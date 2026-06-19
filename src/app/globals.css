@@ -1,26 +1,84 @@
 @import "tailwindcss";
 
+/*
+  DevHatch Labs is dark-navy by default — this is the brand identity,
+  not a toggleable "dark mode." Occasional light-band sections (for
+  contrast/rhythm, like Stripe/Anthropic use) reach for --pale / 
+  --light-gray directly rather than flipping a global theme.
+*/
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #0a1128;
+  --foreground: #ffffff;
+
+  --card: #10193c;
+  --card-foreground: #ffffff;
+
+  --popover: #10193c;
+  --popover-foreground: #ffffff;
+
+  --primary: #2563eb;
+  --primary-foreground: #ffffff;
+
+  --secondary: #10193c;
+  --secondary-foreground: #ffffff;
+
+  --muted: #10193c;
+  --muted-foreground: #64748b;
+
+  --accent: #3b82f6;
+  --accent-foreground: #ffffff;
+
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+
+  --border: #1e2a4a;
+  --input: #1e2a4a;
+  --ring: #2563eb;
+
+  --radius: 0.5rem;
+
+  /* extra brand tokens for occasional light-band sections */
+  --pale: #eff6ff;
+  --light-gray: #f1f5f9;
+  --text-gray: #64748b;
+  --dark-text: #333333;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-pale: var(--pale);
+  --color-light-gray: var(--light-gray);
+  --color-text-gray: var(--text-gray);
+  --color-dark-text: var(--dark-text);
+
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
 }
