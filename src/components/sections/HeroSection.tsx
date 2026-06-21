@@ -2,119 +2,293 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { ArrowRight, Bot, Send } from "lucide-react";
+import {
+  ArrowRight,
+  Sparkles,
+  MessageSquare,
+  Network,
+  Database,
+  Workflow,
+  BrainCircuit,
+  Eye,
+  FileText,
+  BarChart3,
+  Code2,
+  Globe,
+  Rocket,
+  Plug,
+  Compass,
+  Layers,
+  GitBranch,
+  Gauge,
+  type LucideIcon,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 
-type Message = { role: "user" | "assistant"; content: string };
+const trustLine =
+  "AI Chatbots · Agentic Systems · RAG · Automation · Custom Software";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
+type ServiceItem = { icon: LucideIcon; label: string };
+type ServiceGroup = { name: string; items: [ServiceItem, ServiceItem, ServiceItem, ServiceItem] };
+
+const groups: ServiceGroup[] = [
+  {
+    name: "AI Systems",
+    items: [
+      { icon: MessageSquare, label: "AI Chatbots" },
+      { icon: Network, label: "Agentic AI Systems" },
+      { icon: Database, label: "RAG Knowledge Systems" },
+      { icon: Workflow, label: "AI Automation" },
+    ],
+  },
+  {
+    name: "Data & Applied AI",
+    items: [
+      { icon: BrainCircuit, label: "Machine Learning Solutions" },
+      { icon: Eye, label: "Computer Vision" },
+      { icon: FileText, label: "Intelligent Document Processing" },
+      { icon: BarChart3, label: "Data Processing & Analytics" },
+    ],
+  },
+  {
+    name: "Software & Product",
+    items: [
+      { icon: Code2, label: "Custom Software" },
+      { icon: Globe, label: "Web Applications" },
+      { icon: Rocket, label: "SaaS & MVP Development" },
+      { icon: Plug, label: "API & System Integrations" },
+    ],
+  },
+  {
+    name: "Strategy & Scale",
+    items: [
+      { icon: Compass, label: "AI Consulting & Discovery" },
+      { icon: Layers, label: "Workflow & Solution Design" },
+      { icon: GitBranch, label: "Deployment & Integration" },
+      { icon: Gauge, label: "Optimization & Support" },
+    ],
+  },
+];
+
+// Category view — shown immediately on load, and again permanently at the end.
+// One representative icon per category, paired with the category name itself.
+const finalSatellites: [ServiceItem, ServiceItem, ServiceItem, ServiceItem] = [
+  { icon: groups[0].items[0].icon, label: groups[0].name },
+  { icon: groups[1].items[0].icon, label: groups[1].name },
+  { icon: groups[2].items[0].icon, label: groups[2].name },
+  { icon: groups[3].items[0].icon, label: groups[3].name },
+];
+
+const satellitePositions = [
+  "left-1/2 top-0 -translate-x-1/2",
+  "right-0 top-1/2 -translate-y-1/2",
+  "left-1/2 bottom-0 -translate-x-1/2",
+  "left-0 top-1/2 -translate-y-1/2",
+];
+
+const INTRO_MS = 1500;
+const GROUP_MS = 3500;
 
 export function HeroSection() {
-  const [messages, setMessages] = React.useState<Message[]>([
-    {
-      role: "assistant",
-      content: "Hi! I'm the DevHatch AI assistant. Ask me anything about our services — AI chatbots, automation, full-stack development, or how we can help your business.",
-    },
-  ]);
-  const [input, setInput] = React.useState("");
-  const [loading, setLoading] = React.useState(false);
-  const [offline, setOffline] = React.useState(false);
-  const bottomRef = React.useRef<HTMLDivElement>(null);
+  // phase 0 = immediate category labels shown on first load ("Core Engine" + 4 categories)
+  // phase 1-4 = groups[phase - 1] cycling through individual services
+  // phase 5 = final settled state — same content as phase 0, permanent, no further change
+  const [phase, setPhase] = React.useState(0);
+  const [ringSpun, setRingSpun] = React.useState(false);
 
   React.useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+    const prefersReduced =
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  async function sendMessage() {
-    const text = input.trim();
-    if (!text || loading) return;
-    setInput("");
-    setMessages((prev) => [...prev, { role: "user", content: text }]);
-    setLoading(true);
-    setOffline(false);
-    try {
-      const res = await fetch(`${API_URL}/api/chat`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: text }),
-      });
-      if (!res.ok) throw new Error("Server error");
-      const data = await res.json();
-      setMessages((prev) => [...prev, { role: "assistant", content: data.reply ?? data.message ?? "Got it!" }]);
-    } catch {
-      setOffline(true);
-      setMessages((prev) => [...prev, { role: "assistant", content: "The live demo is currently offline. Email us at hello@devhatchlabs.com or book a call to see it live." }]);
-    } finally {
-      setLoading(false);
+    if (prefersReduced) {
+      // Reduced-motion users land directly on the final static state —
+      // no sequence, no ring spin. Deferred via setTimeout(0) rather than
+      // called synchronously in the effect body.
+      const t = setTimeout(() => {
+        setPhase(5);
+        setRingSpun(true);
+      }, 0);
+      return () => clearTimeout(t);
     }
+
+    const timers: ReturnType<typeof setTimeout>[] = [];
+
+    timers.push(setTimeout(() => setRingSpun(true), 50));
+    timers.push(setTimeout(() => setPhase(1), INTRO_MS));
+    timers.push(setTimeout(() => setPhase(2), INTRO_MS + GROUP_MS));
+    timers.push(setTimeout(() => setPhase(3), INTRO_MS + GROUP_MS * 2));
+    timers.push(setTimeout(() => setPhase(4), INTRO_MS + GROUP_MS * 3));
+    timers.push(setTimeout(() => setPhase(5), INTRO_MS + GROUP_MS * 4));
+
+    return () => {
+      timers.forEach(clearTimeout);
+    };
+  }, []);
+
+  const currentGroup = phase >= 1 && phase <= 4 ? groups[phase - 1] : null;
+  const centerLabel = currentGroup ? currentGroup.name : "Core Engine";
+
+  function getSatellite(index: number): ServiceItem {
+    if (currentGroup) return currentGroup.items[index];
+    return finalSatellites[index]; // phase 0 (immediate) and phase 5 (final) — same content
   }
 
   return (
-    <section className="relative overflow-hidden">
-      <div aria-hidden className="pointer-events-none absolute inset-0" style={{ backgroundImage: "radial-gradient(circle at 1px 1px, rgba(37,99,235,0.15) 1px, transparent 0)", backgroundSize: "32px 32px" }} />
-      <div aria-hidden className="pointer-events-none absolute -top-40 left-1/2 h-96 w-96 -translate-x-1/2 rounded-full bg-primary/20 blur-3xl" />
+    <section className="relative overflow-hidden bg-background">
+      {/* Mesh glow — three soft blurred blobs (blue / cyan / violet), low opacity */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -top-32 right-[-4rem] h-[26rem] w-[26rem] rounded-full bg-brand-blue/20 blur-3xl"
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute top-20 right-1/4 h-72 w-72 rounded-full bg-cyan/20 blur-3xl"
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute bottom-0 left-1/3 h-64 w-64 rounded-full bg-violet/10 blur-3xl"
+      />
 
-      <div className="relative mx-auto max-w-6xl px-6 pb-24 pt-20 md:pt-32">
-        <p className="mb-4 font-mono text-xs font-medium uppercase tracking-widest text-primary">
-          AI Systems for Ambitious Teams
-        </p>
-        <h1 className="max-w-3xl text-4xl font-bold leading-tight tracking-tight md:text-6xl lg:text-7xl">
-          Build Smarter.{" "}<span className="text-primary">Scale Faster.</span>
-        </h1>
-        <p className="mt-6 max-w-xl text-lg text-muted-foreground md:text-xl">
-          We design, build, and ship AI chatbots, automation, and full-stack products — in weeks, not quarters.
-        </p>
-        <div className="mt-8 flex flex-wrap items-center gap-4">
-          <Button asChild size="lg">
-            <Link href="/contact">Book a Call <ArrowRight className="size-4" /></Link>
-          </Button>
-          <Button asChild variant="outline" size="lg">
-            <Link href="#demo">Try our AI agent <Bot className="size-4" /></Link>
-          </Button>
-        </div>
+      <div className="relative mx-auto max-w-6xl px-6 pb-20 pt-16 md:pb-28 md:pt-24">
+        <div className="flex flex-col gap-16 lg:grid lg:grid-cols-2 lg:items-center lg:gap-16">
+          {/* ---------------- Left: copy ---------------- */}
+          <div>
+            {/* Eyebrow */}
+            <span className="inline-flex items-center gap-2 rounded-full border border-border bg-soft-blue px-4 py-1.5 text-xs font-semibold text-brand-blue">
+              <span className="size-1.5 rounded-full bg-electric-blue" />
+              AI systems built for the way you work
+            </span>
 
-        {/* Live chatbot embed */}
-        <div id="demo" className="mt-16 rounded-2xl border border-border bg-card shadow-2xl">
-          <div className="flex items-center justify-between border-b border-border px-5 py-3">
-            <div className="flex items-center gap-2">
-              <div className="size-2 rounded-full bg-primary" />
-              <span className="font-mono text-xs text-muted-foreground">devhatch-ai-agent</span>
+            {/* Heading */}
+            <h1 className="mt-6 text-4xl font-bold leading-[1.1] tracking-tight text-navy md:text-5xl lg:text-6xl">
+              Build smarter systems.{" "}
+              <span className="bg-gradient-to-r from-brand-blue to-violet bg-clip-text text-transparent">
+                Scale faster.
+              </span>
+            </h1>
+
+            {/* Supporting text */}
+            <p className="mt-6 max-w-xl text-base leading-relaxed text-muted-foreground md:text-lg">
+              DevHatch Labs designs AI agents, chatbots, RAG systems, automation
+              workflows, and custom software that help ambitious teams move
+              faster with confidence.
+            </p>
+
+            {/* CTAs */}
+            <div className="mt-8 flex flex-wrap items-center gap-4">
+              <Button asChild size="lg">
+                <Link href="/contact">
+                  Book a Discovery Call <ArrowRight className="size-4" />
+                </Link>
+              </Button>
+              <Button asChild variant="outline" size="lg">
+                <Link href="/services">Explore Our Services</Link>
+              </Button>
             </div>
-            <div className="flex items-center gap-1.5">
-              <div className={cn("size-2 rounded-full", offline ? "bg-destructive" : "bg-emerald-500")} />
-              <span className="font-mono text-xs text-muted-foreground">{offline ? "offline" : "live"}</span>
-            </div>
+
+            {/* Trust line */}
+            <p className="mt-8 text-xs font-medium tracking-wide text-muted-foreground">
+              {trustLine}
+            </p>
           </div>
 
-          <div className="flex h-72 flex-col gap-3 overflow-y-auto p-5 md:h-80">
-            {messages.map((msg, i) => (
-              <div key={i} className={cn("max-w-[85%] rounded-xl px-4 py-2.5 text-sm leading-relaxed", msg.role === "user" ? "ml-auto bg-primary text-primary-foreground" : "bg-secondary text-foreground")}>
-                {msg.content}
-              </div>
-            ))}
-            {loading && (
-              <div className="flex max-w-[85%] items-center gap-1.5 rounded-xl bg-secondary px-4 py-3">
-                {[0, 1, 2].map((i) => (
-                  <span key={i} className="size-1.5 animate-bounce rounded-full bg-muted-foreground" style={{ animationDelay: `${i * 150}ms` }} />
-                ))}
-              </div>
-            )}
-            <div ref={bottomRef} />
-          </div>
-
-          <div className="flex items-center gap-3 border-t border-border px-4 py-3">
-            <input
-              type="text"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-              placeholder="Ask about our services…"
-              className="flex-1 bg-transparent text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
+          {/* ---------------- Right: abstract AI services orbit ---------------- */}
+          <div className="relative">
+            {/* Layered background card — implies a stacked interface, peeking out behind the main panel */}
+            <div
+              aria-hidden="true"
+              className="absolute inset-0 hidden -translate-y-3 translate-x-3 rotate-2 rounded-3xl border border-border bg-soft-blue/50 sm:block"
             />
-            <button onClick={sendMessage} disabled={!input.trim() || loading} aria-label="Send" className="rounded-lg bg-primary p-2 text-white transition-colors hover:bg-accent disabled:opacity-40">
-              <Send className="size-4" />
-            </button>
+
+            {/* Main panel */}
+            <div className="relative overflow-hidden rounded-3xl border border-border bg-gradient-to-br from-white to-ice p-8 shadow-soft-lg">
+              {/* Small understated glowing brand-mark detail — hexagon echo of the DevHatch mark */}
+              <div
+                aria-hidden="true"
+                className="absolute right-6 top-6 h-3.5 w-3.5 animate-breathe shadow-glow-blue"
+              >
+                <svg viewBox="0 0 100 100" className="h-full w-full">
+                  <polygon points="25,4 75,4 96,50 75,96 25,96 4,50" fill="#1769FF" />
+                </svg>
+              </div>
+
+              <div className="relative mx-auto aspect-square w-full max-w-xs sm:max-w-sm lg:max-w-md">
+                {/* Ambient floating glow layer */}
+                <div className="absolute inset-0 animate-float-slow rounded-full bg-gradient-to-br from-soft-blue via-white to-soft-violet opacity-70 blur-2xl" />
+
+                {/* Decorative orbit ring — spins once at the start, then settles permanently.
+                    The marker dot is a child of this same rotating element, so it visibly
+                    travels one full lap around the ring as the ring itself rotates. */}
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-[6%] rounded-full border-2 border-dashed border-brand-blue/25"
+                  style={{
+                    transform: `rotate(${ringSpun ? 360 : 0}deg)`,
+                    transition: "transform 2400ms cubic-bezier(0.4, 0, 0.2, 1)",
+                  }}
+                >
+                  <span className="absolute left-1/2 top-0 size-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-electric-blue shadow-glow-blue" />
+                </div>
+
+                {/* Connecting lines (cardinal, fixed — never rotate, so satellites stay aligned) */}
+                <div className="absolute left-1/2 top-[15%] h-[21%] w-px -translate-x-1/2 bg-gradient-to-b from-transparent via-brand-blue/50 to-transparent" />
+                <div className="absolute right-[15%] top-1/2 h-px w-[21%] -translate-y-1/2 bg-gradient-to-l from-transparent via-cyan/50 to-transparent" />
+                <div className="absolute bottom-[15%] left-1/2 h-[21%] w-px -translate-x-1/2 bg-gradient-to-t from-transparent via-brand-blue/50 to-transparent" />
+                <div className="absolute left-[15%] top-1/2 h-px w-[21%] -translate-y-1/2 bg-gradient-to-r from-transparent via-violet/50 to-transparent" />
+
+                {/* Center node — hexagonal Core Engine / current group name */}
+                <div className="absolute left-1/2 top-1/2 z-10 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center">
+                  <div className="relative flex h-20 w-20 animate-breathe items-center justify-center drop-shadow-lg">
+                    <svg viewBox="0 0 100 100" className="absolute inset-0 h-full w-full">
+                      <defs>
+                        <linearGradient id="coreHexGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                          <stop offset="0%" stopColor="#061A45" />
+                          <stop offset="100%" stopColor="#1769FF" />
+                        </linearGradient>
+                      </defs>
+                      <polygon
+                        points="25,4 75,4 96,50 75,96 25,96 4,50"
+                        fill="url(#coreHexGradient)"
+                      />
+                    </svg>
+                    <Sparkles className="relative size-7 text-white" />
+                  </div>
+                  <span
+                    key={centerLabel}
+                    className="animate-fade-rise mt-2 whitespace-nowrap text-[11px] font-semibold text-navy"
+                  >
+                    {centerLabel}
+                  </span>
+                </div>
+
+                {/* Satellite nodes — content swaps per phase, position never moves */}
+                {satellitePositions.map((position, i) => {
+                  const content = getSatellite(i);
+                  return (
+                    <div key={i} className={`absolute z-10 ${position}`}>
+                      <div
+                        key={`${phase}-${i}`}
+                        className="animate-fade-rise relative flex items-center gap-2 whitespace-nowrap rounded-2xl border border-border bg-white px-3 py-2.5 shadow-soft"
+                      >
+                        {i === 1 && (
+                          <span
+                            aria-hidden="true"
+                            className="absolute -right-1 -top-1 size-2.5 rounded-full bg-magenta ring-2 ring-white"
+                          />
+                        )}
+                        <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-brand-blue/10 text-brand-blue">
+                          <content.icon className="size-3.5" />
+                        </span>
+                        <span className="max-w-[7.5rem] truncate text-[11px] font-semibold text-navy">
+                          {content.label}
+                        </span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
           </div>
         </div>
       </div>

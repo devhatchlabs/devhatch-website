@@ -1,50 +1,64 @@
 @import "tailwindcss";
 
 /*
-  DevHatch Labs is dark-navy by default — this is the brand identity,
-  not a toggleable "dark mode." Occasional light-band sections (for
-  contrast/rhythm, like Stripe/Anthropic use) reach for --pale / 
-  --light-gray directly rather than flipping a global theme.
+  DevHatch Labs — Light / Ice-White Brand Theme
+  ============================================
+  Default marketing-site background is white. Navy and brand-blue are
+  the primary DevHatch colors. Cyan, violet, and magenta are SUPPORTING
+  accents only — used for gradients, badges, glows, and key words, never
+  as full-section backgrounds or full-paragraph text color.
 */
+
 :root {
-  --background: #0a1128;
-  --foreground: #ffffff;
+  /* ---- shadcn/ui semantic slots, mapped to the DevHatch palette ---- */
+  --background: #ffffff;
+  --foreground: #10182b; /* Dark Ink — body text stays dark & readable */
 
-  --card: #10193c;
-  --card-foreground: #ffffff;
+  --card: #ffffff;
+  --card-foreground: #10182b;
 
-  --popover: #10193c;
-  --popover-foreground: #ffffff;
+  --popover: #ffffff;
+  --popover-foreground: #10182b;
 
-  --primary: #2563eb;
+  --primary: #1769ff; /* Brand Blue */
   --primary-foreground: #ffffff;
 
-  --secondary: #10193c;
-  --secondary-foreground: #ffffff;
+  --secondary: #eef5ff; /* Soft Blue Surface */
+  --secondary-foreground: #10182b;
 
-  --muted: #10193c;
-  --muted-foreground: #64748b;
+  --muted: #f6f9ff; /* Ice White */
+  --muted-foreground: #61708a; /* Muted Text */
 
-  --accent: #3b82f6;
+  --accent: #159fe8; /* Electric Blue */
   --accent-foreground: #ffffff;
 
-  --destructive: #ef4444;
+  --destructive: #e5484d;
   --destructive-foreground: #ffffff;
 
-  --border: #1e2a4a;
-  --input: #1e2a4a;
-  --ring: #2563eb;
+  --border: #d9e6fa;
+  --input: #d9e6fa;
+  --ring: #1769ff;
 
-  --radius: 0.5rem;
+  --radius: 0.75rem;
 
-  /* extra brand tokens for occasional light-band sections */
-  --pale: #eff6ff;
-  --light-gray: #f1f5f9;
-  --text-gray: #64748b;
-  --dark-text: #333333;
+  /* ---- raw brand tokens ---- */
+  --navy: #061a45; /* Deep Navy */
+  --ink: #10182b; /* Dark Ink */
+  --brand-blue: #1769ff;
+  --brand-blue-dark: #0f5ce0; /* derived hover state */
+  --electric-blue: #159fe8;
+  --cyan: #14c8e8;
+  --violet: #6d4aff;
+  --magenta: #d84bc4;
+  --ice: #f6f9ff;
+  --soft-blue: #eef5ff;
+  --soft-violet: #f3f0fd; /* derived: violet accent at low tint over white */
+  --border-soft: #d9e6fa;
+  --muted-text: #61708a;
 }
 
 @theme inline {
+  /* shadcn slots */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -65,14 +79,23 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
 
-  --color-pale: var(--pale);
-  --color-light-gray: var(--light-gray);
-  --color-text-gray: var(--text-gray);
-  --color-dark-text: var(--dark-text);
+  /* brand tokens exposed as real Tailwind utilities:
+     bg-navy, text-cyan, from-brand-blue, to-violet, bg-soft-blue, etc. */
+  --color-navy: var(--navy);
+  --color-ink: var(--ink);
+  --color-brand-blue: var(--brand-blue);
+  --color-brand-blue-dark: var(--brand-blue-dark);
+  --color-electric-blue: var(--electric-blue);
+  --color-cyan: var(--cyan);
+  --color-violet: var(--violet);
+  --color-magenta: var(--magenta);
+  --color-ice: var(--ice);
+  --color-soft-blue: var(--soft-blue);
+  --color-soft-violet: var(--soft-violet);
 
   --radius-lg: var(--radius);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 4px);
+  --radius-sm: calc(var(--radius) - 6px);
 
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
@@ -81,4 +104,141 @@
 body {
   background: var(--background);
   color: var(--foreground);
+}
+
+/* =======================================================================
+   Gradient text utilities — for key words and badges only.
+   Never apply to full headlines or body paragraphs.
+   ======================================================================= */
+.text-gradient-brand {
+  background: linear-gradient(90deg, var(--brand-blue), var(--cyan));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.text-gradient-accent {
+  background: linear-gradient(90deg, var(--violet), var(--magenta));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* =======================================================================
+   Soft shadow system.
+   ======================================================================= */
+.shadow-soft {
+  box-shadow:
+    0 1px 2px rgba(6, 26, 69, 0.04),
+    0 8px 24px rgba(6, 26, 69, 0.06);
+}
+
+.shadow-soft-lg {
+  box-shadow:
+    0 4px 12px rgba(6, 26, 69, 0.06),
+    0 20px 48px rgba(6, 26, 69, 0.08);
+}
+
+.shadow-glow-blue {
+  box-shadow:
+    0 0 0 1px rgba(23, 105, 255, 0.15),
+    0 10px 30px -6px rgba(23, 105, 255, 0.45);
+}
+
+.shadow-glow-cyan {
+  box-shadow:
+    0 0 0 1px rgba(20, 200, 232, 0.2),
+    0 10px 30px -6px rgba(20, 200, 232, 0.45);
+}
+
+/* =======================================================================
+   Section rhythm — generous, consistent vertical whitespace.
+   ======================================================================= */
+.section-py {
+  padding-top: clamp(4rem, 8vw, 7rem);
+  padding-bottom: clamp(4rem, 8vw, 7rem);
+}
+
+/* =======================================================================
+   Motion system — CSS-only, slow and subtle.
+   ======================================================================= */
+@keyframes gradient-drift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes float-slow {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+@keyframes breathe {
+  0%,
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+  50% {
+    transform: scale(1.02) rotate(1deg);
+  }
+}
+
+@keyframes fade-rise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-gradient-drift {
+  background-size: 200% 200%;
+  animation: gradient-drift 26s ease-in-out infinite;
+}
+
+.animate-float-slow {
+  animation: float-slow 8s ease-in-out infinite;
+}
+
+.animate-breathe {
+  animation: breathe 6s ease-in-out infinite;
+}
+
+.animate-fade-rise {
+  animation: fade-rise 0.6s ease-out both;
+}
+
+/* =======================================================================
+   Accessibility — disable non-essential motion when requested.
+   ======================================================================= */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .animate-gradient-drift,
+  .animate-float-slow,
+  .animate-breathe,
+  .animate-fade-rise {
+    animation: none !important;
+  }
 }
