@@ -29,110 +29,117 @@ const trustLine =
   "AI Chatbots · Agentic Systems · RAG · Automation · Custom Software";
 
 type ServiceItem = { icon: LucideIcon; label: string };
-type ServiceGroup = { name: string; items: [ServiceItem, ServiceItem, ServiceItem, ServiceItem] };
+// Order matches satellite render order: [top, right, bottom, left]
+type Quad = [ServiceItem, ServiceItem, ServiceItem, ServiceItem];
 
-const groups: ServiceGroup[] = [
-  {
-    name: "AI Systems",
-    items: [
-      { icon: MessageSquare, label: "AI Chatbots" },
-      { icon: Network, label: "Agentic AI Systems" },
-      { icon: Database, label: "RAG Knowledge Systems" },
-      { icon: Workflow, label: "AI Automation" },
-    ],
-  },
-  {
-    name: "Data & Applied AI",
-    items: [
-      { icon: BrainCircuit, label: "Machine Learning Solutions" },
-      { icon: Eye, label: "Computer Vision" },
-      { icon: FileText, label: "Intelligent Document Processing" },
-      { icon: BarChart3, label: "Data Processing & Analytics" },
-    ],
-  },
-  {
-    name: "Software & Product",
-    items: [
-      { icon: Code2, label: "Custom Software" },
-      { icon: Globe, label: "Web Applications" },
-      { icon: Rocket, label: "SaaS & MVP Development" },
-      { icon: Plug, label: "API & System Integrations" },
-    ],
-  },
-  {
-    name: "Strategy & Scale",
-    items: [
-      { icon: Compass, label: "AI Consulting & Discovery" },
-      { icon: Layers, label: "Workflow & Solution Design" },
-      { icon: GitBranch, label: "Deployment & Integration" },
-      { icon: Gauge, label: "Optimization & Support" },
-    ],
-  },
-];
-
-// Category view — shown immediately on load, and again permanently at the end.
-// One representative icon per category, paired with the category name itself.
-const finalSatellites: [ServiceItem, ServiceItem, ServiceItem, ServiceItem] = [
-  { icon: groups[0].items[0].icon, label: groups[0].name },
-  { icon: groups[1].items[0].icon, label: groups[1].name },
-  { icon: groups[2].items[0].icon, label: groups[2].name },
-  { icon: groups[3].items[0].icon, label: groups[3].name },
+// Index 0 = category overview, indices 1-4 = the four service groups in order.
+const orbitFrames: Quad[] = [
+  // 0 — Category overview
+  [
+    { icon: Network, label: "AI Systems" },
+    { icon: BrainCircuit, label: "Data & Applied AI" },
+    { icon: Code2, label: "Software & Product" },
+    { icon: Compass, label: "Strategy & Scale" },
+  ],
+  // 1 — AI Systems
+  [
+    { icon: MessageSquare, label: "AI Chatbots" },
+    { icon: Network, label: "Agentic AI Systems" },
+    { icon: Database, label: "RAG Knowledge Systems" },
+    { icon: Workflow, label: "AI Automation" },
+  ],
+  // 2 — Data & Applied AI
+  [
+    { icon: BrainCircuit, label: "Machine Learning" },
+    { icon: Eye, label: "Computer Vision" },
+    { icon: FileText, label: "Intelligent Document Processing" },
+    { icon: BarChart3, label: "Data Processing & Analytics" },
+  ],
+  // 3 — Software & Product
+  [
+    { icon: Code2, label: "Custom Software" },
+    { icon: Globe, label: "Web Applications" },
+    { icon: Rocket, label: "SaaS & MVP Development" },
+    { icon: Plug, label: "API & System Integrations" },
+  ],
+  // 4 — Strategy & Scale
+  [
+    { icon: Compass, label: "AI Consulting & Discovery" },
+    { icon: Layers, label: "Workflow & Solution Design" },
+    { icon: GitBranch, label: "Deployment & Integration" },
+    { icon: Gauge, label: "Optimization & Support" },
+  ],
 ];
 
 const satellitePositions = [
-  "left-1/2 top-0 -translate-x-1/2",
-  "right-0 top-1/2 -translate-y-1/2",
-  "left-1/2 bottom-0 -translate-x-1/2",
-  "left-0 top-1/2 -translate-y-1/2",
+  "left-1/2 top-0 -translate-x-1/2", // top
+  "right-0 top-1/2 -translate-y-1/2", // right
+  "left-1/2 bottom-0 -translate-x-1/2", // bottom
+  "left-0 top-1/2 -translate-y-1/2", // left
 ];
 
-const INTRO_MS = 1500;
-const GROUP_MS = 3500;
+const COLLAPSE_MS = 600;
+const FRAME_HOLD = [2700, 3900, 3900, 3900, 3900]; // ms per frame, index-matched to orbitFrames
 
 export function HeroSection() {
-  // phase 0 = immediate category labels shown on first load ("Core Engine" + 4 categories)
-  // phase 1-4 = groups[phase - 1] cycling through individual services
-  // phase 5 = final settled state — same content as phase 0, permanent, no further change
-  const [phase, setPhase] = React.useState(0);
-  const [ringSpun, setRingSpun] = React.useState(false);
+  const [frame, setFrame] = React.useState(0);
+  const [linesCollapsed, setLinesCollapsed] = React.useState(false);
+  const [markerRotation, setMarkerRotation] = React.useState(0);
 
   React.useEffect(() => {
     const prefersReduced =
       typeof window !== "undefined" &&
       window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+    // Reduced-motion users get only the static category overview — no
+    // timers are ever created, so there's nothing to clean up either.
     if (prefersReduced) {
-      // Reduced-motion users land directly on the final static state —
-      // no sequence, no ring spin. Deferred via setTimeout(0) rather than
-      // called synchronously in the effect body.
-      const t = setTimeout(() => {
-        setPhase(5);
-        setRingSpun(true);
-      }, 0);
-      return () => clearTimeout(t);
+      return;
     }
 
-    const timers: ReturnType<typeof setTimeout>[] = [];
+    let cancelled = false;
+    let timeoutId: ReturnType<typeof setTimeout>;
 
-    timers.push(setTimeout(() => setRingSpun(true), 50));
-    timers.push(setTimeout(() => setPhase(1), INTRO_MS));
-    timers.push(setTimeout(() => setPhase(2), INTRO_MS + GROUP_MS));
-    timers.push(setTimeout(() => setPhase(3), INTRO_MS + GROUP_MS * 2));
-    timers.push(setTimeout(() => setPhase(4), INTRO_MS + GROUP_MS * 3));
-    timers.push(setTimeout(() => setPhase(5), INTRO_MS + GROUP_MS * 4));
+    function runFrame(index: number) {
+      if (cancelled) return;
+
+      // Begin collapse: lines pull toward center, marker advances clockwise.
+      setLinesCollapsed(true);
+      setMarkerRotation((r) => r + 72);
+
+      timeoutId = setTimeout(() => {
+        if (cancelled) return;
+
+        // Expand: new content settles in, lines extend back out.
+        setFrame(index);
+        setLinesCollapsed(false);
+
+        const remainingHold = FRAME_HOLD[index] - COLLAPSE_MS;
+        timeoutId = setTimeout(() => {
+          if (cancelled) return;
+          const next = (index + 1) % orbitFrames.length;
+          runFrame(next);
+        }, remainingHold);
+      }, COLLAPSE_MS);
+    }
+
+    // Initial frame (category overview) is already the default state —
+    // useState(0) / useState(false) — so nothing needs setting here.
+    // Just schedule the first transition into frame 1.
+    timeoutId = setTimeout(() => {
+      if (cancelled) return;
+      runFrame(1);
+    }, FRAME_HOLD[0]);
 
     return () => {
-      timers.forEach(clearTimeout);
+      cancelled = true;
+      clearTimeout(timeoutId);
     };
   }, []);
 
-  const currentGroup = phase >= 1 && phase <= 4 ? groups[phase - 1] : null;
-  const centerLabel = currentGroup ? currentGroup.name : "Core Engine";
-
-  function getSatellite(index: number): ServiceItem {
-    if (currentGroup) return currentGroup.items[index];
-    return finalSatellites[index]; // phase 0 (immediate) and phase 5 (final) — same content
-  }
+  const current = orbitFrames[frame];
+  const lineTransform = (axis: "X" | "Y") =>
+    `translate${axis}(-50%) scale${axis === "X" ? "Y" : "X"}(${linesCollapsed ? 0.1 : 1})`;
 
   return (
     <section className="relative overflow-hidden bg-background">
@@ -217,27 +224,46 @@ export function HeroSection() {
                 {/* Ambient floating glow layer */}
                 <div className="absolute inset-0 animate-float-slow rounded-full bg-gradient-to-br from-soft-blue via-white to-soft-violet opacity-70 blur-2xl" />
 
-                {/* Decorative orbit ring — spins once at the start, then settles permanently.
-                    The marker dot is a child of this same rotating element, so it visibly
-                    travels one full lap around the ring as the ring itself rotates. */}
+                {/* Decorative orbit ring + traveling marker dot. The dot is a child
+                    of this same rotating element, so it visibly sweeps clockwise
+                    around the ring as the marker advances each transition. The
+                    dashed pattern drifts slowly along with it — never the labels. */}
                 <div
                   aria-hidden="true"
                   className="absolute inset-[6%] rounded-full border-2 border-dashed border-brand-blue/25"
                   style={{
-                    transform: `rotate(${ringSpun ? 360 : 0}deg)`,
-                    transition: "transform 2400ms cubic-bezier(0.4, 0, 0.2, 1)",
+                    transform: `rotate(${markerRotation}deg)`,
+                    transition: "transform 1200ms cubic-bezier(0.4, 0, 0.2, 1)",
                   }}
                 >
                   <span className="absolute left-1/2 top-0 size-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-electric-blue shadow-glow-blue" />
                 </div>
 
-                {/* Connecting lines (cardinal, fixed — never rotate, so satellites stay aligned) */}
-                <div className="absolute left-1/2 top-[15%] h-[21%] w-px -translate-x-1/2 bg-gradient-to-b from-transparent via-brand-blue/50 to-transparent" />
-                <div className="absolute right-[15%] top-1/2 h-px w-[21%] -translate-y-1/2 bg-gradient-to-l from-transparent via-cyan/50 to-transparent" />
-                <div className="absolute bottom-[15%] left-1/2 h-[21%] w-px -translate-x-1/2 bg-gradient-to-t from-transparent via-brand-blue/50 to-transparent" />
-                <div className="absolute left-[15%] top-1/2 h-px w-[21%] -translate-y-1/2 bg-gradient-to-r from-transparent via-violet/50 to-transparent" />
+                {/* Connecting lines (cardinal) — pull toward center then expand back
+                    out on every transition, signaling the active group changing.
+                    Positions never move, so satellites always stay aligned. */}
+                <div
+                  aria-hidden="true"
+                  className="absolute left-1/2 top-[15%] h-[21%] w-px bg-gradient-to-b from-transparent via-brand-blue/50 to-transparent"
+                  style={{ transform: lineTransform("X"), transition: "transform 600ms ease-in-out" }}
+                />
+                <div
+                  aria-hidden="true"
+                  className="absolute right-[15%] top-1/2 h-px w-[21%] bg-gradient-to-l from-transparent via-cyan/50 to-transparent"
+                  style={{ transform: lineTransform("Y"), transition: "transform 600ms ease-in-out" }}
+                />
+                <div
+                  aria-hidden="true"
+                  className="absolute bottom-[15%] left-1/2 h-[21%] w-px bg-gradient-to-t from-transparent via-brand-blue/50 to-transparent"
+                  style={{ transform: lineTransform("X"), transition: "transform 600ms ease-in-out" }}
+                />
+                <div
+                  aria-hidden="true"
+                  className="absolute left-[15%] top-1/2 h-px w-[21%] bg-gradient-to-r from-transparent via-violet/50 to-transparent"
+                  style={{ transform: lineTransform("Y"), transition: "transform 600ms ease-in-out" }}
+                />
 
-                {/* Center node — hexagonal Core Engine / current group name */}
+                {/* Center node — always "Core Engine", never changes */}
                 <div className="absolute left-1/2 top-1/2 z-10 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center">
                   <div className="relative flex h-20 w-20 animate-breathe items-center justify-center drop-shadow-lg">
                     <svg viewBox="0 0 100 100" className="absolute inset-0 h-full w-full">
@@ -254,21 +280,18 @@ export function HeroSection() {
                     </svg>
                     <Sparkles className="relative size-7 text-white" />
                   </div>
-                  <span
-                    key={centerLabel}
-                    className="animate-fade-rise mt-2 whitespace-nowrap text-[11px] font-semibold text-navy"
-                  >
-                    {centerLabel}
+                  <span className="mt-2 whitespace-nowrap text-[11px] font-semibold text-navy">
+                    Core Engine
                   </span>
                 </div>
 
-                {/* Satellite nodes — content swaps per phase, position never moves */}
+                {/* Satellite nodes — content swaps per frame, position never moves */}
                 {satellitePositions.map((position, i) => {
-                  const content = getSatellite(i);
+                  const item = current[i];
                   return (
                     <div key={i} className={`absolute z-10 ${position}`}>
                       <div
-                        key={`${phase}-${i}`}
+                        key={`${frame}-${i}`}
                         className="animate-fade-rise relative flex items-center gap-2 whitespace-nowrap rounded-2xl border border-border bg-white px-3 py-2.5 shadow-soft"
                       >
                         {i === 1 && (
@@ -278,10 +301,10 @@ export function HeroSection() {
                           />
                         )}
                         <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-brand-blue/10 text-brand-blue">
-                          <content.icon className="size-3.5" />
+                          <item.icon className="size-3.5" />
                         </span>
                         <span className="max-w-[7.5rem] truncate text-[11px] font-semibold text-navy">
-                          {content.label}
+                          {item.label}
                         </span>
                       </div>
                     </div>
