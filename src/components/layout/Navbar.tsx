@@ -1,112 +1,459 @@
 "use client";
 
-import * as React from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import Image from "next/image";
 import Link from "next/link";
-import { Menu, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Logo } from "@/components/layout/Logo";
-import { cn } from "@/lib/utils";
+import { usePathname } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
+import {
+  ArrowUpRight,
+  BarChart3,
+  Bot,
+  Brain,
+  ChevronDown,
+  Cloud,
+  Code2,
+  Database,
+  Layers,
+  Menu,
+  MessageSquare,
+  Sparkles,
+  Workflow,
+  X,
+  Zap,
+} from "lucide-react";
 
-const navLinks = [
-  { label: "Services", href: "/services" },
+const navItems = [
+  { label: "Home", href: "/" },
   { label: "Work", href: "/work" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
 ];
 
-export function Navbar() {
-  const [open, setOpen] = React.useState(false);
-  const [scrolled, setScrolled] = React.useState(false);
+const serviceGroups = [
+  {
+    icon: Bot,
+    title: "AI & Automation",
+    description: "Intelligent systems that work for you",
+    items: [
+      { label: "AI Chatbots", icon: MessageSquare },
+      { label: "Agentic AI Systems", icon: Brain },
+      { label: "RAG Applications", icon: Database },
+      { label: "AI Automation", icon: Workflow },
+    ],
+  },
+  {
+    icon: BarChart3,
+    title: "Data & Cloud",
+    description: "Scalable data infrastructure",
+    items: [
+      { label: "Data Integration & Pipelines", icon: Database },
+      { label: "Big Data Analytics", icon: BarChart3 },
+      { label: "Cloud Deployment & MLOps", icon: Cloud },
+      { label: "Document OCR & Extraction", icon: Zap },
+    ],
+  },
+  {
+    icon: Layers,
+    title: "Custom Software",
+    description: "Tailored solutions for your business",
+    items: [
+      { label: "Web Applications", icon: Code2 },
+      { label: "API Development", icon: Sparkles },
+      { label: "Custom Software", icon: Layers },
+      { label: "Business Systems & Dashboards", icon: Workflow },
+    ],
+  },
+];
 
-  React.useEffect(() => {
-    function onScroll() {
-      setScrolled(window.scrollY > 8);
-    }
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+const transition = {
+  duration: 0.22,
+  ease: [0.16, 1, 0.3, 1] as const,
+};
+
+function isRouteActive(pathname: string, href: string) {
+  if (href === "/") {
+    return pathname === "/";
+  }
+
+  return pathname === href || pathname.startsWith(`${href}/`);
+}
+
+export function Navbar() {
+  const pathname = usePathname();
+
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isServicesOpen, setIsServicesOpen] = useState(false);
+  const [isMobileServicesOpen, setIsMobileServicesOpen] = useState(false);
+
+  const servicesMenuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 12);
+    };
+
+    handleScroll();
+    window.addEventListener("scroll", handleScroll);
+
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Lock body scroll while the mobile menu is open
-  React.useEffect(() => {
-    document.body.style.overflow = open ? "hidden" : "";
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        servicesMenuRef.current &&
+        !servicesMenuRef.current.contains(event.target as Node)
+      ) {
+        setIsServicesOpen(false);
+      }
+    };
+
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setIsServicesOpen(false);
+        setIsMobileMenuOpen(false);
+        setIsMobileServicesOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleEscape);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleEscape);
+    };
+  }, []);
+
+  useEffect(() => {
+    document.body.style.overflow = isMobileMenuOpen ? "hidden" : "";
+
     return () => {
       document.body.style.overflow = "";
     };
-  }, [open]);
+  }, [isMobileMenuOpen]);
 
-  function closeMenu() {
-    setOpen(false);
-  }
+  const closeMobileMenu = () => {
+    setIsMobileMenuOpen(false);
+    setIsMobileServicesOpen(false);
+  };
 
   return (
     <header
-      className={cn(
-        "sticky top-0 z-50 border-b bg-white/90 backdrop-blur-md transition-shadow duration-300",
-        scrolled ? "border-border shadow-soft" : "border-transparent"
-      )}
+      className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
+        isScrolled
+          ? "border-b border-[#D9E6FA] bg-white/90 py-3 shadow-[0_8px_28px_rgba(6,26,69,0.06)] backdrop-blur-xl"
+          : "bg-white/70 py-4 backdrop-blur-md"
+      }`}
     >
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
-        <Logo />
+      <div className="mx-auto max-w-7xl px-6">
+        <div className="flex items-center justify-between gap-4">
+          {/* Brand */}
+          <Link
+            href="/"
+            aria-label="DevHatch Labs home"
+            className="group flex shrink-0 items-center gap-2.5"
+          >
+            <div className="relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl border border-[#D9E6FA] bg-white shadow-sm transition-all duration-300 group-hover:-translate-y-0.5 group-hover:border-[#1769FF]/45 group-hover:shadow-[0_8px_18px_rgba(23,105,255,0.14)]">
+              <Image
+                src="/brand/Logo1.jpeg"
+                alt="DevHatch Labs"
+                fill
+                priority
+                className="object-contain p-1.5"
+                sizes="40px"
+              />
+            </div>
 
-        <nav aria-label="Primary" className="hidden items-center gap-8 md:flex">
-          {navLinks.map((link) => (
+            <span className="text-base font-bold tracking-tight text-[#061A45] sm:text-lg">
+              DevHatch{" "}
+              <span className="bg-gradient-to-r from-[#1769FF] to-[#6D4AFF] bg-clip-text text-transparent">
+                Labs
+              </span>
+            </span>
+          </Link>
+
+          {/* Desktop navigation */}
+          <nav
+            aria-label="Primary navigation"
+            className="hidden items-center rounded-full border border-[#D9E6FA] bg-[#F8FBFF]/90 p-1.5 lg:flex"
+          >
             <Link
-              key={link.href}
-              href={link.href}
-              className="group relative text-sm font-medium text-navy transition-colors hover:text-electric-blue"
+              href="/"
+              className={`rounded-full px-4 py-2 text-sm font-semibold transition-colors ${
+                isRouteActive(pathname, "/")
+                  ? "bg-white text-[#1769FF] shadow-sm"
+                  : "text-[#61708A] hover:text-[#1769FF]"
+              }`}
             >
-              {link.label}
-              <span className="absolute -bottom-1 left-0 h-px w-0 bg-electric-blue transition-all duration-200 group-hover:w-full" />
+              Home
             </Link>
-          ))}
-        </nav>
 
-        <div className="hidden md:block">
-          <Button asChild>
-            <Link href="/contact">Book a Discovery Call</Link>
-          </Button>
+            <div ref={servicesMenuRef} className="relative">
+              <button
+                type="button"
+                onClick={() => setIsServicesOpen((current) => !current)}
+                aria-expanded={isServicesOpen}
+                aria-haspopup="true"
+                className={`inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-semibold transition-all ${
+                  isServicesOpen || isRouteActive(pathname, "/services")
+                    ? "bg-white text-[#1769FF] shadow-sm"
+                    : "text-[#61708A] hover:text-[#1769FF]"
+                }`}
+              >
+                Services
+                <motion.span
+                  animate={{ rotate: isServicesOpen ? 180 : 0 }}
+                  transition={{ duration: 0.18 }}
+                  className="inline-flex"
+                >
+                  <ChevronDown className="h-4 w-4" />
+                </motion.span>
+              </button>
+
+              <AnimatePresence>
+                {isServicesOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10, scale: 0.98 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 10, scale: 0.98 }}
+                    transition={transition}
+                    className="absolute left-1/2 top-full mt-4 w-[790px] -translate-x-[30%] overflow-hidden rounded-2xl border border-[#D9E6FA] bg-white shadow-[0_22px_60px_rgba(6,26,69,0.13)]"
+                  >
+                    <div
+                      aria-hidden="true"
+                      className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_50%_45%_at_50%_0%,rgba(23,105,255,0.07),transparent_65%)]"
+                    />
+
+                    <div className="relative grid grid-cols-3 gap-6 p-6">
+                      {serviceGroups.map((group) => {
+                        const GroupIcon = group.icon;
+
+                        return (
+                          <div key={group.title}>
+                            <div className="flex items-center gap-2.5 border-b border-[#D9E6FA] pb-3">
+                              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#EEF5FF] text-[#1769FF]">
+                                <GroupIcon className="h-4 w-4" />
+                              </div>
+
+                              <div>
+                                <h3 className="text-xs font-bold uppercase tracking-[0.1em] text-[#061A45]">
+                                  {group.title}
+                                </h3>
+                                <p className="mt-0.5 text-[10px] text-[#61708A]">
+                                  {group.description}
+                                </p>
+                              </div>
+                            </div>
+
+                            <div className="mt-3 space-y-1">
+                              {group.items.map((item) => {
+                                const ItemIcon = item.icon;
+
+                                return (
+                                  <Link
+                                    key={item.label}
+                                    href="/services"
+                                    onClick={() => setIsServicesOpen(false)}
+                                    className="group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-[#61708A] transition-all hover:bg-[#EEF5FF] hover:text-[#1769FF]"
+                                  >
+                                    <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border border-[#D9E6FA] bg-white text-[#61708A] transition-colors group-hover:border-[#1769FF]/25 group-hover:bg-white group-hover:text-[#1769FF]">
+                                      <ItemIcon className="h-3.5 w-3.5" />
+                                    </div>
+                                    {item.label}
+                                  </Link>
+                                );
+                              })}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+
+                    <div className="relative flex items-center justify-between border-t border-[#D9E6FA] bg-[#F8FBFF] px-6 py-4">
+                      <p className="text-xs text-[#61708A]">
+                        Explore practical AI, automation, and software systems.
+                      </p>
+
+                      <Link
+                        href="/services"
+                        onClick={() => setIsServicesOpen(false)}
+                        className="group inline-flex items-center gap-1.5 text-xs font-bold text-[#1769FF] transition-all hover:gap-2.5"
+                      >
+                        View all services
+                        <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                      </Link>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
+            {navItems
+              .filter((item) => item.label !== "Home")
+              .map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`rounded-full px-4 py-2 text-sm font-semibold transition-colors ${
+                    isRouteActive(pathname, item.href)
+                      ? "bg-white text-[#1769FF] shadow-sm"
+                      : "text-[#61708A] hover:text-[#1769FF]"
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              ))}
+          </nav>
+
+          {/* Desktop CTA */}
+          <div className="hidden sm:block">
+            <Link
+              href="/contact"
+              className="group inline-flex items-center justify-center gap-1.5 rounded-full bg-[#1769FF] px-5 py-2.5 text-xs font-bold text-white shadow-[0_8px_22px_rgba(23,105,255,0.24)] transition-all hover:-translate-y-0.5 hover:bg-[#159FE8] hover:shadow-[0_12px_30px_rgba(23,105,255,0.34)]"
+            >
+              Book a Call
+              <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+            </Link>
+          </div>
+
+          {/* Mobile menu button */}
+          <button
+            type="button"
+            onClick={() => setIsMobileMenuOpen((current) => !current)}
+            aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={isMobileMenuOpen}
+            className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-[#D9E6FA] bg-white text-[#061A45] shadow-sm transition-all hover:border-[#1769FF]/40 hover:text-[#1769FF] lg:hidden"
+          >
+            {isMobileMenuOpen ? (
+              <X className="h-5 w-5" />
+            ) : (
+              <Menu className="h-5 w-5" />
+            )}
+          </button>
         </div>
-
-        <button
-          type="button"
-          className="text-navy md:hidden"
-          aria-label={open ? "Close menu" : "Open menu"}
-          aria-expanded={open}
-          aria-controls="mobile-nav"
-          onClick={() => setOpen((v) => !v)}
-        >
-          {open ? <X className="size-6" /> : <Menu className="size-6" />}
-        </button>
       </div>
 
-      {/* Mobile menu — always mounted, transitions smoothly via
-          max-height/opacity (no extra animation library needed). */}
-      <div
-        id="mobile-nav"
-        className={cn(
-          "overflow-hidden border-t border-border bg-white transition-all duration-300 ease-out md:hidden",
-          open ? "max-h-96 opacity-100" : "max-h-0 border-t-0 opacity-0"
+      {/* Mobile menu */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={transition}
+            className="absolute left-0 right-0 top-full max-h-[calc(100vh-5rem)] overflow-y-auto border-b border-[#D9E6FA] bg-white shadow-[0_16px_34px_rgba(6,26,69,0.10)] lg:hidden"
+          >
+            <nav aria-label="Mobile navigation" className="space-y-2 p-5">
+              <Link
+                href="/"
+                onClick={closeMobileMenu}
+                className={`block rounded-xl px-4 py-3 text-sm font-bold transition-colors ${
+                  isRouteActive(pathname, "/")
+                    ? "bg-[#EEF5FF] text-[#1769FF]"
+                    : "text-[#061A45] hover:bg-[#F8FBFF]"
+                }`}
+              >
+                Home
+              </Link>
+
+              <div className="overflow-hidden rounded-2xl border border-[#D9E6FA] bg-[#F8FBFF] p-2">
+                <button
+                  type="button"
+                  onClick={() =>
+                    setIsMobileServicesOpen((current) => !current)
+                  }
+                  aria-expanded={isMobileServicesOpen}
+                  className="flex w-full items-center justify-between rounded-xl px-3 py-3 text-sm font-bold text-[#061A45]"
+                >
+                  Services
+
+                  <motion.span
+                    animate={{ rotate: isMobileServicesOpen ? 180 : 0 }}
+                    transition={{ duration: 0.18 }}
+                  >
+                    <ChevronDown className="h-4 w-4 text-[#61708A]" />
+                  </motion.span>
+                </button>
+
+                <AnimatePresence>
+                  {isMobileServicesOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                      transition={transition}
+                      className="overflow-hidden"
+                    >
+                      <div className="space-y-5 border-l-2 border-[#1769FF]/20 px-3 pb-3 pl-4 pt-2">
+                        {serviceGroups.map((group) => {
+                          const GroupIcon = group.icon;
+
+                          return (
+                            <div key={group.title}>
+                              <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.12em] text-[#61708A]">
+                                <GroupIcon className="h-3.5 w-3.5 text-[#1769FF]" />
+                                {group.title}
+                              </div>
+
+                              <div className="mt-2 space-y-1">
+                                {group.items.map((item) => {
+                                  const ItemIcon = item.icon;
+
+                                  return (
+                                    <Link
+                                      key={item.label}
+                                      href="/services"
+                                      onClick={closeMobileMenu}
+                                      className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-[#61708A] transition-colors hover:bg-white hover:text-[#1769FF]"
+                                    >
+                                      <ItemIcon className="h-3.5 w-3.5" />
+                                      {item.label}
+                                    </Link>
+                                  );
+                                })}
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              {navItems
+                .filter((item) => item.label !== "Home")
+                .map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={closeMobileMenu}
+                    className={`block rounded-xl px-4 py-3 text-sm font-bold transition-colors ${
+                      isRouteActive(pathname, item.href)
+                        ? "bg-[#EEF5FF] text-[#1769FF]"
+                        : "text-[#061A45] hover:bg-[#F8FBFF]"
+                    }`}
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+
+              <Link
+                href="/contact"
+                onClick={closeMobileMenu}
+                className="mt-4 flex items-center justify-center gap-2 rounded-full bg-[#1769FF] px-5 py-3 text-sm font-bold text-white shadow-[0_8px_22px_rgba(23,105,255,0.23)] transition-colors hover:bg-[#159FE8]"
+              >
+                Book a Call
+                <ArrowUpRight className="h-4 w-4" />
+              </Link>
+            </nav>
+          </motion.div>
         )}
-      >
-        <nav aria-label="Mobile" className="flex flex-col gap-1 px-6 pb-4 pt-3">
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="rounded-lg px-3 py-2.5 text-sm font-medium text-navy transition-colors hover:bg-soft-blue hover:text-electric-blue"
-              onClick={closeMenu}
-            >
-              {link.label}
-            </Link>
-          ))}
-          <Button asChild className="mt-2">
-            <Link href="/contact" onClick={closeMenu}>
-              Book a Discovery Call
-            </Link>
-          </Button>
-        </nav>
-      </div>
+      </AnimatePresence>
     </header>
   );
 }
+export default Navbar;

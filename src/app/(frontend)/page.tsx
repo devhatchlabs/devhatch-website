@@ -1,21 +1,21 @@
-import { HeroSection } from "@/components/sections/HeroSection";
-import { TechStripSection } from "@/components/sections/TechStripSection";
-import { ServicesSection } from "@/components/sections/ServicesSection";
-import { HowWeWorkSection } from "@/components/sections/HowWeWorkSection";
-import { FeaturedWorkSection } from "@/components/sections/FeaturedWorkSection";
-import { TeamSection } from "@/components/sections/TeamSection";
-import { CtaSection } from "@/components/sections/CtaSection";
+import HeroSection from "@/components/sections/hero/HeroSection";
+import ServicesSection from "@/components/sections/services/ServicesSection";
+import IndustriesSection from "@/components/sections/industries/IndustriesSection";
+import HowItWorksSection from "@/components/sections/how-it-works/HowItWorksSection";
+import TestimonialsSection from "@/components/sections/testimonials/TestimonialsSection";
+import AboutSection from "@/components/sections/about/AboutSection";
+import CTASection from "@/components/sections/cta/CTASection";
 
-export default function HomePage() {
+export default function Home() {
   return (
     <>
       <HeroSection />
-      <TechStripSection />
       <ServicesSection />
-      <HowWeWorkSection />
-      <FeaturedWorkSection />
-      <TeamSection />
-      <CtaSection />
+      <IndustriesSection />
+      <HowItWorksSection />
+      <TestimonialsSection />
+      <AboutSection />
+      <CTASection />
     </>
   );
 }
