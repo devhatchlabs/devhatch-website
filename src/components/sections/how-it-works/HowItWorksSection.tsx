@@ -47,22 +47,23 @@ const transition = {
 
 export default function HowItWorksSection() {
   return (
-    <section className="relative overflow-hidden bg-white py-20 md:py-28">
+    <section className="relative overflow-hidden bg-white pt-8 pb-20 md:pt-10 md:pb-24">
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_65%_55%_at_50%_-10%,rgba(23,105,255,0.07),transparent_60%)]"
       />
+
       <div
         aria-hidden="true"
         className="pointer-events-none absolute -left-24 bottom-0 -z-10 h-72 w-72 rounded-full bg-[#14C8E8]/10 blur-3xl"
       />
+
       <div
         aria-hidden="true"
         className="pointer-events-none absolute -right-24 top-12 -z-10 h-72 w-72 rounded-full bg-[#6D4AFF]/10 blur-3xl"
       />
 
       <div className="relative mx-auto max-w-7xl px-6">
-        {/* Section heading */}
         <div className="mx-auto max-w-2xl text-center">
           <motion.span
             initial={{ opacity: 0, y: 14 }}
@@ -100,8 +101,7 @@ export default function HowItWorksSection() {
           </motion.p>
         </div>
 
-        {/* Steps */}
-        <div className="relative mx-auto mt-16 max-w-6xl md:mt-20">
+        <div className="relative mx-auto mt-12 max-w-6xl md:mt-14">
           <div
             aria-hidden="true"
             className="absolute left-[16.66%] right-[16.66%] top-10 hidden h-px bg-gradient-to-r from-transparent via-[#D9E6FA] to-transparent md:block"
@@ -147,13 +147,12 @@ export default function HowItWorksSection() {
           </div>
         </div>
 
-        {/* CTA */}
         <motion.div
           initial={{ opacity: 0, y: 18 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.4 }}
           transition={transition}
-          className="mt-14 text-center md:mt-16"
+          className="mt-12 text-center md:mt-14"
         >
           <Link
             href="/contact"

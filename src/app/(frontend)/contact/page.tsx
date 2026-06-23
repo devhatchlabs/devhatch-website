@@ -1,194 +1,489 @@
-import type { Metadata } from "next";
+"use client";
+
+import { AnimatePresence, motion } from "framer-motion";
+import {
+  AlertCircle,
+  ArrowRight,
+  Building2,
+  CheckCircle2,
+  Loader2,
+  Mail,
+  MapPin,
+  MessageSquare,
+  Send,
+  Sparkles,
+  User,
+} from "lucide-react";
 import Link from "next/link";
 import {
-  Mail, Phone, Calendar, ChevronRight,
-  Clock, MessageSquare, ArrowRight,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { ContactForm } from "@/app/(frontend)/contact/ContactForm";
+  useState,
+  type ChangeEvent,
+  type FormEvent,
+  type ReactNode,
+} from "react";
+import type { LucideIcon } from "lucide-react";
 
-export const metadata: Metadata = {
-  title: "Contact | DevHatch Labs",
-  description:
-    "Book a free 30-minute call with DevHatch Labs or send us a message about your AI or development project.",
+type LeadFormData = {
+  name: string;
+  email: string;
+  company: string;
+  service: string;
+  budget: string;
+  message: string;
 };
 
-const contactMethods = [
-  { icon: Mail, label: "Email", value: "hello@devhatchlabs.com", href: "mailto:hello@devhatchlabs.com", description: "We reply within 24 hours" },
-  { icon: Phone, label: "WhatsApp", value: "+92 335 254 9956", href: "https://wa.me/923352549956", description: "For quick questions" },
-  { icon: Calendar, label: "Book a call", value: "Schedule 30 minutes", href: "https://calendly.com/devhatchlabs", description: "Free discovery call" },
-];
+type Status = "idle" | "loading" | "success" | "error";
 
-const faqs = [
-  { q: "How quickly can you start?", a: "Usually within a week of our first call. Discovery call → proposal → kick-off is typically a 3–5 day cycle." },
-  { q: "Do you work with clients outside Pakistan?", a: "Yes — most of our target clients are in the US, UK, UAE, Australia, and Canada. We work fully remote and async across time zones." },
-  { q: "What's the minimum project size?", a: "Smallest engagements start around $200–$500 for a focused automation or chatbot setup. Full builds start from $500." },
-  { q: "Do I own the code at the end?", a: "Yes, always. Full source code, all credentials, all repos — handed over on project completion. No lock-in." },
-  { q: "Can you work with our existing tech stack?", a: "Mostly yes. We specialize in the MERN stack and LangChain/Groq AI layer. Tell us what you're running and we'll be straight with you about fit." },
-  { q: "What happens on the discovery call?", a: "30 minutes. We understand your problem, ask about your current workflow, and give you an honest read on what it takes to solve it — including whether we're the right fit." },
-];
+const initialForm: LeadFormData = {
+  name: "",
+  email: "",
+  company: "",
+  service: "",
+  budget: "",
+  message: "",
+};
 
-const socialLinks = [
-  { label: "LinkedIn", href: "https://linkedin.com/company/devhatchlabs" },
-  { label: "GitHub", href: "https://github.com/DevHatchLabs" },
-  { label: "Instagram", href: "https://instagram.com/devhatchlabs" },
-  { label: "TikTok", href: "https://tiktok.com/@devhatchlabs" },
-];
+const fadeUp = {
+  hidden: {
+    opacity: 0,
+    y: 24,
+  },
+  show: (delay = 0) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.6,
+      delay,
+      ease: [0.16, 1, 0.3, 1] as const,
+    },
+  }),
+};
+
+const inputBase =
+  "w-full rounded-xl border border-[#D9E6FA] bg-white py-3 pl-10 pr-4 text-sm font-medium text-[#061A45] outline-none transition placeholder:text-[#9AA9BE] focus:border-[#1769FF] focus:ring-4 focus:ring-[#1769FF]/10";
+
+function Field({
+  label,
+  icon: Icon,
+  children,
+}: {
+  label: string;
+  icon: LucideIcon;
+  children: ReactNode;
+}) {
+  return (
+    <div>
+      <label className="mb-2 block text-[10px] font-bold uppercase tracking-[0.14em] text-[#61708A]">
+        {label}
+      </label>
+
+      <div className="relative">
+        <Icon className="pointer-events-none absolute left-3.5 top-3.5 h-4 w-4 text-[#1769FF]" />
+        {children}
+      </div>
+    </div>
+  );
+}
 
 export default function ContactPage() {
+  const [form, setForm] = useState<LeadFormData>(initialForm);
+  const [status, setStatus] = useState<Status>("idle");
+
+  const updateField =
+    (field: keyof LeadFormData) =>
+    (
+      event: ChangeEvent<
+        HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+      >,
+    ) => {
+      setForm((currentForm) => ({
+        ...currentForm,
+        [field]: event.target.value,
+      }));
+    };
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    if (
+      !form.name.trim() ||
+      !form.email.trim() ||
+      !form.message.trim()
+    ) {
+      return;
+    }
+
+    setStatus("loading");
+
+    try {
+      const response = await fetch("/api/leads", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: form.name.trim(),
+          email: form.email.trim(),
+          company: form.company.trim(),
+          service: form.service || undefined,
+          budget: form.budget || undefined,
+          message: form.message.trim(),
+          source: "website",
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Could not save lead");
+      }
+
+      setForm(initialForm);
+      setStatus("success");
+    } catch (error) {
+      console.error("Lead submission failed:", error);
+      setStatus("error");
+    }
+  };
+
   return (
-    <>
-      {/* Hero */}
-      <section className="relative overflow-hidden py-20 md:py-24">
-        <div aria-hidden className="pointer-events-none absolute inset-0" style={{ backgroundImage: "radial-gradient(circle at 1px 1px, rgba(37,99,235,0.12) 1px, transparent 0)", backgroundSize: "32px 32px" }} />
-        <div aria-hidden className="pointer-events-none absolute -top-32 left-1/2 h-80 w-80 -translate-x-1/2 rounded-full bg-primary/15 blur-3xl" />
-        <div className="relative mx-auto max-w-6xl px-6">
-          <div className="mb-6 flex items-center gap-2 font-mono text-xs text-muted-foreground">
-            <Link href="/" className="hover:text-foreground">Home</Link>
-            <ChevronRight className="size-3" />
-            <span className="text-foreground">Contact</span>
-          </div>
-          <p className="mb-4 font-mono text-xs font-medium uppercase tracking-widest text-primary">Get in Touch</p>
-          <h1 className="max-w-2xl text-4xl font-bold leading-tight tracking-tight md:text-5xl">
-            Let&apos;s talk about what you&apos;re building
-          </h1>
-          <p className="mt-5 max-w-lg text-lg text-muted-foreground">
-            Book a free 30-minute call or send us a message. No sales pitch — just an honest conversation about your problem and whether we can help.
-          </p>
-        </div>
-      </section>
+    <main className="relative min-h-screen overflow-hidden bg-white pb-24 pt-28">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_55%_at_50%_-10%,rgba(23,105,255,0.12),transparent_64%)]" />
+      <div className="pointer-events-none absolute -right-24 top-24 h-80 w-80 rounded-full bg-[#14C8E8]/10 blur-3xl" />
+      <div className="pointer-events-none absolute -left-32 top-[55%] h-80 w-80 rounded-full bg-[#6D4AFF]/10 blur-3xl" />
 
-      {/* Main grid */}
-      <section className="pb-24">
-        <div className="mx-auto max-w-6xl px-6">
-          <div className="grid gap-10 lg:grid-cols-5">
-            {/* Form (wider) */}
-            <div className="lg:col-span-3">
-              <ContactForm />
-            </div>
+      <div className="relative mx-auto max-w-6xl px-4 sm:px-6">
+        <section className="grid items-center gap-10 lg:grid-cols-[0.85fr_1.15fr]">
+          <div>
+            <motion.div
+              variants={fadeUp}
+              initial="hidden"
+              animate="show"
+              custom={0}
+              className="inline-flex items-center gap-2 rounded-full border border-[#D9E6FA] bg-[#EEF5FF] px-4 py-2 text-xs font-bold text-[#1769FF]"
+            >
+              <Sparkles className="h-3.5 w-3.5" />
+              Start a Conversation
+            </motion.div>
 
-            {/* Sidebar */}
-            <div className="flex flex-col gap-6 lg:col-span-2">
-              {/* Book a call */}
-              <div className="rounded-2xl border border-primary/30 bg-primary/5 p-6">
-                <div className="mb-4 flex size-10 items-center justify-center rounded-xl bg-primary/10">
-                  <Calendar className="size-5 text-primary" />
-                </div>
-                <h3 className="font-bold">Book a free discovery call</h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                  30 minutes. You describe the problem, we ask the right questions, and we both leave knowing whether it makes sense to work together.
-                </p>
-                <ul className="mt-4 flex flex-col gap-2">
-                  {["No pitch, no pressure", "We'll tell you if we're not the right fit", "Free — always"].map((point) => (
-                    <li key={point} className="flex items-center gap-2 text-xs text-muted-foreground">
-                      <span className="size-1.5 shrink-0 rounded-full bg-primary" />{point}
-                    </li>
-                  ))}
-                </ul>
-                <Button asChild className="mt-5 w-full" size="lg">
-                  <a href="https://calendly.com/devhatchlabs" target="_blank" rel="noopener noreferrer">
-                    Schedule 30 minutes <ArrowRight className="size-4" />
-                  </a>
-                </Button>
-                <p className="mt-2 text-center font-mono text-xs text-muted-foreground">
-                  <Clock className="mr-1 inline size-3" />
-                  Typical response: same or next business day
-                </p>
+            <motion.h1
+              variants={fadeUp}
+              initial="hidden"
+              animate="show"
+              custom={0.1}
+              className="mt-5 text-4xl font-bold leading-[1.08] tracking-tight text-[#061A45] sm:text-5xl lg:text-6xl"
+            >
+              Let&apos;s build something
+              <br />
+              <span className="bg-gradient-to-r from-[#1769FF] via-[#159FE8] to-[#6D4AFF] bg-clip-text text-transparent">
+                useful together.
+              </span>
+            </motion.h1>
+
+            <motion.p
+              variants={fadeUp}
+              initial="hidden"
+              animate="show"
+              custom={0.2}
+              className="mt-6 max-w-xl text-base leading-relaxed text-[#61708A] sm:text-lg"
+            >
+              Tell us what you are trying to improve. Whether it is an AI
+              chatbot, automation workflow, web application, or custom
+              software system, we will help you identify the right direction.
+            </motion.p>
+
+            <motion.div
+              variants={fadeUp}
+              initial="hidden"
+              animate="show"
+              custom={0.3}
+              className="mt-8 space-y-4 border-t border-[#D9E6FA] pt-7"
+            >
+              <a
+                href="mailto:hello@devhatchlabs.com"
+                className="group flex items-center gap-3 text-sm font-semibold text-[#61708A] transition hover:text-[#1769FF]"
+              >
+                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#EEF5FF] text-[#1769FF] transition group-hover:scale-110 group-hover:bg-[#1769FF] group-hover:text-white">
+                  <Mail className="h-4 w-4" />
+                </span>
+
+                <span>
+                  <span className="block text-[10px] font-bold uppercase tracking-[0.12em] text-[#9AA9BE]">
+                    Email us
+                  </span>
+                  hello@devhatchlabs.com
+                </span>
+              </a>
+
+              <div className="flex items-center gap-3 text-sm font-semibold text-[#61708A]">
+                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#EEF5FF] text-[#1769FF]">
+                  <MapPin className="h-4 w-4" />
+                </span>
+
+                <span>
+                  <span className="block text-[10px] font-bold uppercase tracking-[0.12em] text-[#9AA9BE]">
+                    Working model
+                  </span>
+                  Remote-first, serving global clients
+                </span>
               </div>
+            </motion.div>
 
-              {/* Direct contact */}
-              <div className="rounded-2xl border border-border bg-card p-6">
-                <h3 className="mb-4 text-sm font-semibold">Direct contact</h3>
-                <div className="flex flex-col gap-3">
-                  {contactMethods.map((method) => {
-                    const Icon = method.icon;
-                    return (
-                      <a key={method.label} href={method.href} target={method.href.startsWith("mailto") ? undefined : "_blank"} rel="noopener noreferrer" className="flex items-center gap-3 rounded-lg border border-border px-4 py-3 transition-colors hover:border-primary/50 hover:bg-secondary/50">
-                        <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary/10">
-                          <Icon className="size-4 text-primary" />
-                        </div>
-                        <div className="min-w-0 flex-1">
-                          <p className="text-xs text-muted-foreground">{method.label}</p>
-                          <p className="truncate text-sm font-medium">{method.value}</p>
-                        </div>
-                        <Badge variant="outline" className="shrink-0 font-mono text-xs">{method.description}</Badge>
-                      </a>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* Social */}
-              <div className="rounded-2xl border border-border bg-card p-6">
-                <h3 className="mb-3 text-sm font-semibold">Follow our work</h3>
-                <div className="grid grid-cols-2 gap-2">
-                  {socialLinks.map((s) => (
-                    <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center rounded-lg border border-border py-2 font-mono text-xs text-muted-foreground transition-colors hover:border-primary/50 hover:text-foreground">
-                      {s.label}
-                    </a>
-                  ))}
-                </div>
-              </div>
-
-              {/* Human response note */}
-              <div className="flex items-start gap-3 rounded-xl border border-border bg-card p-4">
-                <MessageSquare className="mt-0.5 size-4 shrink-0 text-primary" />
-                <p className="text-xs leading-relaxed text-muted-foreground">
-                  <span className="font-medium text-foreground">We reply fast.</span> Every inquiry gets a human response. If you haven&apos;t heard back in 24 hours, check spam then email{" "}
-                  <a href="mailto:saim@devhatchlabs.com" className="text-primary hover:underline">saim@devhatchlabs.com</a> directly.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* FAQ */}
-      <section className="bg-secondary/30 py-24">
-        <div className="mx-auto max-w-6xl px-6">
-          <p className="mb-3 font-mono text-xs font-medium uppercase tracking-widest text-primary">FAQ</p>
-          <h2 className="max-w-xl text-3xl font-bold tracking-tight md:text-4xl">Questions we get asked most</h2>
-          <div className="mt-12 grid gap-4 md:grid-cols-2">
-            {faqs.map((faq) => (
-              <div key={faq.q} className="rounded-xl border border-border bg-card p-5">
-                <p className="text-sm font-semibold">{faq.q}</p>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{faq.a}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Bottom CTA */}
-      <section className="py-24">
-        <div className="mx-auto max-w-6xl px-6">
-          <div className="relative overflow-hidden rounded-2xl border border-primary/30 bg-primary/5 px-8 py-14 text-center">
-            <div aria-hidden className="pointer-events-none absolute inset-0 flex items-center justify-center">
-              <div className="h-64 w-64 rounded-full bg-primary/10 blur-3xl" />
-            </div>
-            <div className="relative">
-              <p className="mb-4 font-mono text-xs font-medium uppercase tracking-widest text-primary">Still unsure?</p>
-              <h2 className="text-2xl font-bold tracking-tight md:text-3xl">
-                Bring us the problem. We&apos;ll figure out the solution together.
-              </h2>
-              <p className="mx-auto mt-3 max-w-md text-sm text-muted-foreground">
-                The worst outcome from a 30-minute call is that you leave with a clearer picture of what you need — even if it&apos;s not us.
+            <motion.div
+              variants={fadeUp}
+              initial="hidden"
+              animate="show"
+              custom={0.4}
+              className="mt-8 rounded-2xl border border-[#D9E6FA] bg-[#F8FBFF] p-5"
+            >
+              <p className="text-xs font-bold uppercase tracking-[0.14em] text-[#1769FF]">
+                What happens next
               </p>
-              <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
-                <Button asChild size="lg">
-                  <a href="https://calendly.com/devhatchlabs" target="_blank" rel="noopener noreferrer">
-                    Book a free call <ArrowRight className="size-4" />
-                  </a>
-                </Button>
-                <Button asChild variant="outline" size="lg">
-                  <Link href="/services">Browse services</Link>
-                </Button>
+
+              <div className="mt-4 space-y-3">
+                <div className="flex items-start gap-3">
+                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#1769FF] text-[10px] font-bold text-white">
+                    01
+                  </span>
+                  <p className="pt-0.5 text-xs leading-relaxed text-[#61708A]">
+                    Share your idea, challenge, or process you want to improve.
+                  </p>
+                </div>
+
+                <div className="flex items-start gap-3">
+                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#1769FF] text-[10px] font-bold text-white">
+                    02
+                  </span>
+                  <p className="pt-0.5 text-xs leading-relaxed text-[#61708A]">
+                    We review the requirements and suggest a practical solution.
+                  </p>
+                </div>
+
+                <div className="flex items-start gap-3">
+                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#1769FF] text-[10px] font-bold text-white">
+                    03
+                  </span>
+                  <p className="pt-0.5 text-xs leading-relaxed text-[#61708A]">
+                    Together, we scope the next step toward a useful MVP.
+                  </p>
+                </div>
               </div>
-            </div>
+            </motion.div>
           </div>
-        </div>
-      </section>
-    </>
+
+          <motion.div
+            variants={fadeUp}
+            initial="hidden"
+            animate="show"
+            custom={0.2}
+            className="relative"
+          >
+            <div className="absolute -inset-4 -z-10 rounded-[2rem] bg-gradient-to-br from-[#1769FF]/10 via-[#14C8E8]/10 to-[#6D4AFF]/10 blur-2xl" />
+
+            <div className="overflow-hidden rounded-3xl border border-[#D9E6FA] bg-white p-6 shadow-[0_20px_50px_rgba(23,105,255,0.12)] sm:p-8">
+              <div className="flex items-center justify-between border-b border-[#D9E6FA] pb-5">
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-[0.14em] text-[#1769FF]">
+                    Project Inquiry
+                  </p>
+                  <h2 className="mt-1 text-xl font-bold text-[#061A45]">
+                    Tell us about your idea.
+                  </h2>
+                </div>
+
+                <div className="flex gap-1.5">
+                  <span className="h-2.5 w-2.5 rounded-full bg-red-400" />
+                  <span className="h-2.5 w-2.5 rounded-full bg-yellow-400" />
+                  <span className="h-2.5 w-2.5 rounded-full bg-green-400" />
+                </div>
+              </div>
+
+              <AnimatePresence mode="wait">
+                {status === "success" ? (
+                  <motion.div
+                    key="success"
+                    initial={{ opacity: 0, scale: 0.96 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.96 }}
+                    className="flex min-h-[440px] flex-col items-center justify-center px-4 text-center"
+                  >
+                    <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#1769FF]/10 text-[#1769FF]">
+                      <CheckCircle2 className="h-8 w-8" />
+                    </div>
+
+                    <h3 className="mt-6 text-2xl font-bold text-[#061A45]">
+                      Message received.
+                    </h3>
+
+                    <p className="mt-3 max-w-sm text-sm leading-relaxed text-[#61708A]">
+                      Your inquiry has been saved successfully. DevHatch Labs
+                      will review it and get back to you soon.
+                    </p>
+
+                    <button
+                      type="button"
+                      onClick={() => setStatus("idle")}
+                      className="mt-7 inline-flex items-center gap-2 rounded-full border border-[#D9E6FA] px-5 py-3 text-sm font-bold text-[#1769FF] transition hover:border-[#1769FF] hover:bg-[#EEF5FF]"
+                    >
+                      Send another message
+                      <ArrowRight className="h-4 w-4" />
+                    </button>
+                  </motion.div>
+                ) : (
+                  <motion.form
+                    key="form"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    onSubmit={handleSubmit}
+                    className="mt-7 space-y-5"
+                  >
+                    <div className="grid gap-5 sm:grid-cols-2">
+                      <Field label="Your name" icon={User}>
+                        <input
+                          type="text"
+                          required
+                          placeholder="Your full name"
+                          value={form.name}
+                          onChange={updateField("name")}
+                          className={inputBase}
+                        />
+                      </Field>
+
+                      <Field label="Email address" icon={Mail}>
+                        <input
+                          type="email"
+                          required
+                          placeholder="you@company.com"
+                          value={form.email}
+                          onChange={updateField("email")}
+                          className={inputBase}
+                        />
+                      </Field>
+                    </div>
+
+                    <Field label="Company or organization" icon={Building2}>
+                      <input
+                        type="text"
+                        placeholder="Company name (optional)"
+                        value={form.company}
+                        onChange={updateField("company")}
+                        className={inputBase}
+                      />
+                    </Field>
+
+                    <div className="grid gap-5 sm:grid-cols-2">
+                      <Field label="What do you need?" icon={Sparkles}>
+                        <select
+                          value={form.service}
+                          onChange={updateField("service")}
+                          className={`${inputBase} cursor-pointer appearance-none`}
+                        >
+                          <option value="">Select a service</option>
+                          <option value="ai-chatbot">AI Chatbot</option>
+                          <option value="agentic-ai">
+                            Agentic AI System
+                          </option>
+                          <option value="rag-application">
+                            RAG Application
+                          </option>
+                          <option value="ai-automation">
+                            AI Automation
+                          </option>
+                          <option value="custom-software">
+                            Custom Software
+                          </option>
+                          <option value="web-application">
+                            Web Application
+                          </option>
+                          <option value="other">Other / Not sure yet</option>
+                        </select>
+                      </Field>
+
+                      <Field label="Estimated budget" icon={Sparkles}>
+                        <select
+                          value={form.budget}
+                          onChange={updateField("budget")}
+                          className={`${inputBase} cursor-pointer appearance-none`}
+                        >
+                          <option value="">Select a range</option>
+                          <option value="under-500">Under $500</option>
+                          <option value="500-1500">$500 – $1,500</option>
+                          <option value="1500-5000">$1,500 – $5,000</option>
+                          <option value="5000-plus">$5,000+</option>
+                          <option value="discuss">Let&apos;s discuss</option>
+                        </select>
+                      </Field>
+                    </div>
+
+                    <Field label="Project details" icon={MessageSquare}>
+                      <textarea
+                        required
+                        rows={5}
+                        placeholder="Briefly describe what you want to build, improve, or automate..."
+                        value={form.message}
+                        onChange={updateField("message")}
+                        className={`${inputBase} resize-none pt-3`}
+                      />
+                    </Field>
+
+                    {status === "error" && (
+                      <div className="flex items-center gap-2 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">
+                        <AlertCircle className="h-4 w-4 shrink-0" />
+                        Something went wrong. Please try again or email us
+                        directly at hello@devhatchlabs.com.
+                      </div>
+                    )}
+
+                    <button
+                      type="submit"
+                      disabled={status === "loading"}
+                      className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#1769FF] px-6 py-3.5 text-sm font-bold text-white transition hover:-translate-y-0.5 hover:bg-[#0A55D6] hover:shadow-[0_12px_26px_rgba(23,105,255,0.3)] disabled:cursor-not-allowed disabled:opacity-70"
+                    >
+                      {status === "loading" ? (
+                        <>
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                          Saving your inquiry...
+                        </>
+                      ) : (
+                        <>
+                          Send Project Inquiry
+                          <Send className="h-4 w-4 transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                        </>
+                      )}
+                    </button>
+
+                    <p className="text-center text-[10px] font-medium text-[#9AA9BE]">
+                      Your project details are securely saved in our lead
+                      system. We do not share your information.
+                    </p>
+                  </motion.form>
+                )}
+              </AnimatePresence>
+            </div>
+          </motion.div>
+        </section>
+
+        <section className="mt-20 overflow-hidden rounded-3xl bg-gradient-to-br from-[#061A45] via-[#0A2D70] to-[#1769FF] px-6 py-10 sm:px-10">
+          <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-center">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.15em] text-[#14C8E8]">
+                Prefer email?
+              </p>
+
+              <h2 className="mt-2 text-2xl font-bold text-white sm:text-3xl">
+                Start with a simple conversation.
+              </h2>
+            </div>
+
+            <Link
+              href="mailto:hello@devhatchlabs.com"
+              className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3.5 text-sm font-bold text-[#1769FF] transition hover:-translate-y-0.5 hover:bg-[#EEF5FF]"
+            >
+              Email DevHatch Labs
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+        </section>
+      </div>
+    </main>
   );
 }

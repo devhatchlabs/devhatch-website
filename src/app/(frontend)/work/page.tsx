@@ -1,392 +1,438 @@
-import type { Metadata } from "next";
+"use client";
+
+import Image from "next/image";
 import Link from "next/link";
+import { AnimatePresence, motion } from "framer-motion";
 import {
-  ArrowRight, ChevronRight, CheckCircle2,
-  Code2, Bot, Zap, Globe,
-  GitBranch, Terminal, ExternalLink,
-  FileCode, Cpu, Lock,
+  ArrowUpRight,
+  Construction,
+  ExternalLink,
+  Layers,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
 
-export const metadata: Metadata = {
-  title: "Work | DevHatch Labs",
-  description:
-    "Real projects built and shipped by DevHatch Labs — AI chatbots, automation systems, and full-stack web applications.",
+function GitHubIcon({ className = "" }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      aria-hidden="true"
+      className={className}
+    >
+      <path d="M12 2C6.477 2 2 6.477 2 12a10 10 0 0 0 6.838 9.488c.5.092.682-.217.682-.483 0-.237-.009-.866-.014-1.7-2.782.604-3.37-1.34-3.37-1.34-.455-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.004.07 1.532 1.032 1.532 1.032.892 1.529 2.341 1.087 2.91.831.091-.646.349-1.087.635-1.337-2.22-.253-4.555-1.11-4.555-4.944 0-1.092.39-1.985 1.029-2.685-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.026A9.58 9.58 0 0 1 12 6.756a9.56 9.56 0 0 1 2.504.337c1.909-1.295 2.748-1.026 2.748-1.026.546 1.377.203 2.394.1 2.647.64.7 1.027 1.593 1.027 2.685 0 3.843-2.339 4.688-4.566 4.936.359.31.678.92.678 1.854 0 1.338-.012 2.418-.012 2.747 0 .269.18.58.688.482A10.002 10.002 0 0 0 22 12c0-5.523-4.477-10-10-10Z" />
+    </svg>
+  );
+}
+
+const fadeUp = {
+  hidden: {
+    opacity: 0,
+    y: 24,
+  },
+  show: (delay = 0) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.6,
+      delay,
+      ease: [0.16, 1, 0.3, 1] as const,
+    },
+  }),
 };
 
-const featuredProject = {
-  id: "pizza-palace-chatbot",
-  status: "Live" as const,
-  type: "AI Chatbot",
-  title: "Pizza Palace AI Customer Support Agent",
-  tagline:
-    "A fully production-ready AI chatbot that handles customer queries, menu questions, and order FAQs — trained on custom business data, served in real time.",
-  context:
-    "Built as DevHatch Labs' first public portfolio project. The goal was a replicable template: any food & beverage business should be able to swap in their own data and have a working AI support agent in under a week.",
-  repo: "https://github.com/DevHatchLabs/devhatch-ai-chatbot",
-  challenges: [
-    {
-      problem: "Generic LLM responses feel impersonal and often hallucinate business-specific details like prices or hours.",
-      solution: "LangChain RAG pipeline retrieves relevant chunks from a structured business knowledge base before every response, grounding the AI in real data.",
-    },
-    {
-      problem: "OpenAI API costs at scale are unpredictable for a small business demo.",
-      solution: "Switched to Groq's inference API (llama-3.1-8b-instant) — free tier, sub-200ms latency, deterministic output.",
-    },
-    {
-      problem: "A chatbot no one interacts with proves nothing.",
-      solution: "Embedded the live widget directly into the marketing homepage so any visitor can test the real model with no login or setup.",
-    },
-  ],
-  architecture: [
-    { layer: "Frontend", detail: "React + Vite + Tailwind CSS", icon: Globe },
-    { layer: "Backend", detail: "Node.js + Express (port 8000)", icon: Terminal },
-    { layer: "AI Layer", detail: "LangChain + Groq API (llama-3.1-8b-instant)", icon: Bot },
-    { layer: "Data", detail: "Structured JSON knowledge base in /server/data", icon: FileCode },
-    { layer: "Inference", detail: "Groq Cloud — free tier, <200ms p95", icon: Cpu },
-    { layer: "Deploy", detail: "Vercel (frontend) + Render (backend)", icon: Globe },
-  ],
-  outcomes: [
-    "Backend confirmed working — 200 OK via Postman on all routes",
-    "Frontend rated 9.5/10 for UI quality — dark navy themed, typing indicator, quick-action buttons",
-    "Handles menu, hours, pricing, and custom queries accurately",
-    "Replicable template — swappable knowledge base, zero code changes needed for a new business",
-    "Full source code open on GitHub under DevHatchLabs org",
-  ],
-  stack: {
-    Frontend: ["React", "Vite", "Tailwind CSS", "JavaScript"],
-    Backend: ["Node.js", "Express", "LangChain", "Groq SDK"],
-    Data: ["JSON knowledge base", "LangChain document loaders"],
-    DevOps: ["Vercel", "Render", "GitHub"],
-  },
-  branches: [
-    {
-      name: "saim-backend",
-      owner: "Saim Iftikhar",
-      status: "Complete ✓",
-      detail: "Node.js/Express server, LangChain chain, Groq integration, REST /api/chat route",
-    },
-    {
-      name: "sara-frontend",
-      owner: "Sara Manzoor",
-      status: "Complete ✓",
-      detail: "React/Vite chat UI, typing indicators, quick-action buttons, dark navy theme",
-    },
-  ],
-  nextSteps: [
-    "Connect frontend to backend (merge branches)",
-    "Add conversation memory with MongoDB session storage",
-    "Deploy frontend to Vercel, backend to Render",
-    "Wire live demo embed into devhatchlabs.com homepage",
-  ],
-};
-
-const upcomingProjects = [
+const projects = [
   {
-    icon: Zap,
-    title: "WhatsApp Lead Automation System",
+    title: "Grocery Store Platform",
     description:
-      "End-to-end automation pipeline — inbound WhatsApp message → AI qualifier → CRM entry → follow-up sequence. Target: reduce lead response time from hours to seconds.",
-    status: "In Discussion",
-    tags: ["WhatsApp API", "n8n", "Node.js", "CRM Integration"],
+      "A full-stack grocery delivery platform with product browsing, authentication, admin controls, cart, wishlist, reviews, order tracking, and recommendations.",
+    category: "Full Stack",
+    image: "/projects/grocery.jpg",
+    tags: ["Python", "Flask", "MySQL", "Chart.js"],
+    featured: true,
+    metrics: "Flask + MySQL · bcrypt authentication",
+    live: "https://grocery-store-website-orpin.vercel.app",
+    github: "https://github.com/Sara12-2/Grocery_Store_Website-",
   },
   {
-    icon: Code2,
-    title: "Multi-Camera Computer Vision Dashboard",
+    title: "Smart Cafeteria",
     description:
-      "Person tracking and movement analytics across multiple warehouse cameras with a real-time admin dashboard. Potential 6-month hourly contract with an established software house.",
-    status: "Scoping",
-    tags: ["Computer Vision", "React", "WebSockets", "Python"],
+      "A role-based food ordering system with menu management, order handling, dashboard controls, and analytics for smoother cafeteria operations.",
+    category: "Full Stack",
+    image: "/projects/cafeteria.jpg",
+    tags: ["Flask", "MySQL", "Bootstrap", "jQuery"],
+    featured: false,
+    metrics: "Role-based access · Order management",
+    live: null,
+    github: "https://github.com/Sara12-2/Smart_Cafeteria_Full_Stack_Website",
   },
   {
-    icon: Lock,
-    title: "Client Portal (Internal)",
+    title: "Smart Retail Shelf",
     description:
-      "A white-label client portal where DevHatch clients can track project status, review deliverables, and communicate — built on the same Next.js + MongoDB stack as this site.",
-    status: "Planned",
-    tags: ["Next.js", "Clerk Auth", "MongoDB", "Tailwind CSS"],
+      "A computer-vision shelf monitoring system built to identify inventory items and support automated stock monitoring workflows.",
+    category: "AI / ML",
+    image: "/projects/retail.jpg",
+    tags: ["Python", "YOLOv8", "OpenCV", "Deep Learning"],
+    featured: true,
+    metrics: "YOLOv8 · Inventory monitoring",
+    live: null,
+    github: "https://github.com/Sara12-2/smart_retail_shelf_system",
+  },
+  {
+    title: "ASL Recognition",
+    description:
+      "A real-time American Sign Language recognition prototype using computer vision and a CNN-based classification workflow.",
+    category: "AI / ML",
+    image: "/projects/asl.jpg",
+    tags: ["TensorFlow", "Keras", "CNN", "OpenCV"],
+    featured: false,
+    metrics: "CNN · Real-time inference workflow",
+    live: null,
+    github: "https://github.com/Sara12-2/ASL_Sign_Language_Recognition",
+  },
+  {
+    title: "SwiftEats",
+    description:
+      "A responsive food delivery website featuring menu filtering, an FAQ accordion, notifications, and smooth interactions.",
+    category: "Web",
+    image: "/projects/swifteats.jpg",
+    tags: ["HTML5", "CSS3", "JavaScript"],
+    featured: false,
+    metrics: "Responsive UI · Vanilla JavaScript",
+    live: "https://restaurant-food-delivery-website-la.vercel.app",
+    github:
+      "https://github.com/Sara12-2/Swifteats_Premium_food_delievery_landing_page",
+  },
+  {
+    title: "TechNest",
+    description:
+      "A React e-commerce experience with product search, cart and wishlist logic, theme switching, and local storage persistence.",
+    category: "React",
+    image: "/projects/technest.jpg",
+    tags: ["React", "Vite", "Framer Motion"],
+    featured: false,
+    metrics: "React · Local storage persistence",
+    live: null,
+    github: "https://github.com/Sara12-2/TechNest_Ecommerce_Website",
+  },
+  {
+    title: "Luxe Commerce",
+    description:
+      "A premium e-commerce interface designed around polished product presentation, responsive browsing, and a modern shopping experience.",
+    category: "E-commerce",
+    image: "/projects/luxestate.jpg",
+    tags: ["E-commerce", "Responsive UI", "Product Showcase"],
+    featured: false,
+    metrics: "Premium storefront · Clean product browsing",
+    live: null,
+    github: null,
+  },
+  {
+    title: "Watch Store",
+    description:
+      "A product-focused watch showcase created to present collections, key product details, and a clean digital shopping interface.",
+    category: "E-commerce",
+    image: "/projects/watch.jpg",
+    tags: ["Product UI", "Responsive Design", "E-commerce"],
+    featured: false,
+    metrics: "Product showcase · Modern storefront",
+    live: null,
+    github: null,
   },
 ];
 
+const filters = [
+  "All",
+  "Full Stack",
+  "AI / ML",
+  "Web",
+  "React",
+  "E-commerce",
+  "Upcoming",
+];
+
 export default function WorkPage() {
-  const p = featuredProject;
+  const [activeFilter, setActiveFilter] = useState("All");
+
+  const visibleProjects =
+    activeFilter === "All"
+      ? projects
+      : projects.filter((project) => project.category === activeFilter);
+
+  const getCount = (filter: string) => {
+    if (filter === "All") return projects.length;
+    if (filter === "Upcoming") return null;
+
+    return projects.filter((project) => project.category === filter).length;
+  };
 
   return (
-    <>
-      {/* Hero */}
-      <section className="relative overflow-hidden py-20 md:py-28">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0"
-          style={{
-            backgroundImage:
-              "radial-gradient(circle at 1px 1px, rgba(37,99,235,0.12) 1px, transparent 0)",
-            backgroundSize: "32px 32px",
-          }}
-        />
-        <div aria-hidden className="pointer-events-none absolute -top-32 left-1/3 h-80 w-80 rounded-full bg-primary/15 blur-3xl" />
+    <main className="relative min-h-screen overflow-hidden bg-white pb-28 pt-28">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_55%_at_50%_-10%,rgba(23,105,255,0.11),transparent_62%)]" />
+      <div className="pointer-events-none absolute -right-24 top-24 h-80 w-80 rounded-full bg-[#14C8E8]/10 blur-3xl" />
+      <div className="pointer-events-none absolute -left-32 top-[48%] h-80 w-80 rounded-full bg-[#6D4AFF]/10 blur-3xl" />
 
-        <div className="relative mx-auto max-w-6xl px-6">
-          <div className="mb-6 flex items-center gap-2 font-mono text-xs text-muted-foreground">
-            <Link href="/" className="hover:text-foreground">Home</Link>
-            <ChevronRight className="size-3" />
-            <span className="text-foreground">Work</span>
-          </div>
-          <p className="mb-4 font-mono text-xs font-medium uppercase tracking-widest text-primary">
-            Our Work
-          </p>
-          <h1 className="max-w-3xl text-4xl font-bold leading-tight tracking-tight md:text-5xl lg:text-6xl">
-            Proof, not promises
-          </h1>
-          <p className="mt-6 max-w-xl text-lg text-muted-foreground">
-            Real projects. Real stack. Real outcomes. This page grows as we ship — starting with our first public portfolio project.
-          </p>
-        </div>
-      </section>
+      <div className="relative mx-auto max-w-6xl px-4 sm:px-6">
+        <section className="max-w-3xl border-b border-[#D9E6FA] pb-12">
+          <motion.div
+            variants={fadeUp}
+            initial="hidden"
+            animate="show"
+            custom={0}
+            className="inline-flex items-center gap-2 rounded-full border border-[#D9E6FA] bg-[#EEF5FF] px-4 py-1.5 text-xs font-bold text-[#1769FF]"
+          >
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#1769FF] opacity-60" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-[#1769FF]" />
+            </span>
+            Selected Team Builds
+          </motion.div>
 
-      {/* Featured project */}
-      <section className="pb-24">
-        <div className="mx-auto max-w-6xl px-6">
-          <div className="overflow-hidden rounded-2xl border border-border bg-card">
+          <motion.h1
+            variants={fadeUp}
+            initial="hidden"
+            animate="show"
+            custom={0.1}
+            className="mt-5 text-4xl font-bold leading-[1.08] tracking-tight text-[#061A45] sm:text-5xl lg:text-6xl"
+          >
+            Work built to solve
+            <br />
+            <span className="bg-gradient-to-r from-[#1769FF] via-[#159FE8] to-[#6D4AFF] bg-clip-text text-transparent">
+              practical business problems.
+            </span>
+          </motion.h1>
 
-            {/* Header */}
-            <div className="border-b border-border bg-secondary/50 px-6 py-5">
-              <div className="flex flex-wrap items-start justify-between gap-4">
-                <div>
-                  <div className="flex flex-wrap items-center gap-2">
-                    <Badge className="border-emerald-500/30 bg-emerald-500/20 font-mono text-xs text-emerald-400">
-                      ● {p.status}
-                    </Badge>
-                    <Badge variant="outline" className="font-mono text-xs">{p.type}</Badge>
-                  </div>
-                  <h2 className="mt-3 text-2xl font-bold tracking-tight md:text-3xl">{p.title}</h2>
-                  <p className="mt-2 max-w-2xl text-muted-foreground">{p.tagline}</p>
+          <motion.p
+            variants={fadeUp}
+            initial="hidden"
+            animate="show"
+            custom={0.2}
+            className="mt-5 max-w-2xl text-base leading-relaxed text-[#61708A] sm:text-lg"
+          >
+            A selection of web, full-stack, and AI-focused projects created by
+            the DevHatch Labs team. Each build reflects our approach to useful,
+            user-focused technology.
+          </motion.p>
+        </section>
+
+        <motion.div
+          variants={fadeUp}
+          initial="hidden"
+          animate="show"
+          custom={0.3}
+          className="mt-9 flex flex-wrap gap-2 border-b border-[#D9E6FA] pb-8"
+        >
+          {filters.map((filter) => {
+            const count = getCount(filter);
+            const isActive = activeFilter === filter;
+
+            return (
+              <button
+                key={filter}
+                type="button"
+                onClick={() => setActiveFilter(filter)}
+                className={`inline-flex items-center gap-2 rounded-xl border px-4 py-2.5 text-xs font-bold transition-all ${
+                  isActive
+                    ? "border-[#1769FF] bg-[#1769FF] text-white shadow-[0_10px_24px_rgba(23,105,255,0.24)]"
+                    : filter === "Upcoming"
+                      ? "border-amber-300 bg-amber-50 text-amber-700 hover:bg-amber-100"
+                      : "border-[#D9E6FA] bg-white text-[#61708A] hover:border-[#1769FF]/40 hover:text-[#1769FF]"
+                }`}
+              >
+                {filter === "Upcoming" && (
+                  <Construction className="h-3.5 w-3.5" />
+                )}
+
+                {filter}
+
+                {count !== null && (
+                  <span
+                    className={`rounded-md px-1.5 py-0.5 text-[10px] ${
+                      isActive
+                        ? "bg-white/20 text-white"
+                        : "bg-[#EEF5FF] text-[#61708A]"
+                    }`}
+                  >
+                    {count}
+                  </span>
+                )}
+              </button>
+            );
+          })}
+        </motion.div>
+
+        <section className="mt-10">
+          <AnimatePresence mode="wait">
+            {activeFilter === "Upcoming" ? (
+              <motion.div
+                key="upcoming"
+                initial={{ opacity: 0, scale: 0.98 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.98 }}
+                className="flex min-h-[330px] flex-col items-center justify-center rounded-3xl border border-dashed border-[#D9E6FA] bg-[#F8FBFF] px-6 text-center"
+              >
+                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#1769FF]/10 text-[#1769FF]">
+                  <Layers
+                    className="h-6 w-6 animate-spin"
+                    style={{ animationDuration: "6s" }}
+                  />
                 </div>
-                <a
-                  href={p.repo}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 rounded-lg border border-border px-4 py-2 font-mono text-xs text-muted-foreground transition-colors hover:border-primary/50 hover:text-foreground"
-                >
-                  <GitBranch className="size-3.5" />
-                  View on GitHub
-                  <ExternalLink className="size-3" />
-                </a>
-              </div>
-            </div>
 
-            {/* Context */}
-            <div className="border-b border-border p-6">
-              <p className="text-sm leading-relaxed text-muted-foreground">{p.context}</p>
-            </div>
+                <h2 className="mt-5 text-xl font-bold text-[#061A45]">
+                  More projects are in progress.
+                </h2>
 
-            {/* Architecture */}
-            <div className="border-b border-border p-6">
-              <h3 className="mb-4 font-mono text-xs font-medium uppercase tracking-widest text-muted-foreground">
-                Architecture
-              </h3>
-              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                {p.architecture.map((layer) => {
-                  const Icon = layer.icon;
-                  return (
-                    <div key={layer.layer} className="flex items-start gap-3 rounded-lg border border-border bg-secondary/30 px-4 py-3">
-                      <Icon className="mt-0.5 size-4 shrink-0 text-primary" />
-                      <div>
-                        <p className="font-mono text-xs text-muted-foreground">{layer.layer}</p>
-                        <p className="mt-0.5 text-sm font-medium">{layer.detail}</p>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
+                <p className="mt-3 max-w-md text-sm leading-relaxed text-[#61708A]">
+                  We are continuously building new AI systems, automation
+                  workflows, and custom web applications for future releases.
+                </p>
+              </motion.div>
+            ) : (
+              <motion.div
+                key={activeFilter}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3"
+              >
+                {visibleProjects.map((project, index) => (
+                  <motion.article
+                    key={project.title}
+                    variants={fadeUp}
+                    initial="hidden"
+                    animate="show"
+                    custom={index * 0.08}
+                    className="group relative flex flex-col overflow-hidden rounded-3xl border border-[#D9E6FA] bg-white p-5 shadow-[0_8px_30px_rgba(23,105,255,0.05)] transition-all duration-300 hover:-translate-y-1.5 hover:border-[#1769FF]/45 hover:shadow-[0_20px_44px_rgba(23,105,255,0.14)]"
+                  >
+                    <div className="relative mb-5 aspect-[16/9] overflow-hidden rounded-2xl border border-[#D9E6FA] bg-[#EEF5FF]">
+                      <Image
+                        src={project.image}
+                        alt={`${project.title} project preview`}
+                        fill
+                        priority={index < 2}
+                        sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        className="object-cover transition duration-500 group-hover:scale-105"
+                      />
 
-            {/* Branches */}
-            <div className="border-b border-border p-6">
-              <h3 className="mb-4 font-mono text-xs font-medium uppercase tracking-widest text-muted-foreground">
-                Git Branches
-              </h3>
-              <div className="flex flex-col gap-3">
-                {p.branches.map((branch) => (
-                  <div key={branch.name} className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border bg-secondary/30 px-4 py-3">
-                    <div className="flex items-center gap-3">
-                      <GitBranch className="size-4 shrink-0 text-primary" />
-                      <div>
-                        <p className="font-mono text-sm">{branch.name}</p>
-                        <p className="mt-0.5 text-xs text-muted-foreground">{branch.detail}</p>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-xs text-muted-foreground">{branch.owner}</p>
-                      <p className="mt-0.5 font-mono text-xs text-emerald-400">{branch.status}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#061A45]/75 via-transparent to-transparent" />
 
-            {/* Challenges */}
-            <div className="border-b border-border p-6">
-              <h3 className="mb-4 font-mono text-xs font-medium uppercase tracking-widest text-muted-foreground">
-                Challenges & Solutions
-              </h3>
-              <div className="flex flex-col gap-4">
-                {p.challenges.map((c, i) => (
-                  <div key={i} className="grid gap-3 rounded-xl border border-border bg-secondary/20 p-4 sm:grid-cols-2">
-                    <div>
-                      <p className="mb-1.5 font-mono text-xs text-destructive">Problem</p>
-                      <p className="text-sm leading-relaxed text-muted-foreground">{c.problem}</p>
-                    </div>
-                    <div>
-                      <p className="mb-1.5 font-mono text-xs text-emerald-400">Solution</p>
-                      <p className="text-sm leading-relaxed text-muted-foreground">{c.solution}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Stack */}
-            <div className="border-b border-border p-6">
-              <h3 className="mb-4 font-mono text-xs font-medium uppercase tracking-widest text-muted-foreground">
-                Full Stack
-              </h3>
-              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                {Object.entries(p.stack).map(([category, techs]) => (
-                  <div key={category}>
-                    <p className="mb-2 font-mono text-xs text-primary">{category}</p>
-                    <div className="flex flex-wrap gap-1.5">
-                      {techs.map((t) => (
-                        <span key={t} className="rounded border border-border px-2 py-0.5 font-mono text-xs text-foreground/60">
-                          {t}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Outcomes */}
-            <div className="border-b border-border p-6">
-              <h3 className="mb-4 font-mono text-xs font-medium uppercase tracking-widest text-muted-foreground">
-                Outcomes
-              </h3>
-              <ul className="grid gap-2 sm:grid-cols-2">
-                {p.outcomes.map((o) => (
-                  <li key={o} className="flex items-start gap-2 text-sm text-muted-foreground">
-                    <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-emerald-400" />
-                    {o}
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Next steps */}
-            <div className="p-6">
-              <h3 className="mb-4 font-mono text-xs font-medium uppercase tracking-widest text-muted-foreground">
-                Next Steps
-              </h3>
-              <ol className="flex flex-col gap-2">
-                {p.nextSteps.map((step, i) => (
-                  <li key={step} className="flex items-start gap-3 text-sm text-muted-foreground">
-                    <span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full border border-border font-mono text-xs text-primary">
-                      {i + 1}
-                    </span>
-                    {step}
-                  </li>
-                ))}
-              </ol>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Upcoming */}
-      <section className="bg-secondary/30 py-24">
-        <div className="mx-auto max-w-6xl px-6">
-          <p className="mb-3 font-mono text-xs font-medium uppercase tracking-widest text-primary">
-            What&apos;s Next
-          </p>
-          <h2 className="max-w-xl text-3xl font-bold tracking-tight md:text-4xl">
-            Projects in the pipeline
-          </h2>
-          <p className="mt-4 max-w-xl text-muted-foreground">
-            These become full case studies the moment they ship. If your project fits one of these categories, you can help define what goes here.
-          </p>
-
-          <div className="mt-12 grid gap-6 md:grid-cols-3">
-            {upcomingProjects.map((proj) => {
-              const Icon = proj.icon;
-              return (
-                <div key={proj.title} className="flex flex-col rounded-xl border border-border bg-card p-6">
-                  <div className="mb-4 flex items-center justify-between">
-                    <div className="flex size-10 items-center justify-center rounded-lg bg-primary/10">
-                      <Icon className="size-5 text-primary" />
-                    </div>
-                    <Badge
-                      variant="outline"
-                      className={
-                        proj.status === "In Discussion"
-                          ? "border-amber-500/30 font-mono text-xs text-amber-400"
-                          : proj.status === "Scoping"
-                          ? "border-blue-400/30 font-mono text-xs text-blue-400"
-                          : "font-mono text-xs"
-                      }
-                    >
-                      {proj.status}
-                    </Badge>
-                  </div>
-                  <h3 className="text-base font-semibold">{proj.title}</h3>
-                  <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">
-                    {proj.description}
-                  </p>
-                  <div className="mt-4 flex flex-wrap gap-1.5">
-                    {proj.tags.map((tag) => (
-                      <span key={tag} className="rounded border border-border px-2 py-0.5 font-mono text-xs text-foreground/50">
-                        {tag}
+                      <span className="absolute left-3 top-3 flex h-8 w-8 items-center justify-center rounded-full border border-white/30 bg-[#061A45]/45 text-[10px] font-bold text-white backdrop-blur-sm">
+                        {String(index + 1).padStart(2, "0")}
                       </span>
-                    ))}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
 
-      {/* CTA */}
-      <section className="py-24">
-        <div className="mx-auto max-w-6xl px-6">
-          <div className="relative overflow-hidden rounded-2xl border border-primary/30 bg-primary/5 px-8 py-16 text-center">
-            <div aria-hidden className="pointer-events-none absolute inset-0 flex items-center justify-center">
-              <div className="h-64 w-64 rounded-full bg-primary/10 blur-3xl" />
-            </div>
-            <div className="relative">
-              <p className="mb-4 font-mono text-xs font-medium uppercase tracking-widest text-primary">
-                Want to be on this page?
-              </p>
-              <h2 className="text-3xl font-bold tracking-tight">
-                Let&apos;s build something worth showing
-              </h2>
-              <p className="mx-auto mt-4 max-w-md text-muted-foreground">
-                We&apos;re selective about what we take on so everything we ship is something we&apos;re proud to put here. If your project is a real problem with a real outcome — let&apos;s talk.
-              </p>
-              <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
-                <Button asChild size="lg">
-                  <Link href="/contact">
-                    Start a project <ArrowRight className="size-4" />
-                  </Link>
-                </Button>
-                <Button asChild variant="outline" size="lg">
-                  <Link href="/services">See what we build</Link>
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-    </>
+                      <span className="absolute bottom-3 left-3 rounded-full border border-white/25 bg-[#061A45]/50 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-white backdrop-blur-sm">
+                        {project.category}
+                      </span>
+
+                      {project.featured && (
+                        <span className="absolute right-3 top-3 rounded-full bg-white px-3 py-1 text-[10px] font-bold text-[#1769FF] shadow-lg">
+                          Featured
+                        </span>
+                      )}
+                    </div>
+
+                    <div className="flex flex-1 flex-col">
+                      <div className="flex items-start justify-between gap-3">
+                        <h2 className="text-lg font-bold text-[#061A45] transition-colors group-hover:text-[#1769FF]">
+                          {project.title}
+                        </h2>
+
+                        {project.live && (
+                          <a
+                            href={project.live}
+                            target="_blank"
+                            rel="noreferrer"
+                            aria-label={`Open ${project.title} live demo`}
+                            className="rounded-lg border border-[#D9E6FA] p-2 text-[#61708A] transition hover:border-[#1769FF]/40 hover:bg-[#EEF5FF] hover:text-[#1769FF]"
+                          >
+                            <ExternalLink className="h-4 w-4" />
+                          </a>
+                        )}
+                      </div>
+
+                      <p className="mt-3 text-sm leading-relaxed text-[#61708A]">
+                        {project.description}
+                      </p>
+
+                      <div className="mt-5 border-t border-[#D9E6FA] pt-4">
+                        <p className="font-mono text-[10px] text-[#61708A]">
+                          {project.metrics}
+                        </p>
+
+                        <div className="mt-3 flex flex-wrap gap-1.5">
+                          {project.tags.map((tag) => (
+                            <span
+                              key={tag}
+                              className="rounded-md border border-[#D9E6FA] bg-[#F8FBFF] px-2 py-1 font-mono text-[10px] text-[#61708A]"
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+
+                        <div className="mt-4 flex flex-wrap gap-3">
+                          {project.live && (
+                            <a
+                              href={project.live}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="inline-flex items-center gap-1.5 text-xs font-bold text-[#1769FF] transition hover:gap-2"
+                            >
+                              Live demo
+                              <ArrowUpRight className="h-3.5 w-3.5" />
+                            </a>
+                          )}
+
+                          {project.github && (
+                            <a
+                              href={project.github}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="inline-flex items-center gap-1.5 text-xs font-bold text-[#61708A] transition hover:text-[#1769FF]"
+                            >
+                              <GitHubIcon className="h-4 w-4" />
+                              View code
+                            </a>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </motion.article>
+                ))}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </section>
+
+        <motion.section
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.25 }}
+          custom={0}
+          className="mt-24 rounded-3xl border border-[#D9E6FA] bg-gradient-to-br from-[#061A45] via-[#0A2D70] to-[#1769FF] px-6 py-12 text-center shadow-[0_20px_55px_rgba(23,105,255,0.22)] sm:px-12"
+        >
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#14C8E8]">
+            Your idea can be next
+          </p>
+
+          <h2 className="mx-auto mt-4 max-w-2xl text-3xl font-bold text-white sm:text-4xl">
+            Ready to build a smarter digital system?
+          </h2>
+
+          <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-white/75 sm:text-base">
+            Let’s discuss your AI automation, website, dashboard, or custom
+            software idea and turn it into a practical solution.
+          </p>
+
+          <Link
+            href="/contact"
+            className="mt-7 inline-flex items-center gap-2.5 rounded-full bg-white px-7 py-3.5 text-sm font-bold text-[#1769FF] transition hover:-translate-y-0.5 hover:bg-[#EEF5FF] hover:shadow-xl"
+          >
+            Start Your Project
+            <ArrowUpRight className="h-4 w-4" />
+          </Link>
+        </motion.section>
+      </div>
+    </main>
   );
 }

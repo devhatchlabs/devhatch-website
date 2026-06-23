@@ -1,40 +1,50 @@
 "use client";
 
-import { motion, useAnimation, useReducedMotion } from "framer-motion";
+import {
+  motion,
+  useAnimation,
+  useReducedMotion,
+} from "framer-motion";
 import { Quote, Sparkles, Star } from "lucide-react";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 
+// TEMPORARY DEMO TESTIMONIALS.
+// Replace with approved real client feedback before publishing.
 const testimonials = [
   {
     name: "Sarah Johnson",
     role: "CEO",
     company: "Growth Marketing Agency",
+    focus: "Lead Automation",
     quote:
-      "Humne DevHatch Labs ke sath apna inbound lead qualification flow automate kiya. System ab 24/7 chal raha hai aur hum pehle se 3x zyada leads handle kar rahe hain bina team ka size barhaye. Internal bottlenecks bilkul khatam ho chuke hain.",
+      "DevHatch Labs helped us structure and automate our inbound lead workflow. The system made lead handling clearer, faster, and much easier for our team to manage.",
     rating: 5,
   },
   {
     name: "David Chen",
     role: "CTO",
     company: "SaaS Startup",
+    focus: "RAG Application",
     quote:
-      "Inka custom RAG integration kamaal ka hai. Humare internal Slack aur documentation ko LLM se connect karne ke baad, customer support tickets direct 60% drop ho gaye. Sab se best cheez data privacy aur instant response time hai.",
+      "The RAG system gave our team a more practical way to use internal knowledge. Our documentation and support information became easier to search, access, and work with.",
     rating: 5,
   },
   {
     name: "Michael Rodriguez",
     role: "Founder",
     company: "Real Estate Group",
+    focus: "Agentic AI Workflow",
     quote:
-      "Hum cold outreach aur follow-ups par bohot time waste kar rahe the. DevHatch ke Agentic AI workflows setup karne ke baad hamara appointment booking rate seedha 20% se jump kar ke 80% par chala gaya hai. It's literally printing money.",
+      "DevHatch designed a focused follow-up workflow for our business. It helped us create a more consistent process for leads, conversations, and appointment management.",
     rating: 5,
   },
   {
     name: "Amara Okafor",
     role: "Operations Director",
-    company: "Logistics Sync",
+    company: "Logistics Company",
+    focus: "Business Automation",
     quote:
-      "Manual data entry aur invoice matching hamara bohot time leti thi. Inho ne AI agents ke zariye pura ERP automation workflow design kiya jis se hamara monthly processing time 40 ghante se kam ho kar sirf 15 minutes reh gaya.",
+      "We needed a better way to manage repetitive operational work. The automation workflow reduced manual effort and gave our team a much clearer process to follow.",
     rating: 5,
   },
 ];
@@ -58,7 +68,7 @@ export default function TestimonialsSection() {
 
   const marqueeItems = [...testimonials, ...testimonials];
 
-  const startMarquee = () => {
+  const startMarquee = useCallback(() => {
     if (shouldReduceMotion) {
       marqueeControls.set({ x: "0%" });
       return;
@@ -67,84 +77,93 @@ export default function TestimonialsSection() {
     marqueeControls.start({
       x: ["0%", "-50%"],
       transition: {
-        duration: 46,
+        duration: 50,
         ease: "linear",
         repeat: Infinity,
         repeatType: "loop",
       },
     });
-  };
+  }, [marqueeControls, shouldReduceMotion]);
 
   useEffect(() => {
     startMarquee();
-  }, [shouldReduceMotion]);
+
+    return () => {
+      marqueeControls.stop();
+    };
+  }, [marqueeControls, startMarquee]);
 
   return (
-    <section className="relative overflow-hidden bg-[#F6F9FF] py-20 md:py-28">
-      {/* Background decoration */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(23,105,255,0.07),transparent_60%)]"
-      />
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -right-24 -top-20 -z-10 h-80 w-80 rounded-full bg-[#1769FF]/10 blur-3xl"
-      />
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -bottom-24 -left-24 -z-10 h-80 w-80 rounded-full bg-[#6D4AFF]/10 blur-3xl"
-      />
+    <section className="relative overflow-hidden bg-[#F6F9FF] py-20 sm:py-24">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(23,105,255,0.09),transparent_62%)]" />
 
-      <div className="relative mx-auto max-w-7xl px-6">
-        {/* Header */}
-        <div className="mx-auto max-w-2xl text-center">
+      <div className="pointer-events-none absolute -left-24 bottom-0 h-80 w-80 rounded-full bg-[#6D4AFF]/10 blur-3xl" />
+
+      <div className="pointer-events-none absolute -right-24 top-0 h-80 w-80 rounded-full bg-[#14C8E8]/10 blur-3xl" />
+
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
+        <div className="mx-auto max-w-3xl text-center">
           <motion.span
             initial={{ opacity: 0, y: 14 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.4 }}
+            viewport={{ once: true, amount: 0.3 }}
             transition={transition}
-            className="inline-flex items-center gap-2 rounded-full border border-[#D9E6FA] bg-white px-4 py-1.5 text-xs font-semibold text-[#1769FF] shadow-sm"
+            className="inline-flex items-center gap-2 rounded-full border border-[#D9E6FA] bg-white px-4 py-1.5 text-xs font-bold text-[#1769FF] shadow-sm"
           >
             <Sparkles className="h-3.5 w-3.5" />
-            Client Results
+            Client Feedback
           </motion.span>
 
           <motion.h2
             initial={{ opacity: 0, y: 18 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.4 }}
+            viewport={{ once: true, amount: 0.3 }}
             transition={{ ...transition, delay: 0.08 }}
             className="mt-5 text-3xl font-bold tracking-tight text-[#061A45] sm:text-4xl"
           >
-            Trusted by teams who{" "}
+            Built with teams that value{" "}
             <span className="bg-gradient-to-r from-[#1769FF] via-[#159FE8] to-[#6D4AFF] bg-clip-text text-transparent">
-              measure what matters.
+              clarity and results.
             </span>
           </motion.h2>
 
           <motion.p
             initial={{ opacity: 0, y: 18 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.4 }}
+            viewport={{ once: true, amount: 0.3 }}
             transition={{ ...transition, delay: 0.16 }}
-            className="mt-4 text-base leading-relaxed text-[#61708A]"
+            className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-[#61708A]"
           >
-            Practical AI systems, clear workflows, and focused engineering for
-            businesses ready to scale intelligently.
+            We build practical AI systems, automation workflows, and software
+            that help teams remove repetitive work and operate with confidence.
           </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ ...transition, delay: 0.24 }}
+            className="mt-7 flex flex-wrap justify-center gap-2.5"
+          >
+            <span className="rounded-full border border-[#D9E6FA] bg-white px-3.5 py-2 text-xs font-semibold text-[#61708A]">
+              Practical systems
+            </span>
+
+            <span className="rounded-full border border-[#D9E6FA] bg-white px-3.5 py-2 text-xs font-semibold text-[#61708A]">
+              Clear workflows
+            </span>
+
+            <span className="rounded-full border border-[#D9E6FA] bg-white px-3.5 py-2 text-xs font-semibold text-[#61708A]">
+              Focused delivery
+            </span>
+          </motion.div>
         </div>
       </div>
 
-      {/* Testimonial marquee */}
-      <div className="relative mt-14 overflow-hidden md:mt-16">
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r from-[#F6F9FF] to-transparent sm:w-28"
-        />
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-[#F6F9FF] to-transparent sm:w-28"
-        />
+      <div className="relative mt-12 overflow-hidden sm:mt-14">
+        <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-12 bg-gradient-to-r from-[#F6F9FF] to-transparent sm:w-28" />
+
+        <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-12 bg-gradient-to-l from-[#F6F9FF] to-transparent sm:w-28" />
 
         <motion.div
           animate={marqueeControls}
@@ -159,34 +178,42 @@ export default function TestimonialsSection() {
               <article
                 key={`${testimonial.name}-${index}`}
                 aria-hidden={isDuplicate}
-                className="flex w-[320px] shrink-0 flex-col justify-between rounded-2xl border border-[#D9E6FA] bg-white p-6 shadow-[0_10px_35px_rgba(23,105,255,0.06)] transition-all duration-300 hover:-translate-y-1 hover:border-[#1769FF]/35 hover:shadow-[0_18px_40px_rgba(23,105,255,0.14)] sm:w-[410px] sm:p-8"
+                className="group relative flex min-h-[320px] w-[310px] shrink-0 flex-col justify-between overflow-hidden rounded-2xl border border-[#D9E6FA] bg-white p-6 shadow-[0_10px_30px_rgba(23,105,255,0.06)] transition-all duration-300 hover:-translate-y-1 hover:border-[#1769FF]/45 hover:shadow-[0_18px_42px_rgba(23,105,255,0.14)] sm:min-h-[335px] sm:w-[405px] sm:p-7"
               >
-                <div>
+                <div className="pointer-events-none absolute -right-12 -top-12 h-32 w-32 rounded-full bg-[#1769FF]/5 blur-2xl transition group-hover:bg-[#1769FF]/10" />
+
+                <div className="relative">
                   <div className="flex items-start justify-between gap-4">
-                    <div
-                      className="flex gap-1"
-                      aria-label={`${testimonial.rating} out of 5 stars`}
-                    >
-                      {Array.from({ length: testimonial.rating }).map(
-                        (_, starIndex) => (
-                          <Star
-                            key={starIndex}
-                            className="h-3.5 w-3.5 fill-[#1769FF] text-[#1769FF]"
-                          />
-                        ),
-                      )}
+                    <div>
+                      <div
+                        className="flex gap-1"
+                        aria-label={`${testimonial.rating} out of 5 stars`}
+                      >
+                        {Array.from({ length: testimonial.rating }).map(
+                          (_, starIndex) => (
+                            <Star
+                              key={starIndex}
+                              className="h-3.5 w-3.5 fill-[#1769FF] text-[#1769FF]"
+                            />
+                          ),
+                        )}
+                      </div>
+
+                      <span className="mt-3 inline-flex rounded-full border border-[#D9E6FA] bg-[#EEF5FF] px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.08em] text-[#1769FF]">
+                        {testimonial.focus}
+                      </span>
                     </div>
 
-                    <Quote className="h-6 w-6 rotate-180 text-[#1769FF]/20" />
+                    <Quote className="h-7 w-7 rotate-180 text-[#1769FF]/20" />
                   </div>
 
-                  <p className="mt-5 text-sm leading-relaxed text-[#061A45]">
+                  <p className="mt-5 text-sm leading-7 text-[#061A45]">
                     “{testimonial.quote}”
                   </p>
                 </div>
 
-                <div className="mt-8 flex items-center gap-3 border-t border-[#D9E6FA] pt-5">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[#1769FF] to-[#6D4AFF] text-xs font-bold text-white shadow-[0_6px_18px_rgba(23,105,255,0.22)]">
+                <div className="relative mt-7 flex items-center gap-3 border-t border-[#D9E6FA] pt-5">
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[#1769FF] via-[#159FE8] to-[#6D4AFF] text-xs font-bold text-white shadow-[0_7px_18px_rgba(23,105,255,0.24)]">
                     {getInitials(testimonial.name)}
                   </div>
 
@@ -194,7 +221,8 @@ export default function TestimonialsSection() {
                     <p className="truncate text-sm font-bold text-[#061A45]">
                       {testimonial.name}
                     </p>
-                    <p className="truncate text-xs text-[#61708A]">
+
+                    <p className="mt-0.5 truncate text-xs text-[#61708A]">
                       {testimonial.role}
                       <span className="mx-1.5 text-[#61708A]/50">•</span>
                       {testimonial.company}
@@ -206,6 +234,10 @@ export default function TestimonialsSection() {
           })}
         </motion.div>
       </div>
+
+      <p className="relative mx-auto mt-6 max-w-7xl px-6 text-center text-xs text-[#61708A]/75">
+        Hover over the reviews to pause the animation.
+      </p>
     </section>
   );
 }

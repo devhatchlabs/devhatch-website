@@ -72,6 +72,7 @@ export interface Config {
     posts: Post;
     'case-studies': CaseStudy;
     team: Team;
+    leads: Lead;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -84,6 +85,7 @@ export interface Config {
     posts: PostsSelect<false> | PostsSelect<true>;
     'case-studies': CaseStudiesSelect<false> | CaseStudiesSelect<true>;
     team: TeamSelect<false> | TeamSelect<true>;
+    leads: LeadsSelect<false> | LeadsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -334,6 +336,40 @@ export interface Team {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "leads".
+ */
+export interface Lead {
+  id: string;
+  name: string;
+  email: string;
+  company?: string | null;
+  service?:
+    | (
+        | 'ai-chatbot'
+        | 'agentic-ai'
+        | 'rag-application'
+        | 'ai-automation'
+        | 'custom-software'
+        | 'web-application'
+        | 'other'
+      )
+    | null;
+  budget?: ('under-500' | '500-1500' | '1500-5000' | '5000-plus' | 'discuss') | null;
+  /**
+   * The client's message about what they want to build, improve, or automate.
+   */
+  message: string;
+  status: 'new' | 'contacted' | 'qualified' | 'closed' | 'not-interested';
+  /**
+   * Private notes for the DevHatch Labs team.
+   */
+  internalNotes?: string | null;
+  source?: ('website' | 'whatsapp' | 'linkedin' | 'referral' | 'other') | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -375,6 +411,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'team';
         value: string | Team;
+      } | null)
+    | ({
+        relationTo: 'leads';
+        value: string | Lead;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -573,6 +613,23 @@ export interface TeamSelect<T extends boolean = true> {
       };
   order?: T;
   active?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "leads_select".
+ */
+export interface LeadsSelect<T extends boolean = true> {
+  name?: T;
+  email?: T;
+  company?: T;
+  service?: T;
+  budget?: T;
+  message?: T;
+  status?: T;
+  internalNotes?: T;
+  source?: T;
   updatedAt?: T;
   createdAt?: T;
 }

@@ -1,139 +1,136 @@
 "use client";
 
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import Link from "next/link";
 import {
   ArrowUpRight,
   Bot,
   ChevronDown,
-  Cloud,
-  Code,
-  Database,
+  Code2,
+  MessageSquare,
   PlayCircle,
+  Search,
   Sparkles,
+  Workflow,
+  type LucideIcon,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 28 },
-  show: (index: number = 0) => ({
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.7,
-      delay: index * 0.12,
-      ease: [0.16, 1, 0.3, 1] as const,
-    },
-  }),
+type EngineNode = {
+  id: string;
+  title: string;
+  services: string;
+  description: string;
+  icon: LucideIcon;
+  angle: number;
+  color: string;
+  activeColor: string;
 };
 
-const domains = [
+const engineNodes: EngineNode[] = [
   {
-    icon: Bot,
-    title: "AI Chatbots",
-    tagline: "Conversational AI for your business",
+    id: "attract",
+    title: "Attract",
+    services: "Websites · SEO · Branding",
     description:
-      "Build intelligent chat experiences for customer support, lead qualification, FAQs, and guided website conversations.",
-    gradient: "from-[#1769FF] to-[#159FE8]",
-    glow: "rgba(23, 105, 255, 0.14)",
-    capability: "Support · Lead qualification · FAQs",
+      "Build visibility, trust, and a stronger digital presence before the first conversation.",
+    icon: Search,
+    angle: 0,
+    color: "text-[#1769FF]",
+    activeColor: "border-[#1769FF] bg-[#1769FF] text-white",
   },
   {
-    icon: Code,
-    title: "Custom Software",
-    tagline: "Systems built around your workflow",
+    id: "engage",
+    title: "Engage",
+    services: "Chatbots · WhatsApp · Voice",
     description:
-      "Create scalable web applications, dashboards, portals, and internal tools designed around the way your business operates.",
-    gradient: "from-[#6D4AFF] to-[#159FE8]",
-    glow: "rgba(109, 74, 255, 0.14)",
-    capability: "Web apps · Dashboards · Integrations",
+      "Turn customer attention into useful conversations, qualified leads, and faster support.",
+    icon: MessageSquare,
+    angle: 90,
+    color: "text-[#159FE8]",
+    activeColor: "border-[#159FE8] bg-[#159FE8] text-white",
   },
   {
-    icon: Database,
-    title: "RAG Systems",
-    tagline: "Knowledge systems grounded in your data",
+    id: "automate",
+    title: "Automate",
+    services: "CRM · Leads · Workflows",
     description:
-      "Turn approved documents, FAQs, policies, and internal knowledge into searchable AI-powered answers for your team or customers.",
-    gradient: "from-[#14C8E8] to-[#1769FF]",
-    glow: "rgba(20, 200, 232, 0.14)",
-    capability: "Documents · Search · Knowledge retrieval",
+      "Remove repetitive work with connected systems for sales, operations, and follow-ups.",
+    icon: Workflow,
+    angle: 180,
+    color: "text-[#6D4AFF]",
+    activeColor: "border-[#6D4AFF] bg-[#6D4AFF] text-white",
   },
   {
-    icon: Cloud,
-    title: "AI Automation",
-    tagline: "Workflows that reduce repetitive work",
+    id: "build",
+    title: "Build",
+    services: "Software · SaaS · Apps",
     description:
-      "Connect your tools, automate recurring tasks, route information, and build reliable workflows that help teams move faster.",
-    gradient: "from-[#8B5CF6] to-[#6D4AFF]",
-    glow: "rgba(139, 92, 246, 0.14)",
-    capability: "Workflows · Data routing · Operations",
+      "Create custom products, dashboards, portals, and scalable systems around your workflow.",
+    icon: Code2,
+    angle: 270,
+    color: "text-[#1769FF]",
+    activeColor: "border-[#1769FF] bg-[#1769FF] text-white",
   },
 ];
 
 export default function HeroSection() {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const activeDomain = domains[activeIndex];
+  const [activeNodeId, setActiveNodeId] = useState("attract");
+
+  useEffect(() => {
+    const timer = window.setInterval(() => {
+      setActiveNodeId((currentNodeId) => {
+        const currentIndex = engineNodes.findIndex(
+          (node) => node.id === currentNodeId,
+        );
+
+        const nextIndex =
+          currentIndex === engineNodes.length - 1 ? 0 : currentIndex + 1;
+
+        return engineNodes[nextIndex].id;
+      });
+    }, 3600);
+
+    return () => window.clearInterval(timer);
+  }, []);
+
+  const activeNode =
+    engineNodes.find((node) => node.id === activeNodeId) ?? engineNodes[0];
 
   return (
-    <section className="relative isolate flex min-h-[calc(100vh-5rem)] items-center overflow-hidden bg-white pb-20 pt-28">
-      {/* Soft white-theme background glow */}
-      <div className="pointer-events-none absolute inset-0 -z-30 bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(23,105,255,0.08),transparent_60%)]" />
+    <section className="relative isolate overflow-hidden bg-white pb-20 pt-28 sm:pb-24 sm:pt-32">
+      <div className="pointer-events-none absolute inset-0 -z-30 bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(23,105,255,0.08),transparent_62%)]" />
 
       <div className="pointer-events-none absolute -left-24 -top-24 -z-20 h-80 w-80 rounded-full bg-[#1769FF]/10 blur-3xl" />
-      <div className="pointer-events-none absolute right-0 top-20 -z-20 h-96 w-96 rounded-full bg-[#14C8E8]/10 blur-3xl" />
-      <div className="pointer-events-none absolute bottom-0 left-1/3 -z-20 h-72 w-72 rounded-full bg-[#6D4AFF]/10 blur-3xl" />
+      <div className="pointer-events-none absolute right-0 top-16 -z-20 h-96 w-96 rounded-full bg-[#14C8E8]/10 blur-3xl" />
+      <div className="pointer-events-none absolute bottom-0 left-[35%] -z-20 h-72 w-72 rounded-full bg-[#6D4AFF]/10 blur-3xl" />
 
       <div className="relative mx-auto w-full max-w-7xl px-6">
-        <div className="grid items-center gap-12 lg:grid-cols-12 lg:gap-8">
-          {/* Left content */}
+        <div className="grid items-center gap-10 lg:grid-cols-12 lg:gap-8">
           <div className="lg:col-span-5">
-            <motion.span
-              animate="show"
-              custom={0}
-              initial="hidden"
-              variants={fadeUp}
-              className="inline-flex items-center gap-2 rounded-full border border-[#D9E6FA] bg-[#EEF5FF] px-4 py-1.5 text-xs font-semibold text-[#1769FF]"
-            >
+            <div className="inline-flex items-center gap-2 rounded-full border border-[#D9E6FA] bg-[#EEF5FF] px-4 py-1.5 text-xs font-semibold text-[#1769FF]">
               <span className="relative flex h-1.5 w-1.5">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#159FE8] opacity-75" />
                 <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[#1769FF]" />
               </span>
               AI systems built for the way you work
-            </motion.span>
+            </div>
 
-            <motion.h1
-              animate="show"
-              custom={1}
-              initial="hidden"
-              variants={fadeUp}
-              className="mt-6 text-4xl font-bold leading-[1.08] tracking-tight text-[#061A45] sm:text-5xl lg:text-[3.35rem]"
-            >
+            <h1 className="mt-6 text-4xl font-bold leading-[1.08] tracking-tight text-[#061A45] sm:text-5xl lg:text-[3.35rem]">
               Build smarter systems.
               <br />
               <span className="bg-gradient-to-r from-[#1769FF] via-[#159FE8] to-[#6D4AFF] bg-clip-text text-transparent">
                 Scale faster.
               </span>
-            </motion.h1>
+            </h1>
 
-            <motion.p
-              animate="show"
-              custom={2}
-              initial="hidden"
-              variants={fadeUp}
-              className="mt-5 max-w-xl text-base leading-relaxed text-[#61708A] sm:text-lg"
-            >
-              DevHatch Labs designs AI agents, chatbots, RAG systems, automation
-              workflows, and custom software that help ambitious teams move
-              faster with confidence.
-            </motion.p>
+            <p className="mt-5 max-w-xl text-base leading-relaxed text-[#61708A] sm:text-lg">
+              DevHatch Labs connects visibility, customer engagement,
+              automation, and custom technology into practical systems that help
+              ambitious teams move faster with confidence.
+            </p>
 
-            <motion.div
-              animate="show"
-              custom={3}
-              initial="hidden"
-              variants={fadeUp}
-              className="mt-8 flex flex-wrap items-center gap-4"
-            >
+            <div className="mt-8 flex flex-wrap items-center gap-4">
               <Link
                 href="/contact"
                 className="inline-flex items-center justify-center gap-2 rounded-full bg-[#1769FF] px-6 py-3 text-sm font-semibold text-white shadow-[0_8px_30px_rgba(23,105,255,0.28)] transition-all hover:-translate-y-0.5 hover:bg-[#159FE8] hover:shadow-[0_14px_40px_rgba(23,105,255,0.35)]"
@@ -149,148 +146,217 @@ export default function HeroSection() {
                 <PlayCircle className="h-4 w-4" />
                 Explore Our Services
               </Link>
-            </motion.div>
-
-            <motion.p
-              animate="show"
-              custom={4}
-              initial="hidden"
-              variants={fadeUp}
-              className="mt-8 text-xs font-medium tracking-wide text-[#61708A]"
-            >
-              AI Chatbots · Agentic Systems · RAG · Automation · Custom Software
-            </motion.p>
-          </div>
-
-          {/* Right interactive system card */}
-          <div className="grid grid-cols-1 items-center gap-4 md:grid-cols-12 lg:col-span-7">
-            {/* Service selector */}
-            <div className="flex gap-2 overflow-x-auto pb-2 md:col-span-4 md:flex-col md:overflow-visible md:pb-0">
-              {domains.map((domain, index) => {
-                const Icon = domain.icon;
-                const isActive = activeIndex === index;
-
-                return (
-                  <button
-                    key={domain.title}
-                    type="button"
-                    onClick={() => setActiveIndex(index)}
-                    onFocus={() => setActiveIndex(index)}
-                    onMouseEnter={() => setActiveIndex(index)}
-                    className={`relative flex min-w-[155px] items-center gap-3 rounded-xl border p-3 text-left transition-all duration-300 md:min-w-0 ${
-                      isActive
-                        ? "border-[#1769FF]/30 bg-white shadow-[0_4px_20px_rgba(23,105,255,0.10)]"
-                        : "border-transparent bg-transparent hover:bg-[#EEF5FF]"
-                    }`}
-                  >
-                    {isActive && (
-                      <motion.div
-                        layoutId="activeTabIndicator"
-                        transition={{
-                          type: "spring",
-                          stiffness: 300,
-                          damping: 30,
-                        }}
-                        className="absolute inset-0 -z-10 rounded-xl bg-gradient-to-r from-[#1769FF]/5 to-transparent"
-                      />
-                    )}
-
-                    <div
-                      className={`rounded-lg bg-gradient-to-br p-2 text-white transition-transform ${
-                        domain.gradient
-                      } ${isActive ? "scale-110" : "opacity-80"}`}
-                    >
-                      <Icon className="h-4 w-4" />
-                    </div>
-
-                    <span
-                      className={`text-xs font-semibold transition-colors md:text-sm ${
-                        isActive ? "text-[#1769FF]" : "text-[#61708A]"
-                      }`}
-                    >
-                      {domain.title}
-                    </span>
-                  </button>
-                );
-              })}
             </div>
 
-            {/* Main dashboard card */}
-            <div className="md:col-span-8">
-              <motion.div
-                layout
-                className="relative min-h-[350px] overflow-hidden rounded-2xl border border-[#D9E6FA] bg-white p-6 shadow-[0_20px_60px_-24px_rgba(23,105,255,0.22)]"
-              >
-                <div
-                  className="pointer-events-none absolute inset-0 opacity-70 transition-all duration-700"
-                  style={{
-                    background: `radial-gradient(circle at 82% 18%, ${activeDomain.glow}, transparent 58%)`,
+            <p className="mt-8 text-xs font-medium tracking-wide text-[#61708A]">
+              AI Systems · SaaS & Apps · Automation · SEO · Personal Branding
+            </p>
+          </div>
+
+          <div className="lg:col-span-7">
+            <div className="relative mx-auto w-full max-w-[500px]">
+              <div className="pointer-events-none absolute -inset-10 -z-10 rounded-full bg-gradient-to-br from-[#1769FF]/10 via-[#14C8E8]/10 to-[#6D4AFF]/10 blur-3xl" />
+
+              <div className="relative aspect-square w-full">
+                <motion.div
+                  animate={{ rotate: 360 }}
+                  transition={{
+                    duration: 34,
+                    repeat: Infinity,
+                    ease: "linear",
                   }}
+                  className="absolute inset-[12%] rounded-full border border-dashed border-[#1769FF]/25"
                 />
 
-                {/* Browser-style header */}
-                <div className="relative mb-6 flex items-center justify-between border-b border-[#D9E6FA] pb-4">
-                  <div className="flex items-center gap-1.5">
-                    <span className="h-2.5 w-2.5 rounded-full bg-red-400" />
-                    <span className="h-2.5 w-2.5 rounded-full bg-yellow-400" />
-                    <span className="h-2.5 w-2.5 rounded-full bg-green-400" />
+                <motion.div
+                  animate={{ rotate: -360 }}
+                  transition={{
+                    duration: 48,
+                    repeat: Infinity,
+                    ease: "linear",
+                  }}
+                  className="absolute inset-[24%] rounded-full border border-[#14C8E8]/25"
+                />
 
-                    <span className="ml-2 text-[10px] font-mono uppercase tracking-wider text-[#61708A]/70">
-                      DevHatch Core
+                <motion.div
+                  animate={{
+                    scale: [1, 1.05, 1],
+                    opacity: [0.18, 0.35, 0.18],
+                  }}
+                  transition={{
+                    duration: 3.5,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                  className="absolute left-1/2 top-1/2 h-[42%] w-[42%] -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#1769FF]/30"
+                />
+
+                <svg
+                  viewBox="0 0 100 100"
+                  className="pointer-events-none absolute inset-0 h-full w-full"
+                  aria-hidden="true"
+                >
+                  <line
+                    x1="50"
+                    y1="50"
+                    x2="23"
+                    y2="23"
+                    stroke="#1769FF"
+                    strokeOpacity="0.25"
+                    strokeWidth="0.45"
+                  />
+                  <line
+                    x1="50"
+                    y1="50"
+                    x2="77"
+                    y2="23"
+                    stroke="#14C8E8"
+                    strokeOpacity="0.25"
+                    strokeWidth="0.45"
+                  />
+                  <line
+                    x1="50"
+                    y1="50"
+                    x2="23"
+                    y2="77"
+                    stroke="#6D4AFF"
+                    strokeOpacity="0.25"
+                    strokeWidth="0.45"
+                  />
+                  <line
+                    x1="50"
+                    y1="50"
+                    x2="77"
+                    y2="77"
+                    stroke="#1769FF"
+                    strokeOpacity="0.25"
+                    strokeWidth="0.45"
+                  />
+
+                  <circle cx="32" cy="32" r="1.25" fill="#1769FF" />
+                  <circle cx="68" cy="32" r="1.25" fill="#14C8E8" />
+                  <circle cx="32" cy="68" r="1.25" fill="#6D4AFF" />
+                  <circle cx="68" cy="68" r="1.25" fill="#1769FF" />
+                </svg>
+
+                {engineNodes.map((node) => {
+                  const Icon = node.icon;
+                  const isActive = activeNode.id === node.id;
+
+                  return (
+                    <motion.div
+                      key={node.id}
+                      initial={{ rotate: node.angle }}
+                      animate={{ rotate: node.angle + 360 }}
+                      transition={{
+                        duration: 26,
+                        repeat: Infinity,
+                        ease: "linear",
+                      }}
+                      className="absolute inset-[12%]"
+                    >
+                      <div className="absolute left-1/2 top-0">
+                        <div className="-translate-x-1/2 -translate-y-1/2">
+                          <motion.button
+                            type="button"
+                            initial={{ rotate: -node.angle }}
+                            animate={{
+                              rotate: -node.angle - 360,
+                              y: [0, -5, 0],
+                            }}
+                            transition={{
+                              rotate: {
+                                duration: 26,
+                                repeat: Infinity,
+                                ease: "linear",
+                              },
+                              y: {
+                                duration: 2.8,
+                                repeat: Infinity,
+                                ease: "easeInOut",
+                              },
+                            }}
+                            whileHover={{ scale: 1.07 }}
+                            whileTap={{ scale: 0.97 }}
+                            onClick={() => setActiveNodeId(node.id)}
+                            className={`w-[118px] rounded-2xl border p-3 text-left shadow-[0_10px_26px_rgba(23,105,255,0.12)] transition sm:w-[138px] sm:p-3.5 ${
+                              isActive
+                                ? node.activeColor
+                                : "border-[#D9E6FA] bg-white text-[#061A45] hover:border-[#1769FF]/45"
+                            }`}
+                          >
+                            <div className="flex items-center gap-2">
+                              <span
+                                className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-xl ${
+                                  isActive
+                                    ? "bg-white/20 text-white"
+                                    : `bg-[#EEF5FF] ${node.color}`
+                                }`}
+                              >
+                                <Icon className="h-4 w-4" strokeWidth={2} />
+                              </span>
+
+                              <span className="min-w-0">
+                                <span className="block text-xs font-bold">
+                                  {node.title}
+                                </span>
+
+                                <span
+                                  className={`mt-0.5 block text-[9px] font-medium leading-snug ${
+                                    isActive
+                                      ? "text-white/80"
+                                      : "text-[#61708A]"
+                                  }`}
+                                >
+                                  {node.services}
+                                </span>
+                              </span>
+                            </div>
+                          </motion.button>
+                        </div>
+                      </div>
+                    </motion.div>
+                  );
+                })}
+
+                <motion.div
+                  animate={{
+                    scale: [1, 1.08, 1],
+                    y: [0, -5, 0],
+                  }}
+                  transition={{
+                    duration: 3.2,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                  className="absolute left-1/2 top-1/2 z-30 flex h-24 w-24 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-[#1769FF]/30 bg-white p-2 shadow-[0_18px_42px_rgba(23,105,255,0.24)] sm:h-28 sm:w-28"
+                >
+                  <div className="flex h-full w-full flex-col items-center justify-center rounded-full bg-gradient-to-br from-[#061A45] via-[#1769FF] to-[#159FE8] text-center text-white">
+                    <Bot className="h-6 w-6" />
+                    <span className="mt-1 text-[9px] font-bold tracking-[0.14em]">
+                      DEVHATCH
+                    </span>
+                    <span className="text-[8px] font-medium text-white/70">
+                      CORE
                     </span>
                   </div>
+                </motion.div>
+              </div>
 
-                  <Sparkles className="h-4 w-4 animate-pulse text-[#1769FF]" />
-                </div>
+              <motion.div
+                key={activeNode.id}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+                className="mx-auto mt-3 max-w-sm text-center"
+              >
+                <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-[#1769FF]">
+                  Active System Layer · {activeNode.title}
+                </p>
 
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={activeIndex}
-                    initial={{ opacity: 0, x: 16 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -16 }}
-                    transition={{ duration: 0.32, ease: "easeOut" }}
-                    className="relative flex min-h-[260px] flex-col justify-between"
-                  >
-                    <div>
-                      <span
-                        className={`inline-block rounded-md bg-gradient-to-r px-2 py-1 text-[10px] font-bold uppercase tracking-widest text-white ${activeDomain.gradient}`}
-                      >
-                        Active Module
-                      </span>
-
-                      <h2 className="mt-4 flex items-center gap-2 text-2xl font-bold text-[#061A45]">
-                        {activeDomain.title}
-                      </h2>
-
-                      <p className="mt-1 text-sm font-medium italic text-[#1769FF]">
-                        {activeDomain.tagline}
-                      </p>
-
-                      <p className="mt-5 max-w-md text-sm leading-relaxed text-[#61708A]">
-                        {activeDomain.description}
-                      </p>
-                    </div>
-
-                    <div className="mt-8 flex flex-col gap-3 border-t border-[#D9E6FA] pt-4 sm:flex-row sm:items-center sm:justify-between">
-                      <span className="text-[11px] font-mono text-[#61708A]">
-                        {activeDomain.capability}
-                      </span>
-
-                      <Link
-                        href="/services"
-                        className="group inline-flex items-center gap-1.5 text-xs font-semibold text-[#1769FF] transition-all hover:gap-2.5"
-                      >
-                        Explore Services
-                        <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-                      </Link>
-                    </div>
-                  </motion.div>
-                </AnimatePresence>
-
-                <div className="pointer-events-none absolute bottom-3 right-4 select-none text-[9px] font-mono text-[#61708A]/30">
-                  [SYS_REF: 0{activeIndex + 1}]
-                </div>
+                <p className="mt-1 text-xs leading-relaxed text-[#61708A]">
+                  {activeNode.description}
+                </p>
               </motion.div>
             </div>
           </div>
@@ -299,7 +365,7 @@ export default function HeroSection() {
         <motion.div
           animate={{ y: [0, 8, 0] }}
           transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute bottom-4 left-1/2 -translate-x-1/2 text-[#61708A]/40"
+          className="absolute bottom-3 left-1/2 -translate-x-1/2 text-[#61708A]/40"
         >
           <ChevronDown className="h-5 w-5" />
         </motion.div>

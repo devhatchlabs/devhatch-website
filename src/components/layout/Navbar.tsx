@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import Image from "next/image";
+import Logo from "./Logo";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -11,17 +11,19 @@ import {
   Bot,
   Brain,
   ChevronDown,
-  Cloud,
   Code2,
   Database,
   Layers,
   Menu,
   MessageSquare,
+  Search,
   Sparkles,
   Workflow,
   X,
   Zap,
 } from "lucide-react";
+
+const CALENDLY_URL = "https://calendly.com/saimiftikhar-work/30min";
 
 const navItems = [
   { label: "Home", href: "/" },
@@ -40,28 +42,33 @@ const serviceGroups = [
       { label: "Agentic AI Systems", icon: Brain },
       { label: "RAG Applications", icon: Database },
       { label: "AI Automation", icon: Workflow },
+      { label: "AI Calling Agents", icon: Bot },
+      { label: "WhatsApp Automation", icon: MessageSquare },
     ],
   },
   {
-    icon: BarChart3,
-    title: "Data & Cloud",
-    description: "Scalable data infrastructure",
+    icon: Workflow,
+    title: "Business Systems",
+    description: "Connected operations and lead workflows",
     items: [
-      { label: "Data Integration & Pipelines", icon: Database },
-      { label: "Big Data Analytics", icon: BarChart3 },
-      { label: "Cloud Deployment & MLOps", icon: Cloud },
-      { label: "Document OCR & Extraction", icon: Zap },
+      { label: "CRM Automation", icon: Workflow },
+      { label: "Lead Generation Systems", icon: Zap },
+      { label: "Custom Software", icon: Layers },
+      { label: "Business Dashboards", icon: BarChart3 },
+      { label: "API & Integrations", icon: Database },
     ],
   },
   {
-    icon: Layers,
-    title: "Custom Software",
-    description: "Tailored solutions for your business",
+    icon: Code2,
+    title: "Digital Products & Growth",
+    description: "Products, platforms, and visibility",
     items: [
       { label: "Web Applications", icon: Code2 },
-      { label: "API Development", icon: Sparkles },
-      { label: "Custom Software", icon: Layers },
-      { label: "Business Systems & Dashboards", icon: Workflow },
+      { label: "Full-Stack Applications", icon: Layers },
+      { label: "SaaS Product Development", icon: Layers },
+      { label: "Business Websites", icon: Code2 },
+      { label: "SEO & Search Visibility", icon: Search },
+      { label: "Personal Branding", icon: Sparkles },
     ],
   },
 ];
@@ -145,37 +152,17 @@ export function Navbar() {
       className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
         isScrolled
           ? "border-b border-[#D9E6FA] bg-white/90 py-3 shadow-[0_8px_28px_rgba(6,26,69,0.06)] backdrop-blur-xl"
-          : "bg-white/70 py-4 backdrop-blur-md"
+          : "bg-white/75 py-4 backdrop-blur-md"
       }`}
     >
       <div className="mx-auto max-w-7xl px-6">
         <div className="flex items-center justify-between gap-4">
-          {/* Brand */}
-          <Link
-            href="/"
-            aria-label="DevHatch Labs home"
-            className="group flex shrink-0 items-center gap-2.5"
-          >
-            <div className="relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl border border-[#D9E6FA] bg-white shadow-sm transition-all duration-300 group-hover:-translate-y-0.5 group-hover:border-[#1769FF]/45 group-hover:shadow-[0_8px_18px_rgba(23,105,255,0.14)]">
-              <Image
-                src="/brand/Logo1.jpeg"
-                alt="DevHatch Labs"
-                fill
-                priority
-                className="object-contain p-1.5"
-                sizes="40px"
-              />
-            </div>
+          {/* Brand: Logo.tsx already includes the icon and DEVHATCH LABS text */}
+          <div className="flex shrink-0 items-center">
+            <Logo />
+          </div>
 
-            <span className="text-base font-bold tracking-tight text-[#061A45] sm:text-lg">
-              DevHatch{" "}
-              <span className="bg-gradient-to-r from-[#1769FF] to-[#6D4AFF] bg-clip-text text-transparent">
-                Labs
-              </span>
-            </span>
-          </Link>
-
-          {/* Desktop navigation */}
+          {/* Desktop Navigation */}
           <nav
             aria-label="Primary navigation"
             className="hidden items-center rounded-full border border-[#D9E6FA] bg-[#F8FBFF]/90 p-1.5 lg:flex"
@@ -204,6 +191,7 @@ export function Navbar() {
                 }`}
               >
                 Services
+
                 <motion.span
                   animate={{ rotate: isServicesOpen ? 180 : 0 }}
                   transition={{ duration: 0.18 }}
@@ -220,7 +208,7 @@ export function Navbar() {
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 10, scale: 0.98 }}
                     transition={transition}
-                    className="absolute left-1/2 top-full mt-4 w-[790px] -translate-x-[30%] overflow-hidden rounded-2xl border border-[#D9E6FA] bg-white shadow-[0_22px_60px_rgba(6,26,69,0.13)]"
+                    className="absolute left-1/2 top-full mt-4 w-[840px] -translate-x-[32%] overflow-hidden rounded-2xl border border-[#D9E6FA] bg-white shadow-[0_22px_60px_rgba(6,26,69,0.13)]"
                   >
                     <div
                       aria-hidden="true"
@@ -242,6 +230,7 @@ export function Navbar() {
                                 <h3 className="text-xs font-bold uppercase tracking-[0.1em] text-[#061A45]">
                                   {group.title}
                                 </h3>
+
                                 <p className="mt-0.5 text-[10px] text-[#61708A]">
                                   {group.description}
                                 </p>
@@ -259,9 +248,10 @@ export function Navbar() {
                                     onClick={() => setIsServicesOpen(false)}
                                     className="group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-[#61708A] transition-all hover:bg-[#EEF5FF] hover:text-[#1769FF]"
                                   >
-                                    <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border border-[#D9E6FA] bg-white text-[#61708A] transition-colors group-hover:border-[#1769FF]/25 group-hover:bg-white group-hover:text-[#1769FF]">
+                                    <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border border-[#D9E6FA] bg-white text-[#61708A] transition-colors group-hover:border-[#1769FF]/25 group-hover:text-[#1769FF]">
                                       <ItemIcon className="h-3.5 w-3.5" />
                                     </div>
+
                                     {item.label}
                                   </Link>
                                 );
@@ -274,7 +264,8 @@ export function Navbar() {
 
                     <div className="relative flex items-center justify-between border-t border-[#D9E6FA] bg-[#F8FBFF] px-6 py-4">
                       <p className="text-xs text-[#61708A]">
-                        Explore practical AI, automation, and software systems.
+                        Explore practical AI, automation, software, and growth
+                        systems.
                       </p>
 
                       <Link
@@ -308,18 +299,20 @@ export function Navbar() {
               ))}
           </nav>
 
-          {/* Desktop CTA */}
+          {/* Desktop Calendly CTA */}
           <div className="hidden sm:block">
-            <Link
-              href="/contact"
+            <a
+              href={CALENDLY_URL}
+              target="_blank"
+              rel="noreferrer"
               className="group inline-flex items-center justify-center gap-1.5 rounded-full bg-[#1769FF] px-5 py-2.5 text-xs font-bold text-white shadow-[0_8px_22px_rgba(23,105,255,0.24)] transition-all hover:-translate-y-0.5 hover:bg-[#159FE8] hover:shadow-[0_12px_30px_rgba(23,105,255,0.34)]"
             >
               Book a Call
               <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-            </Link>
+            </a>
           </div>
 
-          {/* Mobile menu button */}
+          {/* Mobile Menu Button */}
           <button
             type="button"
             onClick={() => setIsMobileMenuOpen((current) => !current)}
@@ -336,7 +329,6 @@ export function Navbar() {
         </div>
       </div>
 
-      {/* Mobile menu */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
@@ -441,14 +433,16 @@ export function Navbar() {
                   </Link>
                 ))}
 
-              <Link
-                href="/contact"
+              <a
+                href={CALENDLY_URL}
+                target="_blank"
+                rel="noreferrer"
                 onClick={closeMobileMenu}
                 className="mt-4 flex items-center justify-center gap-2 rounded-full bg-[#1769FF] px-5 py-3 text-sm font-bold text-white shadow-[0_8px_22px_rgba(23,105,255,0.23)] transition-colors hover:bg-[#159FE8]"
               >
                 Book a Call
                 <ArrowUpRight className="h-4 w-4" />
-              </Link>
+              </a>
             </nav>
           </motion.div>
         )}
@@ -456,4 +450,5 @@ export function Navbar() {
     </header>
   );
 }
+
 export default Navbar;

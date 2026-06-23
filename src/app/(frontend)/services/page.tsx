@@ -1,304 +1,524 @@
-import type { Metadata } from "next";
-import Link from "next/link";
-import {
-  Bot, Zap, Code2, BrainCircuit,
-  CheckCircle2, ArrowRight, ChevronRight,
-  MessageSquare, Workflow, Globe, Database,
-  Layers, BarChart3, Clock, Sparkles,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+"use client";
 
-export const metadata: Metadata = {
-  title: "Services | DevHatch Labs",
-  description:
-    "AI chatbots, automation systems, full-stack web apps, and AI consulting — built and shipped by DevHatch Labs.",
+import { AnimatePresence, motion } from "framer-motion";
+import {
+  ArrowRight,
+  CheckCircle2,
+  Cpu,
+  Database,
+  Globe,
+  Layers,
+  MessageSquare,
+  Search,
+  Smartphone,
+  Sparkles,
+  Terminal,
+  User,
+  Users,
+  Zap,
+  type LucideIcon,
+} from "lucide-react";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+
+type MainService = {
+  id: string;
+  number: string;
+  title: string;
+  label: string;
+  tagline: string;
+  description: string;
+  icon: LucideIcon;
+  steps: string[];
+  outcomes: string[];
+  footer: string;
 };
 
-const services = [
+type AdditionalService = {
+  title: string;
+  description: string;
+  icon: LucideIcon;
+};
+
+const mainServices: MainService[] = [
   {
     id: "chatbots",
-    icon: Bot,
-    eyebrow: "Service 01",
-    title: "AI Chatbots & Intelligent Agents",
-    tagline: "Your best support rep never sleeps, never misses a message, and costs a fraction of a hire.",
+    number: "01",
+    title: "AI Chatbots",
+    label: "Customer Conversations",
+    tagline: "Always available. Always helpful.",
     description:
-      "We build custom AI chatbots trained on your specific business data — your products, your FAQs, your tone. Not a generic ChatGPT wrapper. A working system connected to your real workflow.",
-    whatYouGet: [
-      "Custom knowledge base trained on your docs, PDFs, or website",
-      "LangChain-powered reasoning for multi-step conversations",
-      "Sub-200ms responses via Groq inference API",
-      "Handoff logic — escalates to a human when needed",
-      "WhatsApp, web widget, or REST API deployment",
-      "Admin dashboard to view and export conversations",
+      "Custom AI chatbots for websites, WhatsApp, and support channels that answer questions, qualify leads, and guide customers forward.",
+    icon: MessageSquare,
+    steps: ["Customer Query", "AI Assistant", "Helpful Reply"],
+    outcomes: [
+      "24/7 customer support",
+      "Lead capture and qualification",
+      "Website and WhatsApp workflows",
     ],
-    stack: ["LangChain", "Groq API", "Node.js + Express", "MongoDB", "React", "Tailwind CSS"],
-    useCases: ["Customer support automation", "Lead qualification bots", "Internal HR/IT helpdesks", "Restaurant & booking assistants", "E-commerce product finders"],
-    deliveryTime: "1–3 weeks",
+    footer: "Support · Leads · Follow-ups",
+  },
+  {
+    id: "agentic-ai",
+    number: "02",
+    title: "Agentic AI Systems",
+    label: "Autonomous Workflows",
+    tagline: "AI that reasons, plans, and takes action.",
+    description:
+      "Intelligent AI agents that understand goals, use connected tools, make decisions, and complete multi-step business tasks.",
+    icon: Cpu,
+    steps: ["Business Goal", "AI Agent + Tools", "Task Completed"],
+    outcomes: [
+      "Multi-step task execution",
+      "Tool and API integrations",
+      "Smarter operational workflows",
+    ],
+    footer: "Agents · Tools · Execution",
+  },
+  {
+    id: "rag",
+    number: "03",
+    title: "RAG Applications",
+    label: "Private Knowledge AI",
+    tagline: "Your documents, made useful instantly.",
+    description:
+      "Secure AI systems that retrieve useful information from documents, PDFs, policies, and knowledge bases to give accurate answers.",
+    icon: Database,
+    steps: ["Your Documents", "Knowledge Search", "Accurate Answer"],
+    outcomes: [
+      "Document question answering",
+      "Private knowledge-base chatbots",
+      "LLM and vector database integration",
+    ],
+    footer: "Documents · Search · Answers",
   },
   {
     id: "automation",
+    number: "04",
+    title: "AI Automation",
+    label: "Workflow Automation",
+    tagline: "Turn repetitive work into background work.",
+    description:
+      "Automate lead handling, CRM updates, reporting, follow-ups, and recurring business operations with practical workflows.",
     icon: Zap,
-    eyebrow: "Service 02",
-    title: "Automation Systems",
-    tagline: "Eliminate the repetitive work that eats your team's time — and never comes back.",
-    description:
-      "We map your current manual workflows, identify the highest-leverage automation opportunities, then build and deploy systems that run continuously without supervision.",
-    whatYouGet: [
-      "WhatsApp Business automation via official API",
-      "CRM pipeline automation (lead capture → nurture → close)",
-      "Lead generation and enrichment pipelines",
-      "Email sequence automation and follow-up systems",
-      "Webhook-based triggers connecting your existing tools",
-      "Monitoring dashboard with alerts on failures",
+    steps: ["New Trigger", "Smart Workflow", "Action Completed"],
+    outcomes: [
+      "CRM and lead automation",
+      "Automated follow-ups",
+      "Connected business tools",
     ],
-    stack: ["n8n", "Zapier / Make", "WhatsApp Business API", "Node.js", "MongoDB", "REST APIs"],
-    useCases: ["WhatsApp lead response automation", "CRM data enrichment", "Automated follow-up sequences", "Report generation pipelines", "Multi-platform notification systems"],
-    deliveryTime: "1–2 weeks",
+    footer: "CRM · Workflows · Integrations",
   },
   {
-    id: "development",
-    icon: Code2,
-    eyebrow: "Service 03",
-    title: "Full-Stack Web Apps",
-    tagline: "From landing page to full SaaS product — designed well, built fast, production-ready.",
+    id: "software",
+    number: "05",
+    title: "Custom Software",
+    label: "Business Software",
+    tagline: "Systems built around your real workflow.",
     description:
-      "We build end-to-end web applications using the MERN stack. Whether you need a marketing site, a client portal, or a multi-tenant SaaS platform, we design it, build it, and ship it — with clean code you actually own.",
-    whatYouGet: [
-      "Responsive, mobile-first frontend (React + Tailwind)",
-      "REST API backend with authentication and role management",
-      "MongoDB database design and indexing",
-      "Admin dashboards and data visualizations",
-      "Deployment to Vercel + Render with CI/CD",
-      "Full handover with documentation and source code",
+      "Custom dashboards, portals, internal tools, and scalable software designed around your team, process, and business goals.",
+    icon: Terminal,
+    steps: ["Business Need", "Custom Build", "Live System"],
+    outcomes: [
+      "Internal business systems",
+      "Client portals and dashboards",
+      "Scalable custom workflows",
     ],
-    stack: ["React", "Next.js", "Node.js", "Express", "MongoDB", "Tailwind CSS", "TypeScript"],
-    useCases: ["SaaS product MVPs", "Client portals and dashboards", "Business landing pages", "Internal tools and admin panels", "REST APIs for mobile apps"],
-    deliveryTime: "2–6 weeks",
-  },
-  {
-    id: "consulting",
-    icon: BrainCircuit,
-    eyebrow: "Service 04",
-    title: "AI Consulting & RAG Systems",
-    tagline: "Not sure where AI fits in your business? We'll tell you — honestly, not optimistically.",
-    description:
-      "We audit your current operations, identify where AI creates real ROI (and where it doesn't), and build the proof-of-concept that shows it working before you commit to a full build. Specializing in RAG systems that let AI reason over your private documents.",
-    whatYouGet: [
-      "Workflow audit and AI opportunity mapping",
-      "ROI analysis — which automations pay for themselves",
-      "RAG pipeline built on your documents, PDFs, or databases",
-      "Vector database setup (semantic search over your data)",
-      "Proof-of-concept demo within one week",
-      "Ongoing advisory if needed after handover",
-    ],
-    stack: ["LangChain", "Vector DBs (Chroma / Pinecone)", "Groq / OpenAI", "Python", "FastAPI", "MongoDB"],
-    useCases: ["Document intelligence systems", "Internal knowledge base search", "AI-powered due diligence tools", "Legal / medical document Q&A", "Product catalog semantic search"],
-    deliveryTime: "1 week (POC) / 3–4 weeks (full build)",
+    footer: "Dashboards · Portals · Systems",
   },
 ];
 
-const whyUs = [
-  { icon: Layers, title: "Full-stack, not just AI", description: "We build the frontend, the backend, and the AI layer — no handoffs between three different agencies." },
-  { icon: Database, title: "Production-ready by default", description: "Everything we ship is deployed, documented, and owned by you. No \"it works on my machine\" deliverables." },
-  { icon: BarChart3, title: "Outcome-first scoping", description: "We scope every project around a measurable business result, not a list of features." },
-  { icon: Clock, title: "2–6 week delivery", description: "Small team, no bureaucracy. Most projects go from kick-off to live product faster than an agency books its first planning meeting." },
+const additionalServices: AdditionalService[] = [
+  {
+    title: "Web Applications",
+    description:
+      "Modern web apps, dashboards, client portals, and internal business platforms.",
+    icon: Layers,
+  },
+  {
+    title: "Full-Stack Applications",
+    description:
+      "Complete frontend, backend, database, authentication, API, and admin dashboard systems.",
+    icon: Terminal,
+  },
+  {
+    title: "SaaS Product Development",
+    description:
+      "Scalable subscription platforms, multi-user SaaS products, customer portals, and digital tools.",
+    icon: Cpu,
+  },
+  {
+    title: "Mobile App Development",
+    description:
+      "Mobile-first applications for Android and iOS with clean user experiences and connected backend systems.",
+    icon: Smartphone,
+  },
+  {
+    title: "Business Websites",
+    description:
+      "Professional websites and landing pages designed to explain your offer and convert visitors.",
+    icon: Globe,
+  },
+  {
+    title: "AI Calling Agents",
+    description:
+      "AI voice workflows for lead qualification, appointment booking, follow-ups, and customer calls.",
+    icon: MessageSquare,
+  },
+  {
+    title: "WhatsApp Automation",
+    description:
+      "Automated WhatsApp replies, support flows, lead capture, reminders, and follow-ups.",
+    icon: MessageSquare,
+  },
+  {
+    title: "CRM Automation",
+    description:
+      "Lead routing, CRM updates, follow-ups, and cleaner sales operations with less manual work.",
+    icon: Database,
+  },
+  {
+    title: "Lead Generation Systems",
+    description:
+      "Systems that capture, qualify, organize, and route leads from websites and campaigns.",
+    icon: Users,
+  },
+  {
+    title: "SEO & Search Visibility",
+    description:
+      "Technical SEO, content structure, and website improvements that help people find you.",
+    icon: Search,
+  },
+  {
+    title: "Personal Branding",
+    description:
+      "Founder positioning, content direction, and a stronger professional online presence.",
+    icon: User,
+  },
 ];
 
 export default function ServicesPage() {
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  useEffect(() => {
+    const timer = window.setInterval(() => {
+      setActiveIndex((currentIndex) =>
+        currentIndex === mainServices.length - 1 ? 0 : currentIndex + 1,
+      );
+    }, 5000);
+
+    return () => window.clearInterval(timer);
+  }, []);
+
+  const activeService = mainServices[activeIndex];
+  const ActiveIcon = activeService.icon;
+
   return (
-    <>
-      {/* Hero */}
-      <section className="relative overflow-hidden py-20 md:py-28">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0"
-          style={{
-            backgroundImage: "radial-gradient(circle at 1px 1px, rgba(37,99,235,0.12) 1px, transparent 0)",
-            backgroundSize: "32px 32px",
-          }}
-        />
-        <div aria-hidden className="pointer-events-none absolute -top-32 right-1/4 h-80 w-80 rounded-full bg-primary/15 blur-3xl" />
+    <main className="relative min-h-screen overflow-hidden bg-white pb-20 pt-24 sm:pt-28">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_75%_48%_at_50%_-10%,rgba(23,105,255,0.09),transparent_66%)]" />
 
-        <div className="relative mx-auto max-w-6xl px-6">
-          <div className="mb-6 flex items-center gap-2 font-mono text-xs text-muted-foreground">
-            <Link href="/" className="hover:text-foreground">Home</Link>
-            <ChevronRight className="size-3" />
-            <span className="text-foreground">Services</span>
-          </div>
+      <div className="pointer-events-none absolute inset-0 opacity-40 [background-image:radial-gradient(rgba(23,105,255,0.14)_1px,transparent_1px)] [background-size:22px_22px]" />
 
-          <p className="mb-4 font-mono text-xs font-medium uppercase tracking-widest text-primary">
-            What We Build
-          </p>
-          <h1 className="max-w-3xl text-4xl font-bold leading-tight tracking-tight md:text-5xl lg:text-6xl">
-            AI systems and software that actually ship
-          </h1>
-          <p className="mt-6 max-w-xl text-lg text-muted-foreground">
-            Four focused service areas. Every one delivered as a working, deployed system — not a slide deck, not a prototype that needs three more agencies to finish.
-          </p>
+      <div className="pointer-events-none absolute -right-28 top-28 h-72 w-72 rounded-full bg-[#14C8E8]/10 blur-3xl" />
+      <div className="pointer-events-none absolute -left-28 top-[52%] h-72 w-72 rounded-full bg-[#6D4AFF]/10 blur-3xl" />
 
-          <div className="mt-8 flex flex-wrap gap-3">
-            {services.map((s) => (
-              <a
-                key={s.id}
-                href={`#${s.id}`}
-                className="inline-flex items-center gap-1.5 rounded-full border border-border px-4 py-1.5 font-mono text-xs text-muted-foreground transition-colors hover:border-primary/50 hover:text-foreground"
-              >
-                <s.icon className="size-3 text-primary" />
-                {s.title.split(" ").slice(0, 2).join(" ")}
-              </a>
-            ))}
-          </div>
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
+        <div className="mb-5 flex items-center gap-2 text-xs font-medium text-[#61708A]">
+          <Link href="/" className="transition hover:text-[#1769FF]">
+            Home
+          </Link>
+          <span>›</span>
+          <span className="text-[#061A45]">Services</span>
         </div>
-      </section>
 
-      {/* Service sections */}
-      {services.map((service, index) => {
-        const Icon = service.icon;
-        const isEven = index % 2 === 1;
+        <section className="grid items-start gap-10 lg:grid-cols-2 lg:gap-14">
+          <div className="max-w-[560px]">
+            <motion.div
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.45 }}
+              className="inline-flex items-center gap-2 rounded-full border border-[#D9E6FA] bg-[#EEF5FF] px-4 py-2 text-xs font-bold uppercase tracking-[0.12em] text-[#1769FF]"
+            >
+              <Sparkles className="h-3.5 w-3.5" />
+              What We Build
+            </motion.div>
 
-        return (
-          <section
-            key={service.id}
-            id={service.id}
-            className={isEven ? "bg-secondary/30 py-24" : "py-24"}
+            <motion.h1
+              initial={{ opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.55, delay: 0.08 }}
+              className="mt-5 text-4xl font-bold leading-[1.05] tracking-tight text-[#061A45] sm:text-5xl lg:text-[56px]"
+            >
+              <span className="block">AI, software & growth</span>
+              <span className="block">systems that move</span>
+              <span className="block bg-gradient-to-r from-[#1769FF] via-[#159FE8] to-[#6D4AFF] bg-clip-text text-transparent">
+                businesses forward.
+              </span>
+            </motion.h1>
+
+            <motion.p
+              initial={{ opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.55, delay: 0.16 }}
+              className="mt-5 max-w-xl text-base leading-relaxed text-[#61708A] sm:text-lg"
+            >
+              DevHatch Labs builds practical AI systems, custom software,
+              automation workflows, digital products, SEO foundations, and
+              stronger online authority for growing businesses.
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.55, delay: 0.24 }}
+              className="mt-7 grid grid-cols-2 gap-2 sm:grid-cols-3"
+            >
+              {mainServices.map((service, index) => {
+                const Icon = service.icon;
+                const isActive = activeIndex === index;
+
+                return (
+                  <button
+                    key={service.id}
+                    type="button"
+                    onClick={() => setActiveIndex(index)}
+                    className={`flex items-center gap-2 rounded-xl border px-3 py-2.5 text-left text-xs font-semibold transition-all ${
+                      isActive
+                        ? "border-[#1769FF] bg-[#1769FF] text-white shadow-[0_10px_22px_rgba(23,105,255,0.22)]"
+                        : "border-[#D9E6FA] bg-white text-[#61708A] hover:border-[#1769FF]/40 hover:bg-[#EEF5FF] hover:text-[#1769FF]"
+                    }`}
+                  >
+                    <Icon className="h-3.5 w-3.5 shrink-0" strokeWidth={2} />
+                    <span className="truncate">{service.title}</span>
+                  </button>
+                );
+              })}
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.55, delay: 0.3 }}
+            >
+              <Link
+                href="/contact"
+                className="mt-7 inline-flex items-center gap-2 rounded-full bg-[#1769FF] px-5 py-3 text-sm font-bold text-white transition hover:-translate-y-0.5 hover:bg-[#0A55D6] hover:shadow-[0_12px_24px_rgba(23,105,255,0.25)]"
+              >
+                Discuss Your Project
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            </motion.div>
+          </div>
+
+          <motion.div
+            initial={{ opacity: 0, scale: 0.98, y: 18 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.12 }}
+            className="relative w-full max-w-[560px] lg:ml-auto lg:mt-2"
           >
-            <div className="mx-auto max-w-6xl px-6">
-              <div className="flex flex-wrap items-start justify-between gap-6">
-                <div className="max-w-2xl">
-                  <div className="mb-4 flex items-center gap-3">
-                    <div className="flex size-10 items-center justify-center rounded-lg bg-primary/10">
-                      <Icon className="size-5 text-primary" />
-                    </div>
-                    <span className="font-mono text-xs font-medium uppercase tracking-widest text-muted-foreground">
-                      {service.eyebrow}
-                    </span>
-                  </div>
-                  <h2 className="text-3xl font-bold tracking-tight md:text-4xl">{service.title}</h2>
-                  <p className="mt-3 text-lg font-medium text-primary">{service.tagline}</p>
-                  <p className="mt-4 leading-relaxed text-muted-foreground">{service.description}</p>
+            <div className="absolute -inset-4 -z-10 rounded-[2rem] bg-gradient-to-br from-[#1769FF]/10 via-[#14C8E8]/10 to-[#6D4AFF]/10 blur-2xl" />
+
+            <div className="overflow-hidden rounded-2xl border border-[#D9E6FA] bg-white shadow-[0_18px_40px_rgba(23,105,255,0.12)]">
+              <div className="flex items-center justify-between border-b border-[#D9E6FA] bg-[#F8FBFF] px-5 py-4">
+                <div className="flex items-center gap-2">
+                  <span className="h-2.5 w-2.5 rounded-full bg-red-400" />
+                  <span className="h-2.5 w-2.5 rounded-full bg-yellow-400" />
+                  <span className="h-2.5 w-2.5 rounded-full bg-green-400" />
+
+                  <span className="ml-2 text-[10px] font-bold uppercase tracking-[0.14em] text-[#8A9AB5]">
+                    DevHatch Core
+                  </span>
                 </div>
 
-                <div className="flex flex-col items-end gap-2">
-                  <Badge variant="outline" className="font-mono text-xs">
-                    <Clock className="mr-1 size-3" />
-                    {service.deliveryTime}
-                  </Badge>
-                  <Button asChild>
-                    <Link href="/contact">
-                      Start this project <ArrowRight className="size-4" />
-                    </Link>
-                  </Button>
-                </div>
+                <motion.div
+                  animate={{ rotate: [0, 12, -12, 0] }}
+                  transition={{
+                    duration: 2.4,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                >
+                  <Sparkles className="h-5 w-5 text-[#1769FF]" />
+                </motion.div>
               </div>
 
-              <div className="mt-12 grid gap-6 md:grid-cols-3">
-                {/* What you get */}
-                <div className="rounded-xl border border-border bg-card p-6">
-                  <h3 className="mb-4 flex items-center gap-2 text-sm font-semibold">
-                    <CheckCircle2 className="size-4 text-primary" />
-                    What you get
-                  </h3>
-                  <ul className="flex flex-col gap-3">
-                    {service.whatYouGet.map((item) => (
-                      <li key={item} className="flex items-start gap-2 text-sm text-muted-foreground">
-                        <span className="mt-1.5 size-1 shrink-0 rounded-full bg-primary" />
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.div
+                  key={activeService.id}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.26 }}
+                  className="p-5 sm:p-6"
+                >
+                  <div className="flex items-start justify-between gap-4">
+                    <div>
+                      <span className="inline-flex rounded-full bg-gradient-to-r from-[#1769FF] to-[#6D4AFF] px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.12em] text-white">
+                        {activeService.label}
+                      </span>
 
-                {/* Stack + Use cases */}
-                <div className="flex flex-col gap-6 md:col-span-2">
-                  <div className="rounded-xl border border-border bg-card p-6">
-                    <h3 className="mb-4 flex items-center gap-2 text-sm font-semibold">
-                      <Layers className="size-4 text-primary" />
-                      Tech stack
-                    </h3>
-                    <div className="flex flex-wrap gap-2">
-                      {service.stack.map((tech) => (
-                        <span key={tech} className="rounded-md border border-border px-3 py-1 font-mono text-xs text-foreground/70">
-                          {tech}
-                        </span>
+                      <h2 className="mt-3 text-2xl font-bold tracking-tight text-[#061A45]">
+                        {activeService.title}
+                      </h2>
+
+                      <p className="mt-1 text-sm font-semibold italic text-[#1769FF]">
+                        {activeService.tagline}
+                      </p>
+                    </div>
+
+                    <motion.div
+                      animate={{ scale: [1, 1.08, 1] }}
+                      transition={{
+                        duration: 2.2,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                      }}
+                      className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[#1769FF]/10 text-[#1769FF]"
+                    >
+                      <ActiveIcon className="h-5 w-5" strokeWidth={2} />
+                    </motion.div>
+                  </div>
+
+                  <p className="mt-4 max-w-lg text-sm leading-relaxed text-[#61708A]">
+                    {activeService.description}
+                  </p>
+
+                  <div className="mt-5 overflow-hidden rounded-xl border border-[#D9E6FA] bg-[#F8FBFF]">
+                    <div className="grid grid-cols-3 divide-x divide-[#D9E6FA]">
+                      {activeService.steps.map((step, index) => (
+                        <div
+                          key={`${activeService.id}-${step}`}
+                          className="px-2 py-4 text-center sm:px-3"
+                        >
+                          <span className="mx-auto flex h-7 w-7 items-center justify-center rounded-full bg-white text-[10px] font-bold text-[#1769FF] shadow-sm">
+                            0{index + 1}
+                          </span>
+
+                          <p className="mt-2 text-[10px] font-bold leading-snug text-[#061A45] sm:text-xs">
+                            {step}
+                          </p>
+
+                          <motion.span
+                            animate={{ opacity: [0.25, 1, 0.25] }}
+                            transition={{
+                              duration: 1.5,
+                              delay: index * 0.22,
+                              repeat: Infinity,
+                            }}
+                            className="mx-auto mt-2 block h-1 w-8 rounded-full bg-[#1769FF]/35"
+                          />
+                        </div>
                       ))}
                     </div>
                   </div>
 
-                  <div className="rounded-xl border border-border bg-card p-6">
-                    <h3 className="mb-4 flex items-center gap-2 text-sm font-semibold">
-                      <Sparkles className="size-4 text-primary" />
-                      Use cases
-                    </h3>
-                    <ul className="grid gap-2 sm:grid-cols-2">
-                      {service.useCases.map((uc) => (
-                        <li key={uc} className="flex items-center gap-2 text-sm text-muted-foreground">
-                          <ChevronRight className="size-3 shrink-0 text-primary" />
-                          {uc}
-                        </li>
-                      ))}
-                    </ul>
+                  <div className="mt-5 flex flex-col gap-3 border-t border-[#D9E6FA] pt-4 sm:flex-row sm:items-center sm:justify-between">
+                    <div className="flex items-center gap-2 text-xs text-[#61708A]">
+                      <CheckCircle2 className="h-4 w-4 shrink-0 text-[#1769FF]" />
+                      <span>{activeService.outcomes[0]}</span>
+                    </div>
+
+                    <Link
+                      href="/contact"
+                      className="inline-flex items-center gap-2 text-xs font-bold text-[#1769FF] transition hover:gap-3"
+                    >
+                      Discuss this service
+                      <ArrowRight className="h-3.5 w-3.5" />
+                    </Link>
                   </div>
+                </motion.div>
+              </AnimatePresence>
+
+              <div className="flex items-center justify-between border-t border-[#D9E6FA] bg-[#F8FBFF] px-5 py-3">
+                <div className="flex items-center gap-1.5">
+                  {mainServices.map((service, index) => (
+                    <button
+                      key={service.id}
+                      type="button"
+                      aria-label={`Show ${service.title}`}
+                      onClick={() => setActiveIndex(index)}
+                      className={`h-2 rounded-full transition-all ${
+                        activeIndex === index
+                          ? "w-6 bg-[#1769FF]"
+                          : "w-2 bg-[#D9E6FA] hover:bg-[#159FE8]"
+                      }`}
+                    />
+                  ))}
                 </div>
+
+                <span className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#8A9AB5]">
+                  {activeService.number} / {mainServices.length}
+                </span>
               </div>
             </div>
-          </section>
-        );
-      })}
+          </motion.div>
+        </section>
 
-      {/* Why DevHatch */}
-      <section className="py-24">
-        <div className="mx-auto max-w-6xl px-6">
-          <p className="mb-3 font-mono text-xs font-medium uppercase tracking-widest text-primary">
-            Why DevHatch Labs
-          </p>
-          <h2 className="max-w-xl text-3xl font-bold tracking-tight md:text-4xl">
-            What makes us different
-          </h2>
-          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {whyUs.map((item) => {
-              const Icon = item.icon;
+        <section className="mt-16 border-t border-[#D9E6FA] pt-10">
+          <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.14em] text-[#1769FF]">
+                Specialized Services
+              </p>
+
+              <h2 className="mt-2 text-2xl font-bold tracking-tight text-[#061A45] sm:text-3xl">
+                More systems for growth, visibility, and operations.
+              </h2>
+            </div>
+
+            <Link
+              href="/contact"
+              className="inline-flex items-center gap-2 text-sm font-bold text-[#1769FF] transition hover:gap-3"
+            >
+              Ask about a service
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+
+          <div className="mt-7 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {additionalServices.map((service) => {
+              const Icon = service.icon;
+
               return (
-                <div key={item.title} className="rounded-xl border border-border bg-card p-6">
-                  <div className="mb-3 flex size-9 items-center justify-center rounded-lg bg-primary/10">
-                    <Icon className="size-4 text-primary" />
+                <article
+                  key={service.title}
+                  className="group rounded-2xl border border-[#D9E6FA] bg-white p-5 shadow-[0_8px_20px_rgba(23,105,255,0.04)] transition duration-300 hover:-translate-y-1 hover:border-[#1769FF]/40 hover:shadow-[0_14px_30px_rgba(23,105,255,0.10)]"
+                >
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#EEF5FF] text-[#1769FF] transition duration-300 group-hover:scale-110 group-hover:bg-[#1769FF] group-hover:text-white">
+                    <Icon className="h-4.5 w-4.5" strokeWidth={1.9} />
                   </div>
-                  <h3 className="mb-2 text-sm font-semibold">{item.title}</h3>
-                  <p className="text-xs leading-relaxed text-muted-foreground">{item.description}</p>
-                </div>
+
+                  <h3 className="mt-4 text-sm font-bold text-[#061A45]">
+                    {service.title}
+                  </h3>
+
+                  <p className="mt-2 text-xs leading-relaxed text-[#61708A]">
+                    {service.description}
+                  </p>
+                </article>
               );
             })}
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Final CTA */}
-      <section className="pb-24">
-        <div className="mx-auto max-w-6xl px-6">
-          <div className="relative overflow-hidden rounded-2xl border border-primary/30 bg-primary/5 px-8 py-16 text-center">
-            <div aria-hidden className="pointer-events-none absolute inset-0 flex items-center justify-center">
-              <div className="h-64 w-64 rounded-full bg-primary/10 blur-3xl" />
-            </div>
-            <div className="relative">
-              <p className="mb-4 font-mono text-xs font-medium uppercase tracking-widest text-primary">
-                Not sure which service fits?
-              </p>
-              <h2 className="text-3xl font-bold tracking-tight">Let&apos;s figure it out together</h2>
-              <p className="mx-auto mt-4 max-w-md text-muted-foreground">
-                Book a free 30-minute call. Bring your problem — we&apos;ll tell you honestly what it takes to solve it, which service fits, and what a realistic budget and timeline looks like.
-              </p>
-              <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
-                <Button asChild size="lg">
-                  <Link href="/contact">Book a Free Call <ArrowRight className="size-4" /></Link>
-                </Button>
-                <Button asChild variant="outline" size="lg">
-                  <a href="mailto:hello@devhatchlabs.com">hello@devhatchlabs.com</a>
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-    </>
+        <section className="mt-16 rounded-3xl bg-gradient-to-br from-[#061A45] via-[#0A2D70] to-[#1769FF] px-6 py-9 text-center shadow-[0_20px_46px_rgba(23,105,255,0.20)] sm:px-10">
+          <p className="text-xs font-bold uppercase tracking-[0.14em] text-[#14C8E8]">
+            Start with the right system
+          </p>
+
+          <h2 className="mx-auto mt-3 max-w-2xl text-2xl font-bold text-white sm:text-3xl">
+            Have an idea, workflow, website, or personal brand you want to grow?
+          </h2>
+
+          <Link
+            href="/contact"
+            className="mt-6 inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-bold text-[#1769FF] transition hover:-translate-y-0.5 hover:bg-[#EEF5FF]"
+          >
+            Start a Conversation
+            <ArrowRight className="h-4 w-4" />
+          </Link>
+        </section>
+      </div>
+    </main>
   );
 }

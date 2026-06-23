@@ -7,6 +7,7 @@ import { CaseStudies } from "./src/collections/CaseStudies";
 import { Team } from "./src/collections/Team";
 import { Users } from "./src/collections/Users";
 import { Media } from "./src/collections/Media";
+import { Leads } from "./src/collections/Leads";
 
 export default buildConfig({
   admin: {
@@ -16,7 +17,7 @@ export default buildConfig({
     },
   },
 
-  collections: [Users, Media, Posts, CaseStudies, Team],
+  collections: [Users, Media, Posts, CaseStudies, Team, Leads],
 
   editor: lexicalEditor(),
 
