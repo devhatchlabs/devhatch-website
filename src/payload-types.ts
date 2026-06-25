@@ -73,6 +73,8 @@ export interface Config {
     'case-studies': CaseStudy;
     team: Team;
     leads: Lead;
+    'job-positions': JobPosition;
+    'job-applications': JobApplication;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -86,6 +88,8 @@ export interface Config {
     'case-studies': CaseStudiesSelect<false> | CaseStudiesSelect<true>;
     team: TeamSelect<false> | TeamSelect<true>;
     leads: LeadsSelect<false> | LeadsSelect<true>;
+    'job-positions': JobPositionsSelect<false> | JobPositionsSelect<true>;
+    'job-applications': JobApplicationsSelect<false> | JobApplicationsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -370,6 +374,63 @@ export interface Lead {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "job-positions".
+ */
+export interface JobPosition {
+  id: string;
+  title: string;
+  department: string;
+  employmentType: 'full-time' | 'part-time' | 'internship' | 'contract' | 'freelance';
+  workMode: 'remote' | 'hybrid' | 'on-site';
+  location: string;
+  shortDescription: string;
+  responsibilities?:
+    | {
+        item: string;
+        id?: string | null;
+      }[]
+    | null;
+  requirements?:
+    | {
+        item: string;
+        id?: string | null;
+      }[]
+    | null;
+  status: 'open' | 'closed';
+  applicationDeadline?: string | null;
+  /**
+   * Lower numbers appear first on the public Join Us page.
+   */
+  sortOrder?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "job-applications".
+ */
+export interface JobApplication {
+  id: string;
+  job: string | JobPosition;
+  fullName: string;
+  email: string;
+  phone: string;
+  location: string;
+  linkedinUrl?: string | null;
+  portfolioUrl?: string | null;
+  resume: string | Media;
+  coverNote: string;
+  /**
+   * Applicant agrees that DevHatch Labs can review and store their application details for recruitment purposes.
+   */
+  consent: boolean;
+  status: 'new' | 'reviewed' | 'shortlisted' | 'rejected' | 'hired';
+  internalNotes?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -415,6 +476,14 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'leads';
         value: string | Lead;
+      } | null)
+    | ({
+        relationTo: 'job-positions';
+        value: string | JobPosition;
+      } | null)
+    | ({
+        relationTo: 'job-applications';
+        value: string | JobApplication;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -630,6 +699,55 @@ export interface LeadsSelect<T extends boolean = true> {
   status?: T;
   internalNotes?: T;
   source?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "job-positions_select".
+ */
+export interface JobPositionsSelect<T extends boolean = true> {
+  title?: T;
+  department?: T;
+  employmentType?: T;
+  workMode?: T;
+  location?: T;
+  shortDescription?: T;
+  responsibilities?:
+    | T
+    | {
+        item?: T;
+        id?: T;
+      };
+  requirements?:
+    | T
+    | {
+        item?: T;
+        id?: T;
+      };
+  status?: T;
+  applicationDeadline?: T;
+  sortOrder?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "job-applications_select".
+ */
+export interface JobApplicationsSelect<T extends boolean = true> {
+  job?: T;
+  fullName?: T;
+  email?: T;
+  phone?: T;
+  location?: T;
+  linkedinUrl?: T;
+  portfolioUrl?: T;
+  resume?: T;
+  coverNote?: T;
+  consent?: T;
+  status?: T;
+  internalNotes?: T;
   updatedAt?: T;
   createdAt?: T;
 }

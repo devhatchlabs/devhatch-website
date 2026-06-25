@@ -1,0 +1,1 @@
+export const CALENDLY_URL = "https://calendly.com/saimiftikhar-work/30min";

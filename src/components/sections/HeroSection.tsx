@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
+import { CALENDLY_URL } from "@/lib/constants";
 import {
   ArrowRight,
   Sparkles,
@@ -182,17 +183,39 @@ export function HeroSection() {
               faster with confidence.
             </p>
 
-            {/* CTAs */}
-            <div className="mt-8 flex flex-wrap items-center gap-4">
-              <Button asChild size="lg">
-                <Link href="/contact">
-                  Book a Discovery Call <ArrowRight className="size-4" />
-                </Link>
-              </Button>
-              <Button asChild variant="outline" size="lg">
-                <Link href="/services">Explore Our Services</Link>
-              </Button>
-            </div>
+{/* CTAs */}
+<div className="mt-8 flex flex-wrap items-center gap-4">
+  <Button asChild size="lg">
+    <a
+      href={CALENDLY_URL}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      Book a Discovery Call
+      <ArrowRight className="size-4" />
+    </a>
+  </Button>
+
+  <Button asChild variant="outline" size="lg">
+    <Link href="/services">
+      Explore Our Services
+      <ArrowRight className="size-4" />
+    </Link>
+  </Button>
+</div>
+
+{/* Careers link */}
+<div className="mt-5 flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
+  <span>Looking to build with us?</span>
+
+  <Link
+    href="/join-us"
+    className="group inline-flex items-center gap-1 font-semibold text-brand-blue transition-colors hover:text-electric-blue"
+  >
+    Join our team
+    <ArrowRight className="size-3.5 transition-transform duration-200 group-hover:translate-x-1" />
+  </Link>
+</div>
 
             {/* Trust line */}
             <p className="mt-8 text-xs font-medium tracking-wide text-muted-foreground">

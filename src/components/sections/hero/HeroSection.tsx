@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { CALENDLY_URL } from "@/lib/constants";
 import {
   ArrowUpRight,
   Bot,
@@ -129,24 +130,39 @@ export default function HeroSection() {
               automation, and custom technology into practical systems that help
               ambitious teams move faster with confidence.
             </p>
+<div className="mt-8">
+  <div className="flex flex-wrap items-center gap-4">
+    <a
+      href={CALENDLY_URL}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="inline-flex items-center justify-center gap-2 rounded-full bg-[#1769FF] px-6 py-3 text-sm font-semibold text-white shadow-[0_8px_30px_rgba(23,105,255,0.28)] transition-all hover:-translate-y-0.5 hover:bg-[#159FE8] hover:shadow-[0_14px_40px_rgba(23,105,255,0.35)]"
+    >
+      Book a Discovery Call
+      <ArrowUpRight className="h-4 w-4" />
+    </a>
 
-            <div className="mt-8 flex flex-wrap items-center gap-4">
-              <Link
-                href="/contact"
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-[#1769FF] px-6 py-3 text-sm font-semibold text-white shadow-[0_8px_30px_rgba(23,105,255,0.28)] transition-all hover:-translate-y-0.5 hover:bg-[#159FE8] hover:shadow-[0_14px_40px_rgba(23,105,255,0.35)]"
-              >
-                Book a Discovery Call
-                <ArrowUpRight className="h-4 w-4" />
-              </Link>
+    <Link
+      href="/services"
+      className="inline-flex items-center justify-center gap-2 rounded-full border border-[#D9E6FA] bg-white px-6 py-3 text-sm font-semibold text-[#061A45] transition-all hover:-translate-y-0.5 hover:border-[#1769FF] hover:bg-[#EEF5FF]"
+    >
+      <PlayCircle className="h-4 w-4" />
+      Explore Our Services
+    </Link>
+  </div>
 
-              <Link
-                href="/services"
-                className="inline-flex items-center justify-center gap-2 rounded-full border border-[#D9E6FA] bg-white px-6 py-3 text-sm font-semibold text-[#061A45] transition-all hover:-translate-y-0.5 hover:border-[#1769FF] hover:bg-[#EEF5FF]"
-              >
-                <PlayCircle className="h-4 w-4" />
-                Explore Our Services
-              </Link>
-            </div>
+  <Link
+    href="/join-us"
+    className="group mt-5 inline-flex items-center gap-2 text-sm font-semibold text-[#1769FF] transition-colors hover:text-[#159FE8]"
+  >
+    <span className="font-normal text-[#61708A]">
+      Looking to build with us?
+    </span>
+
+    Join our team
+    <ArrowUpRight className="h-4 w-4 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+  </Link>
+</div>
 
             <p className="mt-8 text-xs font-medium tracking-wide text-[#61708A]">
               AI Systems · SaaS & Apps · Automation · SEO · Personal Branding

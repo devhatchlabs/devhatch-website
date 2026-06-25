@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
 
 /*
   DevHatch Labs — Light / Ice-White Brand Theme
@@ -8,7 +9,55 @@
   accents only — used for gradients, badges, glows, and key words, never
   as full-section backgrounds or full-paragraph text color.
 */
+html {
+  background: #f6f9ff;
+}
 
+html.dark {
+  background: #071225;
+}
+
+body {
+  background: #f6f9ff;
+  color: #061a45;
+  transition:
+    background-color 220ms ease,
+    color 220ms ease;
+}
+
+html.dark body {
+  background: #071225;
+  color: #f7faff;
+}
+
+/* Temporary compatibility layer for existing DevHatch light UI */
+html.dark .bg-white {
+  background-color: #0e1b36 !important;
+}
+
+html.dark [class*="bg-white/"] {
+  background-color: rgba(14, 27, 54, 0.86) !important;
+}
+
+html.dark [class*="bg-[#F6F9FF]"] {
+  background-color: #071225 !important;
+}
+
+html.dark [class*="bg-[#EEF5FF]"] {
+  background-color: #10264a !important;
+}
+
+html.dark [class*="text-[#061A45]"] {
+  color: #f7faff !important;
+}
+
+html.dark [class*="text-[#61708A]"] {
+  color: #afbed6 !important;
+}
+
+html.dark [class*="border-[#D9E6FA]"] {
+  border-color: #29476f !important;
+}
 :root {
   /* ---- shadcn/ui semantic slots, mapped to the DevHatch palette ---- */
   --background: #ffffff;

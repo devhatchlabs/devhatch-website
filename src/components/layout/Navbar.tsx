@@ -25,10 +25,12 @@ import {
 
 const CALENDLY_URL = "https://calendly.com/saimiftikhar-work/30min";
 
-const navItems = [
+const navLinks = [
   { label: "Home", href: "/" },
+  { label: "Services", href: "/services" },
   { label: "Work", href: "/work" },
   { label: "About", href: "/about" },
+  { label: "Careers", href: "/join-us" },
   { label: "Contact", href: "/contact" },
 ];
 
@@ -282,9 +284,9 @@ export function Navbar() {
               </AnimatePresence>
             </div>
 
-            {navItems
-              .filter((item) => item.label !== "Home")
-              .map((item) => (
+           {navLinks
+  .filter((item) => item.label !== "Services")
+  .map((item) => (
                 <Link
                   key={item.href}
                   href={item.href}
@@ -416,9 +418,9 @@ export function Navbar() {
                 </AnimatePresence>
               </div>
 
-              {navItems
-                .filter((item) => item.label !== "Home")
-                .map((item) => (
+             {navLinks
+  .filter((item) => item.label !== "Services")
+  .map((item) => (
                   <Link
                     key={item.href}
                     href={item.href}
