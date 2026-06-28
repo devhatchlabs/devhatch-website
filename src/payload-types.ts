@@ -75,6 +75,7 @@ export interface Config {
     leads: Lead;
     'job-positions': JobPosition;
     'job-applications': JobApplication;
+    'applicant-documents': ApplicantDocument;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -90,6 +91,7 @@ export interface Config {
     leads: LeadsSelect<false> | LeadsSelect<true>;
     'job-positions': JobPositionsSelect<false> | JobPositionsSelect<true>;
     'job-applications': JobApplicationsSelect<false> | JobApplicationsSelect<true>;
+    'applicant-documents': ApplicantDocumentsSelect<false> | ApplicantDocumentsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -414,20 +416,43 @@ export interface JobApplication {
   job: string | JobPosition;
   fullName: string;
   email: string;
-  phone: string;
+  whatsapp: string;
   location: string;
-  linkedinUrl?: string | null;
-  portfolioUrl?: string | null;
-  resume: string | Media;
-  coverNote: string;
+  linkedin: string;
+  github?: string | null;
+  portfolio?: string | null;
+  availability: '5-10-hours' | '10-15-hours' | '15-20-hours' | '20-plus-hours';
+  whyJoin: string;
   /**
-   * Applicant agrees that DevHatch Labs can review and store their application details for recruitment purposes.
+   * Optional CV uploaded by the applicant.
    */
-  consent: boolean;
-  status: 'new' | 'reviewed' | 'shortlisted' | 'rejected' | 'hired';
+  resume?: (string | null) | ApplicantDocument;
+  /**
+   * Applicant confirmed the initial internship is unpaid and may lead to project-based earnings or future opportunities.
+   */
+  unpaidAcknowledgement: boolean;
+  status: 'new' | 'reviewing' | 'shortlisted' | 'interview' | 'accepted' | 'rejected';
   internalNotes?: string | null;
+  source?: ('website' | 'linkedin' | 'referral' | 'other') | null;
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "applicant-documents".
+ */
+export interface ApplicantDocument {
+  id: string;
+  label: string;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -484,6 +509,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'job-applications';
         value: string | JobApplication;
+      } | null)
+    | ({
+        relationTo: 'applicant-documents';
+        value: string | ApplicantDocument;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -739,17 +768,36 @@ export interface JobApplicationsSelect<T extends boolean = true> {
   job?: T;
   fullName?: T;
   email?: T;
-  phone?: T;
+  whatsapp?: T;
   location?: T;
-  linkedinUrl?: T;
-  portfolioUrl?: T;
+  linkedin?: T;
+  github?: T;
+  portfolio?: T;
+  availability?: T;
+  whyJoin?: T;
   resume?: T;
-  coverNote?: T;
-  consent?: T;
+  unpaidAcknowledgement?: T;
   status?: T;
   internalNotes?: T;
+  source?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "applicant-documents_select".
+ */
+export interface ApplicantDocumentsSelect<T extends boolean = true> {
+  label?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  url?: T;
+  thumbnailURL?: T;
+  filename?: T;
+  mimeType?: T;
+  filesize?: T;
+  width?: T;
+  height?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

@@ -12,6 +12,7 @@ import { Media } from "./src/collections/Media";
 import { Leads } from "./src/collections/Leads";
 import { JobPositions } from "./src/collections/JobPositions";
 import { JobApplications } from "./src/collections/JobApplications";
+import { ApplicantDocuments } from "./src/collections/ApplicantDocuments";
 
 export default buildConfig({
   admin: {
@@ -30,6 +31,7 @@ export default buildConfig({
     Leads,
     JobPositions,
     JobApplications,
+    ApplicantDocuments,
   ],
 
   editor: lexicalEditor(),

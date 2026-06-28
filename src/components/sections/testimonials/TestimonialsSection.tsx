@@ -94,7 +94,7 @@ export default function TestimonialsSection() {
   }, [marqueeControls, startMarquee]);
 
   return (
-    <section className="relative overflow-hidden bg-[#F6F9FF] py-20 sm:py-24">
+    <section className="relative overflow-hidden bg-[#F6F9FF] pb-10 pt-20 sm:pb-12 sm:pt-24">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(23,105,255,0.09),transparent_62%)]" />
 
       <div className="pointer-events-none absolute -left-24 bottom-0 h-80 w-80 rounded-full bg-[#6D4AFF]/10 blur-3xl" />
@@ -108,7 +108,7 @@ export default function TestimonialsSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.3 }}
             transition={transition}
-            className="inline-flex items-center gap-2 rounded-full border border-[#D9E6FA] bg-white px-4 py-1.5 text-xs font-bold text-[#1769FF] shadow-sm"
+            className="inline-flex items-center gap-2 rounded-full border border-[#D9E6FA] bg-white px-4 py-1.5 text-xs font-bold text-[#1769FF]"
           >
             <Sparkles className="h-3.5 w-3.5" />
             Client Feedback
@@ -145,15 +145,15 @@ export default function TestimonialsSection() {
             transition={{ ...transition, delay: 0.24 }}
             className="mt-7 flex flex-wrap justify-center gap-2.5"
           >
-            <span className="rounded-full border border-[#D9E6FA] bg-white px-3.5 py-2 text-xs font-semibold text-[#61708A]">
+            <span className="rounded-full border border-[#D9E6FA] bg-white px-3.5 py-2 text-xs font-semibold text-[#61708A] transition-all duration-300 hover:-translate-y-0.5 hover:border-[#1769FF]/45 hover:bg-[#EEF5FF] hover:text-[#1769FF] hover:shadow-[0_10px_24px_rgba(23,105,255,0.09)]">
               Practical systems
             </span>
 
-            <span className="rounded-full border border-[#D9E6FA] bg-white px-3.5 py-2 text-xs font-semibold text-[#61708A]">
+            <span className="rounded-full border border-[#D9E6FA] bg-white px-3.5 py-2 text-xs font-semibold text-[#61708A] transition-all duration-300 hover:-translate-y-0.5 hover:border-[#1769FF]/45 hover:bg-[#EEF5FF] hover:text-[#1769FF] hover:shadow-[0_10px_24px_rgba(23,105,255,0.09)]">
               Clear workflows
             </span>
 
-            <span className="rounded-full border border-[#D9E6FA] bg-white px-3.5 py-2 text-xs font-semibold text-[#61708A]">
+            <span className="rounded-full border border-[#D9E6FA] bg-white px-3.5 py-2 text-xs font-semibold text-[#61708A] transition-all duration-300 hover:-translate-y-0.5 hover:border-[#1769FF]/45 hover:bg-[#EEF5FF] hover:text-[#1769FF] hover:shadow-[0_10px_24px_rgba(23,105,255,0.09)]">
               Focused delivery
             </span>
           </motion.div>
@@ -167,8 +167,6 @@ export default function TestimonialsSection() {
 
         <motion.div
           animate={marqueeControls}
-          onMouseEnter={() => marqueeControls.stop()}
-          onMouseLeave={startMarquee}
           className="flex w-max gap-5 px-3 sm:gap-6 sm:px-4"
         >
           {marqueeItems.map((testimonial, index) => {
@@ -178,15 +176,15 @@ export default function TestimonialsSection() {
               <article
                 key={`${testimonial.name}-${index}`}
                 aria-hidden={isDuplicate}
-                className="group relative flex min-h-[320px] w-[310px] shrink-0 flex-col justify-between overflow-hidden rounded-2xl border border-[#D9E6FA] bg-white p-6 shadow-[0_10px_30px_rgba(23,105,255,0.06)] transition-all duration-300 hover:-translate-y-1 hover:border-[#1769FF]/45 hover:shadow-[0_18px_42px_rgba(23,105,255,0.14)] sm:min-h-[335px] sm:w-[405px] sm:p-7"
+                className="group relative flex min-h-[320px] w-[310px] shrink-0 flex-col justify-between overflow-hidden rounded-2xl border border-[#D9E6FA] bg-white p-6 transition-[transform,border-color,box-shadow] duration-300 ease-out hover:-translate-y-2 hover:border-[#1769FF]/70 hover:shadow-[0_8px_20px_rgba(6,26,69,0.06),0_20px_44px_rgba(23,105,255,0.17)] sm:min-h-[335px] sm:w-[405px] sm:p-7"
               >
-                <div className="pointer-events-none absolute -right-12 -top-12 h-32 w-32 rounded-full bg-[#1769FF]/5 blur-2xl transition group-hover:bg-[#1769FF]/10" />
+                <div className="pointer-events-none absolute -right-16 -top-16 h-36 w-36 rounded-full bg-[#1769FF]/0 blur-2xl transition-all duration-300 group-hover:bg-[#1769FF]/10" />
 
                 <div className="relative">
                   <div className="flex items-start justify-between gap-4">
                     <div>
                       <div
-                        className="flex gap-1"
+                        className="flex gap-1 transition-transform duration-300 group-hover:scale-105"
                         aria-label={`${testimonial.rating} out of 5 stars`}
                       >
                         {Array.from({ length: testimonial.rating }).map(
@@ -199,12 +197,12 @@ export default function TestimonialsSection() {
                         )}
                       </div>
 
-                      <span className="mt-3 inline-flex rounded-full border border-[#D9E6FA] bg-[#EEF5FF] px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.08em] text-[#1769FF]">
+                      <span className="mt-3 inline-flex rounded-full border border-[#D9E6FA] bg-[#EEF5FF] px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.08em] text-[#1769FF] transition-all duration-300 group-hover:border-[#1769FF]/40 group-hover:bg-white group-hover:shadow-[0_8px_18px_rgba(23,105,255,0.09)]">
                         {testimonial.focus}
                       </span>
                     </div>
 
-                    <Quote className="h-7 w-7 rotate-180 text-[#1769FF]/20" />
+                    <Quote className="h-7 w-7 rotate-180 text-[#1769FF]/20 transition-all duration-300 group-hover:-translate-y-1 group-hover:text-[#1769FF]/45" />
                   </div>
 
                   <p className="mt-5 text-sm leading-7 text-[#061A45]">
@@ -212,13 +210,13 @@ export default function TestimonialsSection() {
                   </p>
                 </div>
 
-                <div className="relative mt-7 flex items-center gap-3 border-t border-[#D9E6FA] pt-5">
-                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[#1769FF] via-[#159FE8] to-[#6D4AFF] text-xs font-bold text-white shadow-[0_7px_18px_rgba(23,105,255,0.24)]">
+                <div className="relative mt-7 flex items-center gap-3 border-t border-[#D9E6FA] pt-5 transition-colors duration-300 group-hover:border-[#1769FF]/25">
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[#1769FF] via-[#159FE8] to-[#6D4AFF] text-xs font-bold text-white transition-all duration-300 group-hover:-translate-y-1 group-hover:scale-105 group-hover:shadow-[0_12px_24px_rgba(23,105,255,0.28)]">
                     {getInitials(testimonial.name)}
                   </div>
 
                   <div className="min-w-0">
-                    <p className="truncate text-sm font-bold text-[#061A45]">
+                    <p className="truncate text-sm font-bold text-[#061A45] transition-colors duration-300 group-hover:text-[#1769FF]">
                       {testimonial.name}
                     </p>
 
@@ -234,10 +232,6 @@ export default function TestimonialsSection() {
           })}
         </motion.div>
       </div>
-
-      <p className="relative mx-auto mt-6 max-w-7xl px-6 text-center text-xs text-[#61708A]/75">
-        Hover over the reviews to pause the animation.
-      </p>
     </section>
   );
 }

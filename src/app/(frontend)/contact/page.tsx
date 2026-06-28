@@ -60,7 +60,7 @@ const fadeUp = {
 };
 
 const inputBase =
-  "w-full rounded-xl border border-[#D9E6FA] bg-white py-3 pl-10 pr-4 text-sm font-medium text-[#061A45] outline-none transition placeholder:text-[#9AA9BE] focus:border-[#1769FF] focus:ring-4 focus:ring-[#1769FF]/10";
+  "w-full rounded-xl border border-[#D9E6FA] bg-white py-3 pl-10 pr-4 text-sm font-medium text-[#061A45] outline-none transition-all duration-300 placeholder:text-[#9AA9BE] focus:border-[#1769FF] focus:ring-4 focus:ring-[#1769FF]/10";
 
 function Field({
   label,
@@ -105,11 +105,7 @@ export default function ContactPage() {
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (
-      !form.name.trim() ||
-      !form.email.trim() ||
-      !form.message.trim()
-    ) {
+    if (!form.name.trim() || !form.email.trim() || !form.message.trim()) {
       return;
     }
 
@@ -147,7 +143,9 @@ export default function ContactPage() {
   return (
     <main className="relative min-h-screen overflow-hidden bg-white pb-24 pt-28">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_55%_at_50%_-10%,rgba(23,105,255,0.12),transparent_64%)]" />
+
       <div className="pointer-events-none absolute -right-24 top-24 h-80 w-80 rounded-full bg-[#14C8E8]/10 blur-3xl" />
+
       <div className="pointer-events-none absolute -left-32 top-[55%] h-80 w-80 rounded-full bg-[#6D4AFF]/10 blur-3xl" />
 
       <div className="relative mx-auto max-w-6xl px-4 sm:px-6">
@@ -199,9 +197,9 @@ export default function ContactPage() {
             >
               <a
                 href="mailto:hello@devhatchlabs.com"
-                className="group flex items-center gap-3 text-sm font-semibold text-[#61708A] transition hover:text-[#1769FF]"
+                className="group flex items-center gap-3 rounded-2xl border border-transparent px-3 py-2 text-sm font-semibold text-[#61708A] transition-all duration-300 hover:-translate-y-1 hover:border-[#1769FF]/65 hover:bg-white hover:text-[#1769FF] hover:shadow-[0_7px_0_rgba(134,173,255,0.20),0_18px_30px_rgba(23,105,255,0.12)]"
               >
-                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#EEF5FF] text-[#1769FF] transition group-hover:scale-110 group-hover:bg-[#1769FF] group-hover:text-white">
+                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#EEF5FF] text-[#1769FF] transition-all duration-300 group-hover:-translate-y-1 group-hover:scale-110 group-hover:bg-[#1769FF] group-hover:text-white group-hover:shadow-[0_5px_0_rgba(117,164,255,0.24),0_12px_22px_rgba(23,105,255,0.18)]">
                   <Mail className="h-4 w-4" />
                 </span>
 
@@ -213,8 +211,8 @@ export default function ContactPage() {
                 </span>
               </a>
 
-              <div className="flex items-center gap-3 text-sm font-semibold text-[#61708A]">
-                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#EEF5FF] text-[#1769FF]">
+              <div className="group flex items-center gap-3 rounded-2xl border border-transparent px-3 py-2 text-sm font-semibold text-[#61708A] transition-all duration-300 hover:-translate-y-1 hover:border-[#1769FF]/65 hover:bg-white hover:text-[#1769FF] hover:shadow-[0_7px_0_rgba(134,173,255,0.20),0_18px_30px_rgba(23,105,255,0.12)]">
+                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#EEF5FF] text-[#1769FF] transition-all duration-300 group-hover:-translate-y-1 group-hover:scale-110 group-hover:bg-[#1769FF] group-hover:text-white group-hover:shadow-[0_5px_0_rgba(117,164,255,0.24),0_12px_22px_rgba(23,105,255,0.18)]">
                   <MapPin className="h-4 w-4" />
                 </span>
 
@@ -232,7 +230,7 @@ export default function ContactPage() {
               initial="hidden"
               animate="show"
               custom={0.4}
-              className="mt-8 rounded-2xl border border-[#D9E6FA] bg-[#F8FBFF] p-5"
+              className="group mt-8 rounded-2xl border border-[#D9E6FA] bg-[#F8FBFF] p-5 transition-all duration-300 hover:-translate-y-1 hover:border-[#1769FF]/70 hover:bg-white hover:shadow-[0_8px_0_rgba(130,170,255,0.22),0_22px_40px_rgba(23,105,255,0.16)]"
             >
               <p className="text-xs font-bold uppercase tracking-[0.14em] text-[#1769FF]">
                 What happens next
@@ -240,27 +238,30 @@ export default function ContactPage() {
 
               <div className="mt-4 space-y-3">
                 <div className="flex items-start gap-3">
-                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#1769FF] text-[10px] font-bold text-white">
+                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#1769FF] text-[10px] font-bold text-white transition-all duration-300 group-hover:scale-110 group-hover:shadow-[0_4px_0_rgba(117,164,255,0.24),0_10px_18px_rgba(23,105,255,0.16)]">
                     01
                   </span>
+
                   <p className="pt-0.5 text-xs leading-relaxed text-[#61708A]">
                     Share your idea, challenge, or process you want to improve.
                   </p>
                 </div>
 
                 <div className="flex items-start gap-3">
-                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#1769FF] text-[10px] font-bold text-white">
+                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#1769FF] text-[10px] font-bold text-white transition-all duration-300 group-hover:scale-110 group-hover:shadow-[0_4px_0_rgba(117,164,255,0.24),0_10px_18px_rgba(23,105,255,0.16)]">
                     02
                   </span>
+
                   <p className="pt-0.5 text-xs leading-relaxed text-[#61708A]">
                     We review the requirements and suggest a practical solution.
                   </p>
                 </div>
 
                 <div className="flex items-start gap-3">
-                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#1769FF] text-[10px] font-bold text-white">
+                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#1769FF] text-[10px] font-bold text-white transition-all duration-300 group-hover:scale-110 group-hover:shadow-[0_4px_0_rgba(117,164,255,0.24),0_10px_18px_rgba(23,105,255,0.16)]">
                     03
                   </span>
+
                   <p className="pt-0.5 text-xs leading-relaxed text-[#61708A]">
                     Together, we scope the next step toward a useful MVP.
                   </p>
@@ -276,20 +277,21 @@ export default function ContactPage() {
             custom={0.2}
             className="relative"
           >
-            <div className="absolute -inset-4 -z-10 rounded-[2rem] bg-gradient-to-br from-[#1769FF]/10 via-[#14C8E8]/10 to-[#6D4AFF]/10 blur-2xl" />
+            <div className="pointer-events-none absolute -inset-4 -z-10 rounded-[2rem] bg-gradient-to-br from-[#1769FF]/10 via-[#14C8E8]/10 to-[#6D4AFF]/10 blur-2xl" />
 
-            <div className="overflow-hidden rounded-3xl border border-[#D9E6FA] bg-white p-6 shadow-[0_20px_50px_rgba(23,105,255,0.12)] sm:p-8">
-              <div className="flex items-center justify-between border-b border-[#D9E6FA] pb-5">
+            <div className="group overflow-hidden rounded-3xl border border-[#D9E6FA] bg-white p-6 transition-all duration-300 hover:-translate-y-1 hover:border-[#1769FF]/70 hover:shadow-[0_11px_0_rgba(128,171,255,0.24),0_28px_52px_rgba(23,105,255,0.18)] sm:p-8">
+              <div className="flex items-center justify-between border-b border-[#D9E6FA] pb-5 transition-colors duration-300 group-hover:border-[#1769FF]/25">
                 <div>
                   <p className="text-xs font-bold uppercase tracking-[0.14em] text-[#1769FF]">
                     Project Inquiry
                   </p>
+
                   <h2 className="mt-1 text-xl font-bold text-[#061A45]">
                     Tell us about your idea.
                   </h2>
                 </div>
 
-                <div className="flex gap-1.5">
+                <div className="flex gap-1.5 transition-transform duration-300 group-hover:scale-110">
                   <span className="h-2.5 w-2.5 rounded-full bg-red-400" />
                   <span className="h-2.5 w-2.5 rounded-full bg-yellow-400" />
                   <span className="h-2.5 w-2.5 rounded-full bg-green-400" />
@@ -305,7 +307,7 @@ export default function ContactPage() {
                     exit={{ opacity: 0, scale: 0.96 }}
                     className="flex min-h-[440px] flex-col items-center justify-center px-4 text-center"
                   >
-                    <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#1769FF]/10 text-[#1769FF]">
+                    <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#1769FF]/10 text-[#1769FF] transition-all duration-300 group-hover:-translate-y-1 group-hover:bg-[#1769FF] group-hover:text-white group-hover:shadow-[0_7px_0_rgba(117,164,255,0.24),0_16px_28px_rgba(23,105,255,0.20)]">
                       <CheckCircle2 className="h-8 w-8" />
                     </div>
 
@@ -321,10 +323,10 @@ export default function ContactPage() {
                     <button
                       type="button"
                       onClick={() => setStatus("idle")}
-                      className="mt-7 inline-flex items-center gap-2 rounded-full border border-[#D9E6FA] px-5 py-3 text-sm font-bold text-[#1769FF] transition hover:border-[#1769FF] hover:bg-[#EEF5FF]"
+                      className="group/button mt-7 inline-flex items-center gap-2 rounded-full border border-[#D9E6FA] px-5 py-3 text-sm font-bold text-[#1769FF] transition-all duration-300 hover:-translate-y-1 hover:border-[#1769FF]/70 hover:bg-[#EEF5FF] hover:shadow-[0_6px_0_rgba(137,177,255,0.20),0_16px_28px_rgba(23,105,255,0.12)]"
                     >
                       Send another message
-                      <ArrowRight className="h-4 w-4" />
+                      <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover/button:translate-x-1" />
                     </button>
                   </motion.div>
                 ) : (
@@ -436,7 +438,7 @@ export default function ContactPage() {
                     <button
                       type="submit"
                       disabled={status === "loading"}
-                      className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#1769FF] px-6 py-3.5 text-sm font-bold text-white transition hover:-translate-y-0.5 hover:bg-[#0A55D6] hover:shadow-[0_12px_26px_rgba(23,105,255,0.3)] disabled:cursor-not-allowed disabled:opacity-70"
+                      className="group/button inline-flex w-full items-center justify-center gap-2 rounded-full border border-[#1769FF] bg-[#1769FF] px-6 py-3.5 text-sm font-bold text-white transition-all duration-300 hover:-translate-y-1 hover:border-[#159FE8] hover:bg-[#159FE8] hover:shadow-[0_8px_0_rgba(108,176,255,0.30),0_18px_34px_rgba(23,105,255,0.28)] disabled:cursor-not-allowed disabled:opacity-70"
                     >
                       {status === "loading" ? (
                         <>
@@ -446,7 +448,7 @@ export default function ContactPage() {
                       ) : (
                         <>
                           Send Project Inquiry
-                          <Send className="h-4 w-4 transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                          <Send className="h-4 w-4 transition-transform duration-300 group-hover/button:-translate-y-0.5 group-hover/button:translate-x-0.5" />
                         </>
                       )}
                     </button>
@@ -462,10 +464,10 @@ export default function ContactPage() {
           </motion.div>
         </section>
 
-        <section className="mt-20 overflow-hidden rounded-3xl bg-gradient-to-br from-[#061A45] via-[#0A2D70] to-[#1769FF] px-6 py-10 sm:px-10">
+        <section className="group mt-20 overflow-hidden rounded-3xl border border-[#1769FF]/35 bg-gradient-to-br from-[#061A45] via-[#0A2D70] to-[#1769FF] px-6 py-10 transition-all duration-300 hover:-translate-y-1 hover:border-[#7FAAFF] hover:shadow-[0_10px_0_rgba(84,137,255,0.26),0_28px_56px_rgba(6,26,69,0.30)] sm:px-10">
           <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-center">
             <div>
-              <p className="text-xs font-bold uppercase tracking-[0.15em] text-[#14C8E8]">
+              <p className="text-xs font-bold uppercase tracking-[0.15em] text-[#14C8E8] transition-transform duration-300 group-hover:-translate-y-0.5">
                 Prefer email?
               </p>
 
@@ -474,13 +476,13 @@ export default function ContactPage() {
               </h2>
             </div>
 
-            <Link
+            <a
               href="mailto:hello@devhatchlabs.com"
-              className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3.5 text-sm font-bold text-[#1769FF] transition hover:-translate-y-0.5 hover:bg-[#EEF5FF]"
+              className="group/button inline-flex items-center gap-2 rounded-full border border-white/80 bg-white px-6 py-3.5 text-sm font-bold text-[#1769FF] transition-all duration-300 hover:-translate-y-1 hover:bg-[#EEF5FF] hover:shadow-[0_7px_0_rgba(148,188,255,0.28),0_18px_32px_rgba(6,26,69,0.26)]"
             >
               Email DevHatch Labs
-              <ArrowRight className="h-4 w-4" />
-            </Link>
+              <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover/button:translate-x-1" />
+            </a>
           </div>
         </section>
       </div>

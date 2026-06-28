@@ -291,3 +291,44 @@ body {
     animation: none !important;
   }
 }
+
+/* =======================================================================
+   DevHatch Card Elevation
+   Use on service cards, project cards, review cards, and selected UI cards.
+   ======================================================================= */
+
+.devhatch-lift-card {
+  position: relative;
+  border: 1px solid rgba(37, 99, 235, 0.52);
+  box-shadow:
+    0 9px 0 rgba(132, 164, 255, 0.2),
+    0 18px 34px rgba(23, 105, 255, 0.09);
+  transition:
+    transform 220ms ease,
+    border-color 220ms ease,
+    box-shadow 220ms ease;
+  will-change: transform;
+}
+
+.devhatch-lift-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(23, 105, 255, 0.85);
+  box-shadow:
+    0 12px 0 rgba(132, 164, 255, 0.26),
+    0 26px 46px rgba(23, 105, 255, 0.16);
+}
+
+/* Dark mode version */
+html.dark .devhatch-lift-card {
+  border-color: rgba(72, 138, 255, 0.45);
+  box-shadow:
+    0 9px 0 rgba(39, 78, 143, 0.32),
+    0 18px 34px rgba(0, 0, 0, 0.22);
+}
+
+html.dark .devhatch-lift-card:hover {
+  border-color: rgba(105, 162, 255, 0.8);
+  box-shadow:
+    0 12px 0 rgba(39, 78, 143, 0.4),
+    0 26px 46px rgba(0, 0, 0, 0.32);
+}

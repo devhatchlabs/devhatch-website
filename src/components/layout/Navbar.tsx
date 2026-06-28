@@ -285,7 +285,9 @@ export function Navbar() {
             </div>
 
            {navLinks
-  .filter((item) => item.label !== "Services")
+.filter(
+  (item) => item.label !== "Home" && item.label !== "Services",
+)
   .map((item) => (
                 <Link
                   key={item.href}
@@ -419,7 +421,9 @@ export function Navbar() {
               </div>
 
              {navLinks
-  .filter((item) => item.label !== "Services")
+.filter(
+  (item) => item.label !== "Home" && item.label !== "Services",
+)
   .map((item) => (
                   <Link
                     key={item.href}

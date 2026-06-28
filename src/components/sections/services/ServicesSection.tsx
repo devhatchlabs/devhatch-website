@@ -7,6 +7,7 @@ import {
   Cpu,
   Database,
   Globe,
+  GraduationCap,
   Layers,
   MessageSquare,
   Search,
@@ -45,13 +46,13 @@ const coreServices: CoreService[] = [
     label: "Customer Conversations",
     tagline: "Always available. Always helpful.",
     description:
-      "AI chatbots for websites, WhatsApp, and support channels that answer questions, qualify leads, and guide customers forward.",
+      "AI chatbots for websites and support channels that answer questions, qualify leads, and guide customers forward.",
     icon: MessageSquare,
     steps: ["Customer Query", "AI Assistant", "Helpful Reply"],
     outcomes: [
       "24/7 customer support",
       "Lead qualification",
-      "Website and WhatsApp flows",
+      "Website support flows",
     ],
     footer: "Support · Leads · Follow-ups",
   },
@@ -143,11 +144,15 @@ const additionalCapabilities: Capability[] = [
     icon: Globe,
   },
   {
-    title: "AI Calling Agents",
-    icon: MessageSquare,
+    title: "Portfolio Websites",
+    icon: Globe,
   },
   {
-    title: "WhatsApp Automation",
+    title: "FYP Development",
+    icon: GraduationCap,
+  },
+  {
+    title: "AI Calling Agents",
     icon: MessageSquare,
   },
   {
@@ -220,11 +225,12 @@ export default function ServicesSection() {
                   <button
                     key={service.id}
                     type="button"
+                    aria-pressed={isActive}
                     onClick={() => setActiveIndex(index)}
-                    className={`flex items-center gap-2 rounded-xl border px-3 py-2.5 text-left text-xs font-semibold transition-all ${
+                    className={`flex items-center gap-2 rounded-xl border px-3 py-2.5 text-left text-xs font-semibold transition-all duration-300 ${
                       isActive
-                        ? "border-[#1769FF] bg-[#1769FF] text-white shadow-[0_10px_22px_rgba(23,105,255,0.22)]"
-                        : "border-[#D9E6FA] bg-white text-[#61708A] hover:border-[#1769FF]/40 hover:bg-[#EEF5FF] hover:text-[#1769FF]"
+                        ? "border-[#1769FF] bg-[#1769FF] text-white hover:-translate-y-1 hover:border-[#159FE8] hover:shadow-[0_7px_0_rgba(104,157,255,0.32),0_18px_32px_rgba(23,105,255,0.22)]"
+                        : "border-[#D9E6FA] bg-white text-[#61708A] hover:-translate-y-1 hover:border-[#1769FF]/70 hover:bg-[#EEF5FF] hover:text-[#1769FF] hover:shadow-[0_7px_0_rgba(134,173,255,0.22),0_18px_30px_rgba(23,105,255,0.12)]"
                     }`}
                   >
                     <Icon className="h-3.5 w-3.5 shrink-0" strokeWidth={2} />
@@ -237,10 +243,10 @@ export default function ServicesSection() {
 
             <Link
               href="/services"
-              className="mt-7 inline-flex items-center gap-2 text-sm font-bold text-[#1769FF] transition hover:gap-3"
+              className="group mt-7 inline-flex items-center gap-2 text-sm font-bold text-[#1769FF] transition-all duration-300 hover:gap-3 hover:text-[#159FE8]"
             >
               Explore all services
-              <ArrowRight className="h-4 w-4" />
+              <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
             </Link>
           </div>
 
@@ -251,9 +257,9 @@ export default function ServicesSection() {
             transition={{ duration: 0.6 }}
             className="relative w-full max-w-[620px] lg:ml-auto"
           >
-            <div className="absolute -inset-4 -z-10 rounded-[2rem] bg-gradient-to-br from-[#1769FF]/10 via-[#14C8E8]/10 to-[#6D4AFF]/10 blur-2xl" />
+            <div className="pointer-events-none absolute -inset-4 -z-10 rounded-[2rem] bg-gradient-to-br from-[#1769FF]/10 via-[#14C8E8]/10 to-[#6D4AFF]/10 blur-2xl" />
 
-            <div className="overflow-hidden rounded-2xl border border-[#D9E6FA] bg-white shadow-[0_18px_40px_rgba(23,105,255,0.12)]">
+            <div className="group overflow-hidden rounded-2xl border border-[#D9E6FA] bg-white transition-all duration-300 hover:-translate-y-1 hover:border-[#1769FF]/75 hover:shadow-[0_11px_0_rgba(128,171,255,0.26),0_28px_52px_rgba(23,105,255,0.18)]">
               <div className="flex items-center justify-between border-b border-[#D9E6FA] bg-[#F8FBFF] px-5 py-4">
                 <div className="flex items-center gap-2">
                   <span className="h-2.5 w-2.5 rounded-full bg-red-400" />
@@ -272,6 +278,7 @@ export default function ServicesSection() {
                     repeat: Infinity,
                     ease: "easeInOut",
                   }}
+                  className="transition-transform duration-300 group-hover:scale-110"
                 >
                   <Sparkles className="h-5 w-5 text-[#1769FF]" />
                 </motion.div>
@@ -301,24 +308,16 @@ export default function ServicesSection() {
                       </p>
                     </div>
 
-                    <motion.div
-                      animate={{ scale: [1, 1.08, 1] }}
-                      transition={{
-                        duration: 2.2,
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                      }}
-                      className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[#1769FF]/10 text-[#1769FF]"
-                    >
+                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[#1769FF]/10 text-[#1769FF] transition-all duration-300 group-hover:-translate-y-1 group-hover:bg-[#1769FF] group-hover:text-white group-hover:shadow-[0_6px_0_rgba(111,160,255,0.28),0_14px_24px_rgba(23,105,255,0.20)]">
                       <ActiveIcon className="h-5 w-5" strokeWidth={2} />
-                    </motion.div>
+                    </div>
                   </div>
 
                   <p className="mt-4 text-sm leading-relaxed text-[#61708A]">
                     {activeService.description}
                   </p>
 
-                  <div className="mt-5 overflow-hidden rounded-xl border border-[#D9E6FA] bg-[#F8FBFF]">
+                  <div className="mt-5 overflow-hidden rounded-xl border border-[#D9E6FA] bg-[#F8FBFF] transition-all duration-300 group-hover:border-[#1769FF]/45 group-hover:bg-white group-hover:shadow-[0_6px_0_rgba(156,188,255,0.16),0_16px_28px_rgba(23,105,255,0.08)]">
                     <div className="grid grid-cols-3 divide-x divide-[#D9E6FA]">
                       {activeService.steps.map((step, index) => (
                         <div
@@ -355,10 +354,10 @@ export default function ServicesSection() {
 
                     <Link
                       href="/services"
-                      className="inline-flex items-center gap-2 text-xs font-bold text-[#1769FF] transition hover:gap-3"
+                      className="group/link inline-flex items-center gap-2 text-xs font-bold text-[#1769FF] transition-all duration-300 hover:gap-3 hover:text-[#159FE8]"
                     >
                       View service
-                      <ArrowRight className="h-3.5 w-3.5" />
+                      <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover/link:translate-x-1" />
                     </Link>
                   </div>
                 </motion.div>
@@ -372,7 +371,7 @@ export default function ServicesSection() {
                       type="button"
                       aria-label={`Show ${service.title}`}
                       onClick={() => setActiveIndex(index)}
-                      className={`h-2 rounded-full transition-all ${
+                      className={`h-2 rounded-full transition-all duration-300 ${
                         activeIndex === index
                           ? "w-6 bg-[#1769FF]"
                           : "w-2 bg-[#D9E6FA] hover:bg-[#159FE8]"
@@ -403,10 +402,10 @@ export default function ServicesSection() {
 
             <Link
               href="/services"
-              className="inline-flex items-center gap-2 text-sm font-bold text-[#1769FF] transition hover:gap-3"
+              className="group inline-flex items-center gap-2 text-sm font-bold text-[#1769FF] transition-all duration-300 hover:gap-3 hover:text-[#159FE8]"
             >
               View all services
-              <ArrowRight className="h-4 w-4" />
+              <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
             </Link>
           </div>
 
@@ -418,9 +417,9 @@ export default function ServicesSection() {
                 <Link
                   key={capability.title}
                   href="/services"
-                  className="group inline-flex items-center gap-2 rounded-xl border border-[#D9E6FA] bg-white px-3.5 py-2.5 text-xs font-semibold text-[#61708A] shadow-[0_5px_14px_rgba(23,105,255,0.04)] transition hover:-translate-y-0.5 hover:border-[#1769FF]/45 hover:bg-[#EEF5FF] hover:text-[#1769FF]"
+                  className="group inline-flex items-center gap-2 rounded-xl border border-[#D9E6FA] bg-white px-3.5 py-2.5 text-xs font-semibold text-[#61708A] transition-all duration-300 hover:-translate-y-1 hover:border-[#1769FF]/70 hover:bg-[#EEF5FF] hover:text-[#1769FF] hover:shadow-[0_6px_0_rgba(140,177,255,0.20),0_16px_28px_rgba(23,105,255,0.10)]"
                 >
-                  <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#EEF5FF] text-[#1769FF] transition group-hover:bg-[#1769FF] group-hover:text-white">
+                  <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#EEF5FF] text-[#1769FF] transition-all duration-300 group-hover:-translate-y-0.5 group-hover:bg-[#1769FF] group-hover:text-white group-hover:shadow-[0_4px_0_rgba(124,170,255,0.22),0_10px_18px_rgba(23,105,255,0.14)]">
                     <Icon className="h-3.5 w-3.5" strokeWidth={2} />
                   </span>
 

@@ -168,7 +168,9 @@ export default function WorkPage() {
   return (
     <main className="relative min-h-screen overflow-hidden bg-white pb-28 pt-28">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_55%_at_50%_-10%,rgba(23,105,255,0.11),transparent_62%)]" />
+
       <div className="pointer-events-none absolute -right-24 top-24 h-80 w-80 rounded-full bg-[#14C8E8]/10 blur-3xl" />
+
       <div className="pointer-events-none absolute -left-32 top-[48%] h-80 w-80 rounded-full bg-[#6D4AFF]/10 blur-3xl" />
 
       <div className="relative mx-auto max-w-6xl px-4 sm:px-6">
@@ -230,12 +232,12 @@ export default function WorkPage() {
                 key={filter}
                 type="button"
                 onClick={() => setActiveFilter(filter)}
-                className={`inline-flex items-center gap-2 rounded-xl border px-4 py-2.5 text-xs font-bold transition-all ${
+                className={`inline-flex items-center gap-2 rounded-xl border px-4 py-2.5 text-xs font-bold transition-all duration-300 ${
                   isActive
-                    ? "border-[#1769FF] bg-[#1769FF] text-white shadow-[0_10px_24px_rgba(23,105,255,0.24)]"
+                    ? "border-[#1769FF] bg-[#1769FF] text-white hover:-translate-y-1 hover:border-[#159FE8] hover:shadow-[0_7px_0_rgba(104,157,255,0.30),0_18px_32px_rgba(23,105,255,0.22)]"
                     : filter === "Upcoming"
-                      ? "border-amber-300 bg-amber-50 text-amber-700 hover:bg-amber-100"
-                      : "border-[#D9E6FA] bg-white text-[#61708A] hover:border-[#1769FF]/40 hover:text-[#1769FF]"
+                      ? "border-amber-300 bg-amber-50 text-amber-700 hover:-translate-y-1 hover:bg-amber-100 hover:shadow-[0_7px_0_rgba(251,191,36,0.18),0_18px_30px_rgba(251,191,36,0.12)]"
+                      : "border-[#D9E6FA] bg-white text-[#61708A] hover:-translate-y-1 hover:border-[#1769FF]/70 hover:bg-[#EEF5FF] hover:text-[#1769FF] hover:shadow-[0_7px_0_rgba(134,173,255,0.22),0_18px_30px_rgba(23,105,255,0.12)]"
                 }`}
               >
                 {filter === "Upcoming" && (
@@ -268,16 +270,16 @@ export default function WorkPage() {
                 initial={{ opacity: 0, scale: 0.98 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.98 }}
-                className="flex min-h-[330px] flex-col items-center justify-center rounded-3xl border border-dashed border-[#D9E6FA] bg-[#F8FBFF] px-6 text-center"
+                className="group flex min-h-[330px] flex-col items-center justify-center rounded-3xl border border-dashed border-[#D9E6FA] bg-[#F8FBFF] px-6 text-center transition-all duration-300 hover:-translate-y-1 hover:border-[#1769FF]/60 hover:bg-white hover:shadow-[0_8px_0_rgba(134,173,255,0.20),0_20px_38px_rgba(23,105,255,0.12)]"
               >
-                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#1769FF]/10 text-[#1769FF]">
+                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#1769FF]/10 text-[#1769FF] transition-all duration-300 group-hover:-translate-y-1 group-hover:bg-[#1769FF] group-hover:text-white group-hover:shadow-[0_6px_0_rgba(117,164,255,0.24),0_14px_24px_rgba(23,105,255,0.18)]">
                   <Layers
                     className="h-6 w-6 animate-spin"
                     style={{ animationDuration: "6s" }}
                   />
                 </div>
 
-                <h2 className="mt-5 text-xl font-bold text-[#061A45]">
+                <h2 className="mt-5 text-xl font-bold text-[#061A45] transition-colors duration-300 group-hover:text-[#1769FF]">
                   More projects are in progress.
                 </h2>
 
@@ -301,9 +303,9 @@ export default function WorkPage() {
                     initial="hidden"
                     animate="show"
                     custom={index * 0.08}
-                    className="group relative flex flex-col overflow-hidden rounded-3xl border border-[#D9E6FA] bg-white p-5 shadow-[0_8px_30px_rgba(23,105,255,0.05)] transition-all duration-300 hover:-translate-y-1.5 hover:border-[#1769FF]/45 hover:shadow-[0_20px_44px_rgba(23,105,255,0.14)]"
+                    className="group relative flex flex-col overflow-hidden rounded-3xl border border-[#D9E6FA] bg-white p-5 transition-all duration-300 hover:-translate-y-2 hover:border-[#1769FF]/70 hover:shadow-[0_9px_0_rgba(130,170,255,0.24),0_22px_44px_rgba(23,105,255,0.16)]"
                   >
-                    <div className="relative mb-5 aspect-[16/9] overflow-hidden rounded-2xl border border-[#D9E6FA] bg-[#EEF5FF]">
+                    <div className="relative mb-5 aspect-[16/9] overflow-hidden rounded-2xl border border-[#D9E6FA] bg-[#EEF5FF] transition-all duration-300 group-hover:border-[#1769FF]/45 group-hover:shadow-[0_7px_0_rgba(145,181,255,0.16),0_16px_30px_rgba(23,105,255,0.10)]">
                       <Image
                         src={project.image}
                         alt={`${project.title} project preview`}
@@ -315,7 +317,7 @@ export default function WorkPage() {
 
                       <div className="absolute inset-0 bg-gradient-to-t from-[#061A45]/75 via-transparent to-transparent" />
 
-                      <span className="absolute left-3 top-3 flex h-8 w-8 items-center justify-center rounded-full border border-white/30 bg-[#061A45]/45 text-[10px] font-bold text-white backdrop-blur-sm">
+                      <span className="absolute left-3 top-3 flex h-8 w-8 items-center justify-center rounded-full border border-white/30 bg-[#061A45]/45 text-[10px] font-bold text-white backdrop-blur-sm transition-transform duration-300 group-hover:scale-110">
                         {String(index + 1).padStart(2, "0")}
                       </span>
 
@@ -324,7 +326,7 @@ export default function WorkPage() {
                       </span>
 
                       {project.featured && (
-                        <span className="absolute right-3 top-3 rounded-full bg-white px-3 py-1 text-[10px] font-bold text-[#1769FF] shadow-lg">
+                        <span className="absolute right-3 top-3 rounded-full bg-white px-3 py-1 text-[10px] font-bold text-[#1769FF] transition-all duration-300 group-hover:-translate-y-0.5 group-hover:shadow-[0_8px_18px_rgba(23,105,255,0.20)]">
                           Featured
                         </span>
                       )}
@@ -332,7 +334,7 @@ export default function WorkPage() {
 
                     <div className="flex flex-1 flex-col">
                       <div className="flex items-start justify-between gap-3">
-                        <h2 className="text-lg font-bold text-[#061A45] transition-colors group-hover:text-[#1769FF]">
+                        <h2 className="text-lg font-bold text-[#061A45] transition-colors duration-300 group-hover:text-[#1769FF]">
                           {project.title}
                         </h2>
 
@@ -340,11 +342,11 @@ export default function WorkPage() {
                           <a
                             href={project.live}
                             target="_blank"
-                            rel="noreferrer"
+                            rel="noopener noreferrer"
                             aria-label={`Open ${project.title} live demo`}
-                            className="rounded-lg border border-[#D9E6FA] p-2 text-[#61708A] transition hover:border-[#1769FF]/40 hover:bg-[#EEF5FF] hover:text-[#1769FF]"
+                            className="group/live rounded-lg border border-[#D9E6FA] p-2 text-[#61708A] transition-all duration-300 hover:-translate-y-1 hover:border-[#1769FF]/60 hover:bg-[#EEF5FF] hover:text-[#1769FF] hover:shadow-[0_5px_0_rgba(139,177,255,0.18),0_12px_22px_rgba(23,105,255,0.10)]"
                           >
-                            <ExternalLink className="h-4 w-4" />
+                            <ExternalLink className="h-4 w-4 transition-transform duration-300 group-hover/live:-translate-y-0.5 group-hover/live:translate-x-0.5" />
                           </a>
                         )}
                       </div>
@@ -353,7 +355,7 @@ export default function WorkPage() {
                         {project.description}
                       </p>
 
-                      <div className="mt-5 border-t border-[#D9E6FA] pt-4">
+                      <div className="mt-5 border-t border-[#D9E6FA] pt-4 transition-colors duration-300 group-hover:border-[#1769FF]/25">
                         <p className="font-mono text-[10px] text-[#61708A]">
                           {project.metrics}
                         </p>
@@ -362,7 +364,7 @@ export default function WorkPage() {
                           {project.tags.map((tag) => (
                             <span
                               key={tag}
-                              className="rounded-md border border-[#D9E6FA] bg-[#F8FBFF] px-2 py-1 font-mono text-[10px] text-[#61708A]"
+                              className="rounded-md border border-[#D9E6FA] bg-[#F8FBFF] px-2 py-1 font-mono text-[10px] text-[#61708A] transition-all duration-300 group-hover:border-[#B8D2FF] group-hover:bg-[#EEF5FF] group-hover:text-[#1769FF]"
                             >
                               {tag}
                             </span>
@@ -374,11 +376,11 @@ export default function WorkPage() {
                             <a
                               href={project.live}
                               target="_blank"
-                              rel="noreferrer"
-                              className="inline-flex items-center gap-1.5 text-xs font-bold text-[#1769FF] transition hover:gap-2"
+                              rel="noopener noreferrer"
+                              className="group/link inline-flex items-center gap-1.5 text-xs font-bold text-[#1769FF] transition-all duration-300 hover:gap-2 hover:text-[#159FE8]"
                             >
                               Live demo
-                              <ArrowUpRight className="h-3.5 w-3.5" />
+                              <ArrowUpRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5" />
                             </a>
                           )}
 
@@ -386,10 +388,10 @@ export default function WorkPage() {
                             <a
                               href={project.github}
                               target="_blank"
-                              rel="noreferrer"
-                              className="inline-flex items-center gap-1.5 text-xs font-bold text-[#61708A] transition hover:text-[#1769FF]"
+                              rel="noopener noreferrer"
+                              className="group/link inline-flex items-center gap-1.5 text-xs font-bold text-[#61708A] transition-all duration-300 hover:gap-2 hover:text-[#1769FF]"
                             >
-                              <GitHubIcon className="h-4 w-4" />
+                              <GitHubIcon className="h-4 w-4 transition-transform duration-300 group-hover/link:scale-110" />
                               View code
                             </a>
                           )}
@@ -409,9 +411,9 @@ export default function WorkPage() {
           whileInView="show"
           viewport={{ once: true, amount: 0.25 }}
           custom={0}
-          className="mt-24 rounded-3xl border border-[#D9E6FA] bg-gradient-to-br from-[#061A45] via-[#0A2D70] to-[#1769FF] px-6 py-12 text-center shadow-[0_20px_55px_rgba(23,105,255,0.22)] sm:px-12"
+          className="group mt-24 overflow-hidden rounded-3xl border border-[#1769FF]/35 bg-gradient-to-br from-[#061A45] via-[#0A2D70] to-[#1769FF] px-6 py-12 text-center transition-all duration-300 hover:-translate-y-1 hover:border-[#7FAAFF] hover:shadow-[0_10px_0_rgba(84,137,255,0.26),0_28px_56px_rgba(6,26,69,0.30)] sm:px-12"
         >
-          <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#14C8E8]">
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#14C8E8] transition-transform duration-300 group-hover:-translate-y-0.5">
             Your idea can be next
           </p>
 
@@ -420,16 +422,16 @@ export default function WorkPage() {
           </h2>
 
           <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-white/75 sm:text-base">
-            Let’s discuss your AI automation, website, dashboard, or custom
+            Let&apos;s discuss your AI automation, website, dashboard, or custom
             software idea and turn it into a practical solution.
           </p>
 
           <Link
             href="/contact"
-            className="mt-7 inline-flex items-center gap-2.5 rounded-full bg-white px-7 py-3.5 text-sm font-bold text-[#1769FF] transition hover:-translate-y-0.5 hover:bg-[#EEF5FF] hover:shadow-xl"
+            className="group/button mt-7 inline-flex items-center gap-2.5 rounded-full border border-white/80 bg-white px-7 py-3.5 text-sm font-bold text-[#1769FF] transition-all duration-300 hover:-translate-y-1 hover:bg-[#EEF5FF] hover:shadow-[0_7px_0_rgba(148,188,255,0.28),0_18px_32px_rgba(6,26,69,0.26)]"
           >
             Start Your Project
-            <ArrowUpRight className="h-4 w-4" />
+            <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover/button:-translate-y-0.5 group-hover/button:translate-x-0.5" />
           </Link>
         </motion.section>
       </div>

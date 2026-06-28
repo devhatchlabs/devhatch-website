@@ -18,7 +18,9 @@ const processSteps = [
       "We start by understanding your business, current workflow, challenges, and the outcome you want to achieve.",
     icon: MessageSquare,
     iconColor: "text-[#1769FF]",
-    iconHoverColor: "group-hover:text-[#1769FF]",
+    hoverBorder: "group-hover:border-[#1769FF]/70",
+    hoverShadow:
+      "group-hover:shadow-[0_10px_0_rgba(117,166,255,0.24),0_24px_44px_rgba(23,105,255,0.14)]",
   },
   {
     step: "02",
@@ -27,7 +29,9 @@ const processSteps = [
       "We design and build the right AI, automation, or software system, then refine it through focused feedback.",
     icon: Code2,
     iconColor: "text-[#6D4AFF]",
-    iconHoverColor: "group-hover:text-[#6D4AFF]",
+    hoverBorder: "group-hover:border-[#6D4AFF]/65",
+    hoverShadow:
+      "group-hover:shadow-[0_10px_0_rgba(160,136,255,0.22),0_24px_44px_rgba(109,74,255,0.14)]",
   },
   {
     step: "03",
@@ -36,7 +40,9 @@ const processSteps = [
       "We launch the system, support your team, and help you improve it as your business and requirements grow.",
     icon: Rocket,
     iconColor: "text-[#159FE8]",
-    iconHoverColor: "group-hover:text-[#159FE8]",
+    hoverBorder: "group-hover:border-[#159FE8]/70",
+    hoverShadow:
+      "group-hover:shadow-[0_10px_0_rgba(105,214,245,0.22),0_24px_44px_rgba(21,159,232,0.14)]",
   },
 ];
 
@@ -107,7 +113,7 @@ export default function HowItWorksSection() {
             className="absolute left-[16.66%] right-[16.66%] top-10 hidden h-px bg-gradient-to-r from-transparent via-[#D9E6FA] to-transparent md:block"
           />
 
-          <div className="grid gap-10 md:grid-cols-3 md:gap-8">
+          <div className="grid gap-8 md:grid-cols-3 md:gap-8">
             {processSteps.map((step, index) => {
               const Icon = step.icon;
 
@@ -121,26 +127,30 @@ export default function HowItWorksSection() {
                     ...transition,
                     delay: index * 0.1,
                   }}
-                  className="group relative flex flex-col items-center text-center"
+                  className={`group relative flex min-h-[250px] flex-col items-center rounded-3xl border border-transparent bg-white/40 px-6 py-8 text-center transition-all duration-300 hover:-translate-y-2 hover:bg-white ${step.hoverBorder} ${step.hoverShadow}`}
                 >
-                  <div className="relative flex h-20 w-20 items-center justify-center rounded-full border border-[#D9E6FA] bg-white shadow-[0_10px_28px_rgba(23,105,255,0.08)] transition-all duration-300 group-hover:-translate-y-1 group-hover:border-[#1769FF]/40 group-hover:shadow-[0_16px_35px_rgba(23,105,255,0.16)]">
+                  <div
+                    className={`relative flex h-20 w-20 items-center justify-center rounded-full border border-[#D9E6FA] bg-white transition-all duration-300 group-hover:-translate-y-1 group-hover:scale-105 group-hover:border-[#1769FF]/45 group-hover:shadow-[0_8px_0_rgba(151,186,255,0.20),0_18px_30px_rgba(23,105,255,0.13)]`}
+                  >
                     <Icon
-                      className={`h-6 w-6 transition-transform duration-300 group-hover:scale-110 ${step.iconColor} ${step.iconHoverColor}`}
+                      className={`h-6 w-6 transition-transform duration-300 group-hover:scale-110 ${step.iconColor}`}
                       strokeWidth={1.8}
                     />
 
-                    <span className="absolute -right-1 -top-1 flex h-6 w-6 items-center justify-center rounded-full border border-[#D9E6FA] bg-[#EEF5FF] text-[10px] font-mono font-bold text-[#1769FF] shadow-sm">
+                    <span className="absolute -right-1 -top-1 flex h-6 w-6 items-center justify-center rounded-full border border-[#D9E6FA] bg-[#EEF5FF] text-[10px] font-mono font-bold text-[#1769FF] transition-all duration-300 group-hover:border-[#1769FF]/35 group-hover:bg-[#1769FF] group-hover:text-white group-hover:shadow-[0_4px_10px_rgba(23,105,255,0.22)]">
                       {step.step}
                     </span>
                   </div>
 
-                  <h3 className="mt-6 text-lg font-bold tracking-tight text-[#061A45]">
+                  <h3 className="mt-6 text-lg font-bold tracking-tight text-[#061A45] transition-colors duration-300 group-hover:text-[#1769FF]">
                     {step.title}
                   </h3>
 
                   <p className="mt-3 max-w-xs text-sm leading-relaxed text-[#61708A]">
                     {step.description}
                   </p>
+
+                  <span className="mt-5 h-px w-0 bg-gradient-to-r from-[#1769FF] via-[#159FE8] to-[#6D4AFF] transition-all duration-300 group-hover:w-20" />
                 </motion.article>
               );
             })}
@@ -156,7 +166,7 @@ export default function HowItWorksSection() {
         >
           <Link
             href="/contact"
-            className="group inline-flex items-center justify-center gap-2 rounded-full bg-[#1769FF] px-6 py-3 text-sm font-semibold text-white shadow-[0_8px_26px_rgba(23,105,255,0.28)] transition-all hover:-translate-y-0.5 hover:bg-[#159FE8] hover:shadow-[0_14px_36px_rgba(23,105,255,0.35)]"
+            className="group inline-flex items-center justify-center gap-2 rounded-full bg-[#1769FF] px-6 py-3 text-sm font-semibold text-white shadow-[0_8px_26px_rgba(23,105,255,0.28)] transition-all duration-300 hover:-translate-y-1 hover:bg-[#159FE8] hover:shadow-[0_10px_0_rgba(116,178,255,0.28),0_20px_40px_rgba(23,105,255,0.32)]"
           >
             Start Your Project
             <ArrowUpRight className="h-4 w-4 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />

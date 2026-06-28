@@ -11,7 +11,6 @@ import {
   MessageSquare,
   PlayCircle,
   Search,
-  Sparkles,
   Workflow,
   type LucideIcon,
 } from "lucide-react";
@@ -38,7 +37,8 @@ const engineNodes: EngineNode[] = [
     icon: Search,
     angle: 0,
     color: "text-[#1769FF]",
-    activeColor: "border-[#1769FF] bg-[#1769FF] text-white",
+    activeColor:
+      "border-[#1769FF] bg-[#1769FF] text-white shadow-[0_9px_0_rgba(89,147,255,0.34),0_20px_40px_rgba(23,105,255,0.25)]",
   },
   {
     id: "engage",
@@ -49,7 +49,8 @@ const engineNodes: EngineNode[] = [
     icon: MessageSquare,
     angle: 90,
     color: "text-[#159FE8]",
-    activeColor: "border-[#159FE8] bg-[#159FE8] text-white",
+    activeColor:
+      "border-[#159FE8] bg-[#159FE8] text-white shadow-[0_9px_0_rgba(93,209,246,0.30),0_20px_40px_rgba(21,159,232,0.25)]",
   },
   {
     id: "automate",
@@ -60,7 +61,8 @@ const engineNodes: EngineNode[] = [
     icon: Workflow,
     angle: 180,
     color: "text-[#6D4AFF]",
-    activeColor: "border-[#6D4AFF] bg-[#6D4AFF] text-white",
+    activeColor:
+      "border-[#6D4AFF] bg-[#6D4AFF] text-white shadow-[0_9px_0_rgba(145,111,255,0.30),0_20px_40px_rgba(109,74,255,0.26)]",
   },
   {
     id: "build",
@@ -71,7 +73,8 @@ const engineNodes: EngineNode[] = [
     icon: Code2,
     angle: 270,
     color: "text-[#1769FF]",
-    activeColor: "border-[#1769FF] bg-[#1769FF] text-white",
+    activeColor:
+      "border-[#1769FF] bg-[#1769FF] text-white shadow-[0_9px_0_rgba(89,147,255,0.34),0_20px_40px_rgba(23,105,255,0.25)]",
   },
 ];
 
@@ -109,7 +112,7 @@ export default function HeroSection() {
       <div className="relative mx-auto w-full max-w-7xl px-6">
         <div className="grid items-center gap-10 lg:grid-cols-12 lg:gap-8">
           <div className="lg:col-span-5">
-            <div className="inline-flex items-center gap-2 rounded-full border border-[#D9E6FA] bg-[#EEF5FF] px-4 py-1.5 text-xs font-semibold text-[#1769FF]">
+            <div className="inline-flex items-center gap-2 rounded-full border border-[#B8D2FF] bg-[#EEF5FF] px-4 py-1.5 text-xs font-semibold text-[#1769FF] shadow-[0_4px_0_rgba(160,193,255,0.18),0_10px_22px_rgba(23,105,255,0.07)]">
               <span className="relative flex h-1.5 w-1.5">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#159FE8] opacity-75" />
                 <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[#1769FF]" />
@@ -130,39 +133,40 @@ export default function HeroSection() {
               automation, and custom technology into practical systems that help
               ambitious teams move faster with confidence.
             </p>
-<div className="mt-8">
-  <div className="flex flex-wrap items-center gap-4">
-    <a
-      href={CALENDLY_URL}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="inline-flex items-center justify-center gap-2 rounded-full bg-[#1769FF] px-6 py-3 text-sm font-semibold text-white shadow-[0_8px_30px_rgba(23,105,255,0.28)] transition-all hover:-translate-y-0.5 hover:bg-[#159FE8] hover:shadow-[0_14px_40px_rgba(23,105,255,0.35)]"
-    >
-      Book a Discovery Call
-      <ArrowUpRight className="h-4 w-4" />
-    </a>
 
-    <Link
-      href="/services"
-      className="inline-flex items-center justify-center gap-2 rounded-full border border-[#D9E6FA] bg-white px-6 py-3 text-sm font-semibold text-[#061A45] transition-all hover:-translate-y-0.5 hover:border-[#1769FF] hover:bg-[#EEF5FF]"
-    >
-      <PlayCircle className="h-4 w-4" />
-      Explore Our Services
-    </Link>
-  </div>
+            <div className="mt-8">
+              <div className="flex flex-wrap items-center gap-4">
+                <a
+                  href={CALENDLY_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-2 rounded-full border border-[#1769FF] bg-[#1769FF] px-6 py-3 text-sm font-semibold text-white shadow-[0_7px_0_rgba(96,150,255,0.38),0_18px_34px_rgba(23,105,255,0.25)] transition-all duration-300 hover:-translate-y-1 hover:border-[#159FE8] hover:bg-[#159FE8] hover:shadow-[0_10px_0_rgba(96,190,255,0.38),0_24px_44px_rgba(23,105,255,0.34)]"
+                >
+                  Book a Discovery Call
+                  <ArrowUpRight className="h-4 w-4 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                </a>
 
-  <Link
-    href="/join-us"
-    className="group mt-5 inline-flex items-center gap-2 text-sm font-semibold text-[#1769FF] transition-colors hover:text-[#159FE8]"
-  >
-    <span className="font-normal text-[#61708A]">
-      Looking to build with us?
-    </span>
+                <Link
+                  href="/services"
+                  className="inline-flex items-center justify-center gap-2 rounded-full border border-[#B8D2FF] bg-white px-6 py-3 text-sm font-semibold text-[#061A45] shadow-[0_6px_0_rgba(182,207,255,0.22),0_14px_28px_rgba(23,105,255,0.07)] transition-all duration-300 hover:-translate-y-1 hover:border-[#1769FF] hover:bg-[#EEF5FF] hover:shadow-[0_9px_0_rgba(150,187,255,0.30),0_20px_34px_rgba(23,105,255,0.12)]"
+                >
+                  <PlayCircle className="h-4 w-4" />
+                  Explore Our Services
+                </Link>
+              </div>
 
-    Join our team
-    <ArrowUpRight className="h-4 w-4 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-  </Link>
-</div>
+              <Link
+                href="/join-us"
+                className="group mt-5 inline-flex items-center gap-2 text-sm font-semibold text-[#1769FF] transition-colors hover:text-[#159FE8]"
+              >
+                <span className="font-normal text-[#61708A]">
+                  Looking to build with us?
+                </span>
+
+                Join our team
+                <ArrowUpRight className="h-4 w-4 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+              </Link>
+            </div>
 
             <p className="mt-8 text-xs font-medium tracking-wide text-[#61708A]">
               AI Systems · SaaS & Apps · Automation · SEO · Personal Branding
@@ -292,13 +296,13 @@ export default function HeroSection() {
                                 ease: "easeInOut",
                               },
                             }}
-                            whileHover={{ scale: 1.07 }}
+                            whileHover={{ scale: 1.07, y: -6 }}
                             whileTap={{ scale: 0.97 }}
                             onClick={() => setActiveNodeId(node.id)}
-                            className={`w-[118px] rounded-2xl border p-3 text-left shadow-[0_10px_26px_rgba(23,105,255,0.12)] transition sm:w-[138px] sm:p-3.5 ${
+                            className={`w-[118px] rounded-2xl border p-3 text-left transition-all duration-300 sm:w-[138px] sm:p-3.5 ${
                               isActive
                                 ? node.activeColor
-                                : "border-[#D9E6FA] bg-white text-[#061A45] hover:border-[#1769FF]/45"
+                                : "border-[#A8C7FF]/65 bg-white text-[#061A45] shadow-[0_8px_0_rgba(158,191,255,0.20),0_18px_34px_rgba(23,105,255,0.10)] hover:border-[#1769FF]/65 hover:shadow-[0_11px_0_rgba(138,179,255,0.28),0_24px_42px_rgba(23,105,255,0.16)]"
                             }`}
                           >
                             <div className="flex items-center gap-2">
@@ -345,9 +349,9 @@ export default function HeroSection() {
                     repeat: Infinity,
                     ease: "easeInOut",
                   }}
-                  className="absolute left-1/2 top-1/2 z-30 flex h-24 w-24 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-[#1769FF]/30 bg-white p-2 shadow-[0_18px_42px_rgba(23,105,255,0.24)] sm:h-28 sm:w-28"
+                  className="absolute left-1/2 top-1/2 z-30 flex h-24 w-24 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-[#BBD5FF] bg-white p-2 shadow-[0_9px_0_rgba(134,174,255,0.25),0_22px_46px_rgba(23,105,255,0.24)] sm:h-28 sm:w-28"
                 >
-                  <div className="flex h-full w-full flex-col items-center justify-center rounded-full bg-gradient-to-br from-[#061A45] via-[#1769FF] to-[#159FE8] text-center text-white">
+                  <div className="flex h-full w-full flex-col items-center justify-center rounded-full bg-gradient-to-br from-[#061A45] via-[#1769FF] to-[#159FE8] text-center text-white shadow-inner">
                     <Bot className="h-6 w-6" />
                     <span className="mt-1 text-[9px] font-bold tracking-[0.14em]">
                       DEVHATCH
@@ -364,7 +368,7 @@ export default function HeroSection() {
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3 }}
-                className="mx-auto mt-3 max-w-sm text-center"
+                className="mx-auto mt-4 max-w-sm rounded-2xl border border-[#D9E6FA] bg-white/85 px-4 py-3 text-center shadow-[0_6px_0_rgba(171,201,255,0.16),0_14px_28px_rgba(23,105,255,0.07)] backdrop-blur-sm"
               >
                 <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-[#1769FF]">
                   Active System Layer · {activeNode.title}

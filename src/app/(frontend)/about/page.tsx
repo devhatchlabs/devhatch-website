@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
+
 import {
   ArrowUpRight,
   Code2,
@@ -11,12 +12,43 @@ import {
   Eye,
   HeartHandshake,
   Lightbulb,
+  MessageCircle,
   Rocket,
   Sparkles,
   Target,
   Users,
   Workflow,
 } from "lucide-react";
+
+import {
+  FaGithub,
+  FaInstagram,
+  FaLinkedinIn,
+  FaTiktok,
+  FaWhatsapp,
+} from "react-icons/fa6";
+
+type SocialIconName =
+  | "github"
+  | "linkedin"
+  | "instagram"
+  | "tiktok"
+  | "whatsapp";
+
+type SocialLink = {
+  label: string;
+  href: string;
+  icon: SocialIconName;
+  text?: string;
+};
+
+  const socialIcons = {
+    github: FaGithub,
+    linkedin: FaLinkedinIn,
+    instagram: FaInstagram,
+    tiktok: FaTiktok,
+    whatsapp: FaWhatsapp,
+  };
 
 const team = [
   {
@@ -25,9 +57,41 @@ const team = [
     initials: "SI",
     image: "/images/team/saim.png",
     focus:
-  "Strategy, AI systems direction, client consultations, sales leadership, and technical oversight.",
-skills: ["AI Systems Strategy", "RAG & LLM Integration", "Product Development"],
-featured: true,
+      "Strategy, AI systems direction, client consultations, sales leadership, and technical oversight.",
+    skills: [
+      "AI Systems Strategy",
+      "RAG & LLM Integration",
+      "Product Development",
+    ],
+    socials: [
+      {
+        label: "GitHub",
+        href: "https://github.com/DevSaimX",
+        icon: "github",
+      },
+      {
+        label: "LinkedIn",
+        href: "https://linkedin.com/in/saim-iftikhar-a4ab6334b",
+        icon: "linkedin",
+      },
+      {
+        label: "Instagram",
+        href: "https://www.instagram.com/saimiftikhar13",
+        icon: "instagram",
+      },
+      {
+        label: "TikTok",
+        href: "https://www.tiktok.com/@devsaimx",
+        icon: "tiktok",
+      },
+      {
+        label: "WhatsApp",
+        href: "https://wa.me/923352549956",
+        icon: "whatsapp",
+        text: "+92 335 254 9956",
+      },
+    ] satisfies SocialLink[],
+    featured: true,
   },
   {
     name: "Sara Manzoor",
@@ -35,18 +99,28 @@ featured: true,
     initials: "SM",
     image: "/images/team/sara.png",
     focus:
-      "Operations, team coordination, performance monitoring, and internal systems.",
+      "Operations, delivery coordination, performance monitoring, and internal systems.",
     skills: ["Operations", "Delivery", "Team Coordination"],
+    socials: [
+      // Temporary links — replace these with Sara's real profile URLs later.
+      { label: "LinkedIn", href: "https://www.linkedin.com/in/sara-manzoor-3a8a56365", icon: "linkedin" },
+      { label: "GitHub", href: "https://github.com/Sara12-2", icon: "github" },
+    ] satisfies SocialLink[],
     featured: false,
   },
   {
-    name: "Aribah Qandeel",
-    role: "Business Development Executive",
+    name: "Areeba Qandeel",
+    role: "Chief Strategic Officer",
     initials: "AQ",
     image: "/images/team/aribah.png",
     focus:
-      "Lead generation, outreach, CRM management, relationship building, and client communication.",
-    skills: ["Lead Generation", "Outreach", "CRM"],
+      "Strategic planning, business development, outreach, partnerships, and growth initiatives.",
+    skills: ["Strategy", "Business Development", "Partnerships"],
+    socials: [
+      // Temporary links — replace these with Areebah's real profile URLs later.
+      { label: "LinkedIn", href: "https://www.linkedin.com/in/areeba-qandeel-8b0622293?utm_source=share_via&utm_content=profile&utm_medium=member_android", icon: "linkedin" },
+      { label: "GitHub", href: "https://github.com/AribahHussain", icon: "github" },
+    ] satisfies SocialLink[],
     featured: false,
   },
   {
@@ -57,6 +131,12 @@ featured: true,
     focus:
       "AI development, prompt engineering, automation workflows, and technical solutions.",
     skills: ["AI Development", "Automation", "Prompt Engineering"],
+        socials: [
+      // Temporary links — replace these with Areebah's real profile URLs later.
+      { label: "LinkedIn", href: "https://pk.linkedin.com/in/malik-saad-ahmed-93404a318", icon: "linkedin" },
+      { label: "GitHub", href: "https://github.com/Maliksaad231224", icon: "github" },
+    ] satisfies SocialLink[],
+    
     featured: false,
   },
 ];
@@ -181,6 +261,59 @@ function TeamPhoto({
           onError={() => setImageFailed(true)}
         />
       )}
+    </div>
+  );
+}
+
+function SocialLinks({
+  links,
+  featured = false,
+}: {
+  links: SocialLink[];
+  featured?: boolean;
+}) {
+  const availableLinks = links.filter((link) =>
+    link.href.startsWith("https://"),
+  );
+
+  if (!availableLinks.length) {
+    return null;
+  }
+
+  const iconButtonSize = featured ? "h-11 w-11" : "h-10 w-10";
+  const textButtonSize = featured ? "h-11 px-4" : "h-10 px-3";
+
+  return (
+    <div className="flex flex-wrap items-center gap-2">
+      {availableLinks.map((link) => {
+        const Icon = socialIcons[link.icon];
+
+        return (
+          <motion.a
+            key={link.label}
+            href={link.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={link.text ? `${link.label}: ${link.text}` : link.label}
+            whileHover={{ y: -5, scale: 1.07 }}
+            whileTap={{ scale: 0.96 }}
+            transition={{ type: "spring", stiffness: 420, damping: 18 }}
+            className={`group relative inline-flex items-center justify-center gap-2 rounded-xl border border-[#D9E6FA] bg-white text-[#1769FF] shadow-[0_4px_10px_rgba(23,105,255,0.10)] transition-[border-color,box-shadow,background-color] duration-300 hover:border-[#1769FF]/70 hover:bg-[#EEF5FF] hover:shadow-[6px_8px_0_rgba(23,105,255,0.15)] hover:ring-2 hover:ring-[#1769FF]/10 ${
+              link.text ? textButtonSize : iconButtonSize
+            }`}
+          >
+            <Icon className="h-4 w-4" />
+
+            {link.text && (
+              <span className="text-xs font-bold text-[#061A45]">
+                {link.text}
+              </span>
+            )}
+
+            
+          </motion.a>
+        );
+      })}
     </div>
   );
 }
@@ -420,7 +553,7 @@ export default function AboutPage() {
                   key={pillar.title}
                   whileHover={{ y: -6 }}
                   transition={{ duration: 0.2 }}
-                  className="rounded-2xl border border-[#D9E6FA] bg-white p-7 shadow-[0_10px_35px_rgba(23,105,255,0.05)]"
+                  className="group rounded-2xl border border-[#D9E6FA] bg-white p-7 shadow-[0_10px_35px_rgba(23,105,255,0.05)] transition-[border-color,box-shadow,background-color] duration-300 hover:border-[#1769FF]/55 hover:bg-[#F8FBFF] hover:shadow-[6px_8px_0_rgba(23,105,255,0.12)]"
                 >
                   <div
                     className={`inline-flex rounded-xl bg-gradient-to-br ${pillar.gradient} p-3 text-white shadow-[0_8px_18px_rgba(23,105,255,0.20)]`}
@@ -464,7 +597,7 @@ export default function AboutPage() {
                   key={capability.title}
                   whileHover={{ y: -6 }}
                   transition={{ duration: 0.2 }}
-                  className="rounded-2xl border border-[#D9E6FA] bg-white p-6 shadow-[0_10px_35px_rgba(23,105,255,0.05)]"
+                  className="group rounded-2xl border border-[#D9E6FA] bg-white p-6 shadow-[0_10px_35px_rgba(23,105,255,0.05)] transition-[border-color,box-shadow,background-color] duration-300 hover:border-[#1769FF]/55 hover:bg-[#F8FBFF] hover:shadow-[6px_8px_0_rgba(23,105,255,0.12)]"
                 >
                   <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#EEF5FF] text-[#1769FF]">
                     <Icon className="h-5 w-5" />
@@ -521,9 +654,11 @@ export default function AboutPage() {
                 const Icon = principle.icon;
 
                 return (
-                  <article
+                  <motion.article
                     key={principle.title}
-                    className="rounded-2xl border border-[#D9E6FA] bg-white p-5 shadow-sm"
+                    whileHover={{ y: -6, scale: 1.02 }}
+                    transition={{ type: "spring", stiffness: 320, damping: 20 }}
+                    className="group rounded-2xl border border-[#D9E6FA] bg-white p-5 shadow-sm transition-[border-color,box-shadow,background-color] duration-300 hover:border-[#1769FF]/55 hover:bg-[#F8FBFF] hover:shadow-[6px_8px_0_rgba(23,105,255,0.12)]"
                   >
                     <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#EEF5FF] text-[#1769FF]">
                       <Icon className="h-4 w-4" />
@@ -536,7 +671,7 @@ export default function AboutPage() {
                     <p className="mt-2 text-xs leading-relaxed text-[#61708A]">
                       {principle.description}
                     </p>
-                  </article>
+                  </motion.article>
                 );
               })}
             </div>
@@ -573,8 +708,8 @@ export default function AboutPage() {
 
                 <p className="mt-7 max-w-xl text-base leading-relaxed text-[#61708A]">
                   Saim Iftikhar leads DevHatch Labs with a focus on practical
-                  AI systems, RAG applications, automation workflows, and
-                  custom software that solve real business problems.
+                  AI systems, automation workflows, and custom software that
+                  solve real business problems.
                 </p>
 
                 <div className="mt-6 flex flex-wrap gap-2">
@@ -586,6 +721,13 @@ export default function AboutPage() {
                       {skill}
                     </span>
                   ))}
+                </div>
+
+                <div className="mt-6">
+                  <p className="mb-3 text-xs font-bold uppercase tracking-[0.14em] text-[#61708A]">
+                    Connect with Saim
+                  </p>
+                  <SocialLinks links={founder.socials} featured />
                 </div>
 
                 <Link
@@ -621,9 +763,9 @@ export default function AboutPage() {
             {otherTeamMembers.map((member) => (
               <motion.article
                 key={member.name}
-                whileHover={{ y: -6 }}
-                transition={{ duration: 0.2 }}
-                className="rounded-2xl border border-[#D9E6FA] bg-white p-6 shadow-[0_10px_32px_rgba(23,105,255,0.05)]"
+                whileHover={{ y: -8, scale: 1.015 }}
+                transition={{ type: "spring", stiffness: 320, damping: 20 }}
+                className="group rounded-2xl border border-[#D9E6FA] bg-white p-6 shadow-[0_10px_32px_rgba(23,105,255,0.05)] transition-[border-color,box-shadow,background-color] duration-300 hover:border-[#1769FF]/55 hover:bg-[#F8FBFF] hover:shadow-[6px_8px_0_rgba(23,105,255,0.13)]"
               >
                 <TeamPhoto
                   name={member.name}
@@ -642,6 +784,15 @@ export default function AboutPage() {
                 <p className="mt-3 text-sm leading-relaxed text-[#61708A]">
                   {member.focus}
                 </p>
+
+                {member.socials.length > 0 && (
+                  <div className="mt-5">
+                    <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.14em] text-[#61708A]">
+                      Connect with {member.name.split(" ")[0]}
+                    </p>
+                    <SocialLinks links={member.socials} />
+                  </div>
+                )}
 
                 <div className="mt-5 flex flex-wrap gap-2 border-t border-[#D9E6FA] pt-4">
                   {member.skills.map((skill) => (
@@ -669,9 +820,11 @@ export default function AboutPage() {
 
           <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {values.map((value) => (
-              <article
+              <motion.article
                 key={value.title}
-                className="rounded-2xl border border-[#D9E6FA] bg-[#F8FBFF] p-5 transition-all duration-300 hover:-translate-y-1 hover:border-[#1769FF]/30 hover:bg-white"
+                whileHover={{ y: -6, scale: 1.02 }}
+                transition={{ type: "spring", stiffness: 320, damping: 20 }}
+                className="group rounded-2xl border border-[#D9E6FA] bg-[#F8FBFF] p-5 transition-[border-color,box-shadow,background-color] duration-300 hover:border-[#1769FF]/55 hover:bg-white hover:shadow-[6px_8px_0_rgba(23,105,255,0.12)]"
               >
                 <h3 className="text-sm font-bold text-[#1769FF]">
                   {value.title}
@@ -680,7 +833,7 @@ export default function AboutPage() {
                 <p className="mt-2 text-sm leading-relaxed text-[#61708A]">
                   {value.description}
                 </p>
-              </article>
+              </motion.article>
             ))}
           </div>
         </section>
