@@ -26,14 +26,9 @@ export const metadata: Metadata = {
   creator: "DevHatch Labs",
   publisher: "DevHatch Labs",
 
-  alternates: {
-    canonical: "/",
-  },
-
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://devhatchlabs.com",
     siteName: "DevHatch Labs",
     title: "DevHatch Labs | AI Automation & Custom Software",
     description:
@@ -48,6 +43,39 @@ export const metadata: Metadata = {
   },
 };
 
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://devhatchlabs.com/#organization",
+      name: "DevHatch Labs",
+      url: "https://devhatchlabs.com",
+      logo: {
+        "@type": "ImageObject",
+        url: "https://devhatchlabs.com/icon.png",
+        width: 512,
+        height: 512,
+      },
+      sameAs: [
+        "https://linkedin.com/company/devhatch-labs",
+        "https://www.facebook.com/profile.php?id=61590566882773",
+        "https://www.instagram.com/devhatch.labs/",
+        "https://www.tiktok.com/@devhatchlabs",
+      ],
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://devhatchlabs.com/#website",
+      name: "DevHatch Labs",
+      url: "https://devhatchlabs.com",
+      publisher: {
+        "@id": "https://devhatchlabs.com/#organization",
+      },
+    },
+  ],
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -56,6 +84,13 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className="min-h-full flex flex-col">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(structuredData),
+          }}
+        />
+
         <Navbar />
         <main className="flex-1">{children}</main>
         <Footer />
