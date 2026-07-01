@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import HeroSection from "@/components/sections/hero/HeroSection";
 import ImpactSection from "@/components/sections/impact/ImpactSection";
 import ServicesSection from "@/components/sections/services/ServicesSection";
@@ -5,6 +6,16 @@ import IndustriesSection from "@/components/sections/industries/IndustriesSectio
 import HowItWorksSection from "@/components/sections/how-it-works/HowItWorksSection";
 import TestimonialsSection from "@/components/sections/testimonials/TestimonialsSection";
 import CTASection from "@/components/sections/cta/CTASection";
+
+export const metadata: Metadata = {
+  alternates: {
+    canonical: "/",
+  },
+
+  openGraph: {
+    url: "https://devhatchlabs.com",
+  },
+};
 
 export default function Home() {
   return (
