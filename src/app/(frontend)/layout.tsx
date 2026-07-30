@@ -93,6 +93,7 @@ export default function RootLayout({
 
         <Navbar />
         <main className="flex-1">{children}</main>
+        <script src="https://agentforge-backend-hkur.onrender.com/widget/widget.js" data-tenant-id="69fab0a7-cf1a-4e94-932b-2a1bd5ad63e4" data-api-url="https://agentforge-backend-hkur.onrender.com" data-agent-name="Aria" data-color="#001f66" data-position="bottom-right"></script>
         <Footer />
       </body>
     </html>
