@@ -108,37 +108,6 @@ const team = [
     ] satisfies SocialLink[],
     featured: false,
   },
-  {
-    name: "Areeba Qandeel",
-    role: "Chief Strategic Officer",
-    initials: "AQ",
-    image: "/images/team/aribah.png",
-    focus:
-      "Strategic planning, business development, outreach, partnerships, and growth initiatives.",
-    skills: ["Strategy", "Business Development", "Partnerships"],
-    socials: [
-      // Temporary links — replace these with Areebah's real profile URLs later.
-      { label: "LinkedIn", href: "https://www.linkedin.com/in/areeba-qandeel-8b0622293?utm_source=share_via&utm_content=profile&utm_medium=member_android", icon: "linkedin" },
-      { label: "GitHub", href: "https://github.com/AribahHussain", icon: "github" },
-    ] satisfies SocialLink[],
-    featured: false,
-  },
-  {
-    name: "Malik Saad Ahmed",
-    role: "AI Engineering Intern",
-    initials: "MS",
-    image: "/images/team/saad.png",
-    focus:
-      "AI development, prompt engineering, automation workflows, and technical solutions.",
-    skills: ["AI Development", "Automation", "Prompt Engineering"],
-        socials: [
-      // Temporary links — replace these with Areebah's real profile URLs later.
-      { label: "LinkedIn", href: "https://pk.linkedin.com/in/malik-saad-ahmed-93404a318", icon: "linkedin" },
-      { label: "GitHub", href: "https://github.com/Maliksaad231224", icon: "github" },
-    ] satisfies SocialLink[],
-    
-    featured: false,
-  },
 ];
 
 const pillars = [

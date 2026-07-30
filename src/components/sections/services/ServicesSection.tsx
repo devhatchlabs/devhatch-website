@@ -409,7 +409,7 @@ export default function ServicesSection() {
             </Link>
           </div>
 
-          <div className="mt-6 flex flex-wrap gap-2.5">
+          <div className="mt-6 grid grid-cols-2 gap-2.5 sm:flex sm:flex-wrap">
             {additionalCapabilities.map((capability) => {
               const Icon = capability.icon;
 
@@ -417,7 +417,7 @@ export default function ServicesSection() {
                 <Link
                   key={capability.title}
                   href="/services"
-                  className="group inline-flex items-center gap-2 rounded-xl border border-[#D9E6FA] bg-white px-3.5 py-2.5 text-xs font-semibold text-[#61708A] transition-all duration-300 hover:-translate-y-1 hover:border-[#1769FF]/70 hover:bg-[#EEF5FF] hover:text-[#1769FF] hover:shadow-[0_6px_0_rgba(140,177,255,0.20),0_16px_28px_rgba(23,105,255,0.10)]"
+                  className="group flex items-center gap-2 rounded-xl border border-[#D9E6FA] bg-white px-3.5 py-2.5 text-xs font-semibold text-[#61708A] transition-all duration-300 hover:-translate-y-1 hover:border-[#1769FF]/70 hover:bg-[#EEF5FF] hover:text-[#1769FF] hover:shadow-[0_6px_0_rgba(140,177,255,0.20),0_16px_28px_rgba(23,105,255,0.10)] sm:inline-flex"
                 >
                   <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#EEF5FF] text-[#1769FF] transition-all duration-300 group-hover:-translate-y-0.5 group-hover:bg-[#1769FF] group-hover:text-white group-hover:shadow-[0_4px_0_rgba(124,170,255,0.22),0_10px_18px_rgba(23,105,255,0.14)]">
                     <Icon className="h-3.5 w-3.5" strokeWidth={2} />
