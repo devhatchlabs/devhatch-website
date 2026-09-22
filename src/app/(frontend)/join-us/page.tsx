@@ -1,6 +1,4 @@
 import Link from "next/link";
-import { getPayload } from "payload";
-import config from "../../../../payload.config";
 import type { LucideIcon } from "lucide-react";
 import {
   ArrowUpRight,
@@ -20,8 +18,6 @@ import {
   UsersRound,
   Video,
 } from "lucide-react";
-
-export const dynamic = "force-dynamic";
 
 type JobPosition = {
   id: string | number;
@@ -246,22 +242,8 @@ function BulletList({ items }: { items: string[] }) {
   );
 }
 
-export default async function JoinUsPage() {
-  const payload = await getPayload({ config });
-
-  const jobsResult = await payload.find({
-    collection: "job-positions",
-    depth: 0,
-    limit: 50,
-    sort: "sortOrder",
-    where: {
-      status: {
-        equals: "open",
-      },
-    },
-  });
-
-  const openJobs = jobsResult.docs as unknown as JobPosition[];
+export default function JoinUsPage() {
+  const openJobs: JobPosition[] = [];
   const hasOpenJobs = openJobs.length > 0;
 
   return (
@@ -296,8 +278,15 @@ export default async function JoinUsPage() {
               </h1>
 
               <p className="mx-auto mt-6 max-w-2xl text-base leading-8 text-[#61708A] sm:text-lg">
-                We are building our team carefully. New opportunities will
-                appear here as soon as they become available.
+                Open positions will be available again soon. For career
+                inquiries, contact{" "}
+                <a
+                  href="mailto:careers@devhatchlabs.com"
+                  className="font-semibold text-[#1769FF] hover:underline"
+                >
+                  careers@devhatchlabs.com
+                </a>
+                .
               </p>
 
               <a

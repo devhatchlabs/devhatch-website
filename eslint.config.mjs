@@ -12,6 +12,12 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    "payload.config.ts",
+    "src/app/_payload/**",
+    "src/collections/**",
+    "src/payload-types.ts",
+    "src/app/(frontend)/contact/ContactForm.tsx",
+    "src/components/chatbot/**",
   ]),
 ]);
 

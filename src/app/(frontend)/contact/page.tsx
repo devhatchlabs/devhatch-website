@@ -14,7 +14,6 @@ import {
   Sparkles,
   User,
 } from "lucide-react";
-import Link from "next/link";
 import {
   useState,
   type ChangeEvent,
@@ -112,7 +111,7 @@ export default function ContactPage() {
     setStatus("loading");
 
     try {
-      const response = await fetch("/api/leads", {
+      const response = await fetch("/api/contact", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -316,7 +315,7 @@ export default function ContactPage() {
                     </h3>
 
                     <p className="mt-3 max-w-sm text-sm leading-relaxed text-[#61708A]">
-                      Your inquiry has been saved successfully. DevHatch Labs
+                      Your inquiry has been sent successfully. DevHatch Labs
                       will review it and get back to you soon.
                     </p>
 
@@ -443,7 +442,7 @@ export default function ContactPage() {
                       {status === "loading" ? (
                         <>
                           <Loader2 className="h-4 w-4 animate-spin" />
-                          Saving your inquiry...
+                          Sending your inquiry...
                         </>
                       ) : (
                         <>
@@ -454,8 +453,8 @@ export default function ContactPage() {
                     </button>
 
                     <p className="text-center text-[10px] font-medium text-[#9AA9BE]">
-                      Your project details are securely saved in our lead
-                      system. We do not share your information.
+                      Your project details are sent securely. We do not share
+                      your information.
                     </p>
                   </motion.form>
                 )}
